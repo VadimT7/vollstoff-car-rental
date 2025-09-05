@@ -1,0 +1,298 @@
+Here’s a drop-in **master prompt** you can paste into Claude Opus. It tells Claude to choose the best tech, build the full site (booking + payments), and deliver a production-ready repo with insane luxury visuals and motion.
+
+---
+
+# MASTER PROMPT FOR CLAUDE OPUS
+
+**Project:** Ultra-Luxury Exotic Car Rental Website (Booking + Payments + Admin) for company called "Valore Rental"
+**Brand vibe:** “If Louis Vuitton & Gucci ran a supercar fleet.”
+**Business:** Rentals for Lamborghini, BMW M8 Competition, Mercedes-AMG G63, etc.
+**Payments:** Card (Stripe) and Cash options.
+**Booking:** Best-in-class yet budget-sane; Claude chooses the stack.
+
+## 0) Operator Instructions (Do First)
+
+* You are the **principal product designer + full-stack lead**.
+* **Do not ask clarifying questions.** Make sensible assumptions, document them, and build.
+* **Choose the technology stack** you judge best (frontend, backend, DB, CMS, auth, infra). Prefer mainstream, well-supported tools.
+* Deliver a **complete, production-ready monorepo** with code, seed data, and instructions that I can run end-to-end in one sitting.
+* Balance **ultra-luxury visuals** with **95+ Lighthouse (Performance/SEO/Best Practices/Accessibility)**.
+* Include a **fallback for reduced motion** and respect `prefers-reduced-motion`.
+* Output format (strict):
+
+  1. **Executive summary** (stack choice + why).
+  2. **System architecture diagram** (ASCII) and request/flow diagrams.
+  3. **Repo tree**.
+  4. **.env template** (all variables with comments).
+  5. **Docker compose** (DB, cache, app, CMS if separate).
+  6. **Full source code** (no stubs), including infra (IaC if used).
+  7. **Seed scripts** + **admin account** + **demo data** (10 cars, tiered pricing, add-ons, coupons).
+  8. **README** with “one-command dev” + “one-command deploy”.
+  9. **Admin guide** + **Booking ops runbook** (refunds, holds, cancellations).
+  10. **Design system docs** (tokens, components, usage) + **animation storyboard**.
+  11. **QA checklist** + **automated tests** (unit + E2E).
+  12. **SEO pack** (sitemap, robots, schema.org, OpenGraph/Twitter cards).
+
+---
+
+## 1) Art Direction & Brand System
+
+Create a brand system that screams couture autos:
+
+* **Mood:** Midnight black lacquer, deep ivory, subtle champagne accents, restrained gold micro-details.
+* **Typography:** High-fashion editorial display for headlines + modern grotesk for body. Kerning tuned, large letter-spacing on headings.
+* **Grid & negative space:** Plenty of air; content feels curated.
+* **Imagery:** Cinematic car hero shots (low-angle, shallow depth), city-night reflections, detail macro shots (stitching, brake calipers).
+* **3D/Motion:**
+
+  * Subtle **Three.js** / WebGL hero with depth parallax or slow orbit of a featured car (progressively enhanced).
+  * **Framer Motion / GSAP** for micro-interactions (hover reveals, magnetic buttons, list → detail transitions).
+  * Scroll choreography: headline reveals, parallax detail strips, split-screen transitions.
+* **Micro-lux touches:**
+
+  * Cursor-proximal glints on metallic type.
+  * Haptic-feeling toggles (sound optional, default off).
+  * High-end card stacks with soft reflections and glass.
+* **Accessibility:** Color contrast AA+; motion-reduced mode; focus states designed.
+
+Deliver: **Design tokens** (colors, type scales, spacing, radii, shadows), **component library** (Buttons, Cards, Badges, Price Pills, Toggles, Steps, Date/Time pickers, Uploaders, Skeletons, Toasts), and **animation specs** (durations, easings, triggers).
+
+---
+
+## 2) Information Architecture & Pages
+
+**Public**
+
+* **Home** (flagship hero, instant availability search, featured fleet, experiences, testimonials, brand story, awards/logos, concierge CTA)
+* **Fleet** (filter by brand, body, transmission, price/day, availability window; compare up to 3)
+* **Car Detail** (gallery, 360/3D, specs, requirements, inclusions, mileage policy, add-ons, live pricing, availability calendar, CTA)
+* **Booking Flow (multi-step)**
+
+  1. Dates & times (pickup/return, timezone aware)
+  2. Pickup/Return options (in-store vs delivery with map radius, fees)
+  3. Driver details & verification (license upload, age gating, optional Stripe Identity)
+  4. Add-ons (extra mileage packs, insurance tiers, child seat, chauffeur, photographer, flowers, champagne)
+  5. Summary & policies
+  6. Payment (**Card via Stripe** or **Cash**). Card can be **full charge**, **deposit/hold**, or **split**. Cash option requires **card on file for deposit hold** unless business rule says otherwise—build this as a toggle in admin.
+  7. Confirmation (calendar file, email/SMS/WhatsApp)
+* **Concierge / Experiences** (curated routes, photo shoots, event packages)
+* **About** (craft & standards, team, atelier-style photography)
+* **Contact** (form + WhatsApp click-to-chat, phone, showroom map)
+* **Journal/News** (optional for SEO and brand)
+* **Legal** (T\&Cs, Insurance, Privacy, Cookies)
+
+**Customer Account**
+
+* Dashboard (upcoming bookings, keys to pick up, delivery status)
+* Bookings (view, modify, cancel per policy)
+* Documents (stored license, invoices)
+* Payment methods (add/remove card)
+* Profile (KYC status, preferences, language, currency)
+
+**Admin**
+
+* Fleet (CRUD cars; upload gallery, spec sheet, 3D asset)
+* Pricing (base/day, weekend multipliers, seasonal rates, dynamic yield rules, coupons)
+* Availability (calendar with blackout dates, maintenance, minimum durations)
+* Booking management (status: pending, confirmed, on-trip, returned; holds & refunds; cash flag; contract e-sign)
+* Add-ons & packages (tiers and fees)
+* Delivery zones (geo-fenced, per-km pricing, free thresholds)
+* Policies (age, license, deposit rules)
+* Content (home modules, testimonials, journal)
+* Users & roles (admin, ops, concierge)
+* Reports (revenue, utilization, top models, cancellations)
+
+---
+
+## 3) Booking & Payments — Required Logic
+
+* **Inventory & availability:** Single-source truth with atomic locks. Prevent double booking under concurrency.
+* **Rules:** Min/max rental lengths, lead-time windows, age ≥ 25 (configurable), deposit required unless admin override, mileage caps with overage pricing, late fee rules.
+* **Pricing engine:** Base price/day, weekend/season multipliers, add-ons, delivery fees, insurance tiers, coupon codes, taxes/fees. Show transparent breakdown.
+* **Stripe integration:**
+
+  * Card on file / SetupIntent.
+  * PaymentIntent flows: full charge, charge + security **hold** (pre-auth), split payments.
+  * Refunds/partial refunds, release holds on return.
+  * **Cash option** at checkout: still require **card on file for deposit hold**, unless admin disables.
+  * Generate **tax invoices (PDF)**.
+* **Identity / KYC (optional but scaffolded):** Stripe Identity or provider of your choice; license OCR & expiry validation.
+* **Contracts:** E-sign rental agreement (simple in-app e-sign). Store signed PDF to object storage.
+* **Notifications:**
+
+  * Email (transactional + reminders),
+  * SMS/WhatsApp (pickup reminders, return countdown) via Twilio or your pick.
+  * Calendar **.ics** attach on confirmation.
+* **Cancellations & changes:** Policy tiers with deadlines and fees; automatic proration; issue refunds/credits.
+
+---
+
+## 4) Non-Functional Requirements
+
+* **SEO:** schema.org (Car, Product, RentalCarReservation), JSON-LD on car detail & booking pages, sitemaps, canonical, hreflang if multi-lang.
+* **Perf:** 95+ Lighthouse; prefetch routes, lazy-load media, responsive AVIF/WebP, preconnect fonts, code-split 3D.
+* **A11y:** WCAG 2.2 AA, keyboard-navigable booking flow, form ARIA, error summaries.
+* **Security:** Secure headers, CSRF, input validation, rate limits on API & uploads; store secrets properly; encrypted cookies; audit logging on admin actions.
+* **I18n / currency:** At least **EN** with scaffold for additional locales; currency switch (EUR/USD/local), price rounding rules.
+* **Compliance:** Cookie banner, privacy, data retention policy.
+
+---
+
+## 5) Tech Choice (You Decide)
+
+* You pick the **frontend framework** (e.g., Next.js/Remix/etc.), **UI layer** (Tailwind or CSS-in-JS), **motion library** (Framer Motion/GSAP), **3D** (Three.js), **backend** (Node/TypeScript preferred but your call), **ORM** (Prisma, etc.), **DB** (Postgres), **CMS** (Sanity/Strapi/Directus/Contentful—your call), **auth** (passwordless/email magic link or OAuth), **file storage** (S3 compatible), **infra** (Vercel/Netlify/Fly.io/Render/Docker on VPS—your call), **testing** (Playwright, Vitest/Jest).
+* **Explain your choice** briefly in the executive summary (performance, dev speed, hosting cost, maintainability).
+* **Budget-friendly booking:** If using a 3rd-party OSS calendar/date engine, justify. Otherwise implement custom—your call.
+
+---
+
+## 6) Deliverables (Exact)
+
+1. **Executive summary**:
+
+   * Chosen stack + why (perf, luxury motion, SEO, cost).
+   * Key tradeoffs and how you mitigate them.
+2. **Architecture diagrams**:
+
+   * Request flows: booking create/update, payment capture/refund, deposit hold release.
+   * Data model ERD (Cars, Media, PricingRules, AddOns, Policies, Booking, Customer, Payment, Contract, Notification).
+3. **Repository** with:
+
+   * `/apps/web` (public site + booking)
+   * `/apps/admin` (admin panel) *or* a single app with role-based routing—your call
+   * `/packages/ui` (design system)
+   * `/packages/config` (eslint/tsconfig/tailwind config shared)
+   * `/packages/lib` (pricing engine, formatting, schema, API SDK)
+   * `/infra` (docker, IaC if used)
+4. **.env.example** with every variable named and commented (Stripe keys, DB URL, storage bucket, mail, SMS, map, analytics, base URLs).
+5. **DB schema + migrations** (Prisma or your tool) and **seed** script that creates:
+
+   * 10 cars (Lamborghini Huracán EVO, Aventador SVJ, BMW M8 Comp, AMG G63, Ferrari F8, Porsche 911 Turbo S, etc.) with rich specs, galleries, and 3D placeholder if applicable.
+   * Seasonal pricing, weekend multipliers, 6 add-ons, 3 insurance tiers, 3 coupons.
+   * Policies (age=25, deposit=$3,000 hold, min 1 day, max 14).
+6. **Booking engine**: full CRUD APIs, concurrency-safe holds, idempotent payment operations, policy enforcement.
+7. **Payments**: fully wired **Stripe** flows (card on file, pre-auth holds, full/partial refund, cash flag); webhook handlers with retries.
+8. **Contracts**: in-app e-sign, stamped PDF saved to storage.
+9. **Notifications**: transactional emails (MJML/React Email), SMS/WhatsApp templates; queue & retry.
+10. **Design system**: tokens, Figma-equivalent markdown doc, component stories (Storybook optional), motion specs.
+11. **Animations**: hero scene, page transitions, hover micro-interactions, skeleton loaders; reduced-motion variants.
+12. **3D**: hero car progressive enhancement (fallback image if GPU weak); controls gated for performance.
+13. **Content**: CMS models, example entries, editable home sections, testimonials, journal posts.
+14. **Accessibility**: aria labels, traps avoided, focus order, skip links, form error summaries.
+15. **SEO pack**: dynamic metadata, structured data, sitemap, robots, OG images generator.
+16. **Testing**:
+
+    * Unit tests for pricing rules, date math, policy edge cases.
+    * E2E tests (Playwright) for full booking + Stripe test cards, cancel/modify, cash flow, refund flow.
+17. **Admin**: inventory calendar, booking board (Kanban), pricing editor (sliders, tiers), zone map editor, policy toggles (e.g., allow cash without card on file), coupons, content editor.
+18. **Runbooks & docs**: refunds/holds release checklist; “busy weekend” ops; how to add a new car end-to-end.
+19. **Deployment**:
+
+    * One-command local start (Docker Compose).
+    * One-command deploy (e.g., `npm run deploy`) with CI/CD steps described.
+    * CDN caching strategy, image optimization, backup & restore notes.
+
+---
+
+## 7) Page-By-Page UX Notes (Key Moments)
+
+* **Home hero:**
+
+  * Split headline in two lines with kinetic letter-spacing.
+  * 3D/Video hero: slow, luxurious orbit; no sudden movements.
+  * “Book Instantly” inline widget (dates + car quick-select).
+* **Fleet:**
+
+  * Animated filters; card hover: subtle camera pan + spec reveal.
+  * Compare drawer for up to 3 cars with price/day and torque/0–100 specs.
+* **Car Detail:**
+
+  * Left: gallery/360; Right: sticky booking widget.
+  * “What’s included” vs “Policies” tabs.
+  * Live price updates as dates/add-ons change.
+* **Booking Steps:**
+
+  * Progress bar; always show a minimal sticky summary with live totals.
+  * Validations inline, descriptive errors, save-state if user leaves.
+* **Checkout:**
+
+  * Stripe Elements with luxurious styling (custom fonts).
+  * Clear choice: **Card** or **Cash** (with rules badge).
+  * Display deposit hold and when it’s released.
+* **Confirmation:**
+
+  * Large thank-you; route preview if delivery; .ics add-to-calendar.
+* **Account:**
+
+  * Next pickup countdown; “Add license” nudges; receipts; chat link.
+* **Admin:**
+
+  * Calendar heatmap of utilization; revenue chart; pending KYC list; “release all eligible holds” action.
+
+---
+
+## 8) Data Modeling (Minimum)
+
+* `Car` (make, model, trim, year, specs, images, 3DModelRef, featured)
+* `PriceRule` (base/day, weekend/season multiplier, min/max days)
+* `AddOn` (name, price type: flat/per day/per km, icon)
+* `Policy` (ageMin, depositHold, cancellation tiers)
+* `AvailabilityBlock` (carId, start, end, reason)
+* `Booking` (carId, userId, start, end, pickupMethod, location, status, totals, depositHoldId)
+* `Payment` (method, intentId, status, amounts)
+* `Contract` (pdfUrl, signedAt, signerName, ipHash)
+* `User` (roles, profile, licenseUrl, verified flags)
+* `Notification` (channel, template, status)
+* `Content` (home modules, testimonials, journal)
+
+Provide actual schema + migrations.
+
+---
+
+## 9) Policies & Edge Cases (Implement)
+
+* Too-young driver → block with friendly upsell for chauffeur package.
+* No license uploaded → allow booking but gate pickup; reminders sent.
+* Cash selected but no card on file while “card required for deposit” is ON → require adding card for hold only.
+* Overlapping bookings under load → lock and fail fast with helpful message.
+* Modifying dates to violate min stay → show price change + rule explanation.
+* Free delivery within X km; beyond that per-km fee live-calculated.
+* Late returns → automatic late fee; partial refunds if early return (admin-configurable).
+
+---
+
+## 10) Copy Tone
+
+* Minimalist, couture editorial voice.
+* Short lines, no fluff; luxury confidence.
+* Provide **copy blocks** for Home, Fleet intro, Car detail spec labels, Booking steps, Policies, transactional emails/SMS.
+
+---
+
+## 11) Analytics & Growth
+
+* Integrate analytics (your pick) with **consent-mode**.
+* Track funnel events (search, car viewed, add-on changes, checkout start, success, abandon).
+* Abandoned booking emails/SMS after 30 mins + 24 hrs (toggle in admin).
+* Meta Pixel/GA4 wiring optional but scaffolded.
+
+---
+
+## 12) Final Output Requirements
+
+* Provide **complete code** and **ready-to-run instructions**.
+* **No placeholders** for the critical flows (booking, payments, admin).
+* Include **8K hero images placeholders** and **responsive variants**; document how to swap with real assets.
+* Show me **exact commands** to:
+
+  * `git clone … && cp .env.example .env && docker compose up`
+  * seed DB
+  * run migrations/tests
+  * start web + admin
+  * trigger Stripe webhooks locally
+  * deploy to your chosen host
+
+---
+
+**Begin now.**
+Start with the **Executive Summary** (stack & rationale), then the **architecture diagrams**, then the **repo tree**, then **.env.example**, then all source code and docs per the deliverables above.

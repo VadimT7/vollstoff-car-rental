@@ -1,0 +1,363 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Font variables */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    /* Colors */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    
+    --primary: 38 44% 52%; /* Champagne gold */
+    --primary-foreground: 0 0% 98%;
+    
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    
+    --accent: 38 44% 52%;
+    --accent-foreground: 0 0% 9%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --ring: 38 44% 52%;
+    
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 98%;
+    
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 98%;
+    
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    
+    --primary: 38 44% 52%;
+    --primary-foreground: 0 0% 9%;
+    
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --accent: 38 44% 52%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --ring: 38 44% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Custom scrollbar for luxury feel */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-400 rounded-full;
+    transition: background-color 0.3s ease;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-600;
+  }
+  
+  /* Selection color */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+  
+  /* Focus styles */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  /* Luxury heading styles */
+  .heading-hero {
+    @apply font-display text-7xl md:text-8xl lg:text-9xl font-light tracking-luxury uppercase;
+    line-height: 0.9;
+  }
+  
+  .heading-large {
+    @apply font-display text-5xl md:text-6xl lg:text-7xl font-light tracking-wider;
+    line-height: 1.1;
+  }
+  
+  .heading-medium {
+    @apply font-display text-3xl md:text-4xl lg:text-5xl font-normal tracking-wide;
+    line-height: 1.2;
+  }
+  
+  .heading-small {
+    @apply font-display text-xl md:text-2xl lg:text-3xl font-medium;
+    line-height: 1.3;
+  }
+  
+  /* Luxury text styles */
+  .text-luxury {
+    @apply tracking-widest uppercase text-sm font-medium;
+  }
+  
+  .text-price {
+    @apply font-mono text-2xl md:text-3xl font-light tabular-nums;
+  }
+  
+  /* Luxury container */
+  .container-luxury {
+    @apply container mx-auto px-6 md:px-8 lg:px-12 xl:px-16;
+  }
+  
+  /* Section spacing */
+  .section-spacing {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+  
+  /* Luxury card hover effect */
+  .card-luxury {
+    @apply relative overflow-hidden transition-all duration-500 ease-luxury;
+    @apply hover:shadow-luxury-hover;
+  }
+  
+  .card-luxury::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-500;
+  }
+  
+  .card-luxury:hover::before {
+    @apply opacity-100;
+  }
+  
+  /* Glass effect */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+  }
+  
+  .glass-dark {
+    @apply bg-black/80 backdrop-blur-xl border border-white/10;
+  }
+  
+  /* Luxury button */
+  .btn-luxury {
+    @apply relative overflow-hidden;
+    @apply before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent;
+    @apply before:transition-transform before:duration-700 hover:before:translate-x-full;
+  }
+  
+  /* Grid patterns */
+  .grid-luxury {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12;
+  }
+  
+  /* Aspect ratios for images */
+  .aspect-luxury {
+    @apply aspect-[16/10];
+  }
+  
+  .aspect-car {
+    @apply aspect-[16/9];
+  }
+  
+  .aspect-portrait {
+    @apply aspect-[3/4];
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  .animate-luxury-reveal {
+    animation: luxury-reveal 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  }
+  
+  .ease-luxury {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Text shadows for luxury effect */
+  .text-shadow-luxury {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-dark {
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent;
+  }
+  
+  /* Parallax utilities */
+  .parallax-slow {
+    transform: translateZ(-1px) scale(1.5);
+  }
+  
+  .parallax-medium {
+    transform: translateZ(-2px) scale(2);
+  }
+  
+  .parallax-fast {
+    transform: translateZ(-3px) scale(2.5);
+  }
+  
+  /* Loading skeleton */
+  .skeleton {
+    @apply relative overflow-hidden bg-neutral-200;
+  }
+  
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent;
+    animation: shimmer 1.5s infinite;
+  }
+  
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  @keyframes luxury-reveal {
+    from { 
+      opacity: 0; 
+      transform: translateY(30px) scale(0.98);
+      filter: blur(10px);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  /* Mask gradients */
+  .mask-gradient-to-b {
+    mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+  }
+  
+  .mask-gradient-to-t {
+    mask-image: linear-gradient(to top, black 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  }
+  
+  /* Luxury-specific utilities */
+  .tracking-luxury {
+    letter-spacing: 0.2em;
+  }
+  
+  .tracking-wider {
+    letter-spacing: 0.05em;
+  }
+  
+  .tracking-wide {
+    letter-spacing: 0.025em;
+  }
+  
+  /* Shadow utilities */
+  .shadow-luxury-lg {
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .shadow-luxury-hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  
+  /* Button utilities */
+  .btn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.7s;
+  }
+  
+  .btn-shimmer:hover::before {
+    left: 100%;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

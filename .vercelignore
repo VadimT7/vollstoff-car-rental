@@ -1,0 +1,20 @@
+# Vercel ignore file
+apps/admin
+packages/database/prisma/migrations
+packages/database/prisma/seed.ts
+**/node_modules
+**/.turbo
+**/dist
+**/.next
+**/coverage
+**/test-results
+**/.env*
+!**/.env.example
+docs
+scripts
+infra
+tests
+.git
+.gitignore
+*.md
+!README.md

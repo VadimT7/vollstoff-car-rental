@@ -1,0 +1,237 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: valor_postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: valor_rental
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/docker/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: valor_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass redis_password
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO (S3-compatible storage for local development)
+  minio:
+    image: minio/minio:latest
+    container_name: valor_minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_DEFAULT_BUCKETS: valor-rental-assets:public
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # Mailhog (Email testing)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: valor_mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
+    logging:
+      driver: 'none'  # Disable excessive logging
+
+  # Stripe CLI (for webhook testing)
+  stripe-cli:
+    image: stripe/stripe-cli:latest
+    container_name: valor_stripe_cli
+    command: listen --forward-to http://host.docker.internal:3000/api/webhook/stripe --skip-verify
+    environment:
+      STRIPE_API_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_DEVICE_NAME: valor-rental-local
+    depends_on:
+      - web
+    profiles:
+      - stripe
+
+  # Web Application (Next.js)
+  web:
+    build:
+      context: .
+      dockerfile: ./infra/docker/Dockerfile.web
+      args:
+        - NODE_ENV=development
+    container_name: valor_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/valor_rental?schema=public
+      DIRECT_DATABASE_URL: postgresql://postgres:password@postgres:5432/valor_rental?schema=public
+      REDIS_URL: redis://:redis_password@redis:6379
+      NODE_ENV: development
+    env_file:
+      - .env.local
+    volumes:
+      - ./apps/web:/app/apps/web
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/web/node_modules
+      - /app/packages/ui/node_modules
+      - /app/packages/database/node_modules
+      - /app/packages/lib/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: pnpm dev:web
+
+  # Admin Application
+  admin:
+    build:
+      context: .
+      dockerfile: ./infra/docker/Dockerfile.admin
+      args:
+        - NODE_ENV=development
+    container_name: valor_admin
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/valor_rental?schema=public
+      REDIS_URL: redis://:redis_password@redis:6379
+      NODE_ENV: development
+      PORT: 3001
+    env_file:
+      - .env.local
+    volumes:
+      - ./apps/admin:/app/apps/admin
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/admin/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: pnpm dev:admin
+
+  # Sanity Studio (CMS)
+  sanity:
+    build:
+      context: .
+      dockerfile: ./infra/docker/Dockerfile.sanity
+    container_name: valor_sanity
+    restart: unless-stopped
+    ports:
+      - "3333:3333"
+    environment:
+      SANITY_STUDIO_API_PROJECT_ID: ${NEXT_PUBLIC_SANITY_PROJECT_ID}
+      SANITY_STUDIO_API_DATASET: ${NEXT_PUBLIC_SANITY_DATASET}
+    volumes:
+      - ./apps/sanity:/app/apps/sanity
+      - /app/apps/sanity/node_modules
+    command: pnpm dev:sanity
+    profiles:
+      - cms
+
+  # Database migration runner
+  migrate:
+    build:
+      context: .
+      dockerfile: ./infra/docker/Dockerfile.migrate
+    container_name: valor_migrate
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/valor_rental?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./packages/database:/app/packages/database
+    command: pnpm db:migrate:deploy
+    profiles:
+      - tools
+
+  # Database seeder
+  seed:
+    build:
+      context: .
+      dockerfile: ./infra/docker/Dockerfile.migrate
+    container_name: valor_seed
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/valor_rental?schema=public
+      NODE_ENV: development
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./packages/database:/app/packages/database
+      - ./packages/lib:/app/packages/lib
+    command: pnpm db:seed
+    profiles:
+      - tools
+
+  # pgAdmin (Database management UI)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: valor_pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@valorrental.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./infra/docker/pgadmin-servers.json:/pgadmin4/servers.json
+    depends_on:
+      - postgres
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  minio_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  default:
+    name: valor_network
+    driver: bridge

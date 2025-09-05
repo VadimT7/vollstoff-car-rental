@@ -1,0 +1,22 @@
+# Migration runner
+FROM node:20-alpine AS base
+RUN apk add --no-cache libc6-compat
+RUN npm install -g pnpm@8.15.1
+WORKDIR /app
+
+# Copy package files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/database/package.json ./packages/database/
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile --filter @valore/database
+
+# Copy Prisma files
+COPY packages/database/prisma ./packages/database/prisma
+
+# Generate Prisma Client
+WORKDIR /app/packages/database
+RUN npx prisma generate
+
+# Default command runs migrations
+CMD ["npx", "prisma", "migrate", "deploy"]

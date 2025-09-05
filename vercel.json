@@ -1,0 +1,7 @@
+{
+  "buildCommand": "pnpm turbo run build --filter=@valore/web",
+  "installCommand": "pnpm install",
+  "ignoreCommand": "git diff HEAD^ HEAD --quiet .",
+  "framework": "nextjs",
+  "outputDirectory": "apps/web/.next"
+}

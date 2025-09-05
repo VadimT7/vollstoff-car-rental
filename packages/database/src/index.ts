@@ -1,0 +1,5 @@
+export * from '@prisma/client'
+export { default as prisma } from './client'
+export { default } from './client'
+export { vehicleService, bookingService, userService } from './service'
+export { default as dbService } from './service'

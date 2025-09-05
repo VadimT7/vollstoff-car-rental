@@ -1,0 +1,102 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local", ".env"],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**",
+        "build/**",
+        ".sanity/**"
+      ],
+      "env": [
+        "NODE_ENV",
+        "NEXT_PUBLIC_*",
+        "DATABASE_URL",
+        "NEXTAUTH_SECRET",
+        "STRIPE_SECRET_KEY",
+        "SANITY_API_TOKEN",
+        "RESEND_API_KEY"
+      ]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "NODE_ENV",
+        "NEXT_PUBLIC_*",
+        "DATABASE_URL",
+        "REDIS_URL",
+        "NEXTAUTH_*",
+        "STRIPE_*",
+        "SANITY_*",
+        "RESEND_*",
+        "TWILIO_*",
+        "R2_*",
+        "CLOUDFLARE_*"
+      ]
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "outputs": [],
+      "cache": true
+    },
+    "typecheck": {
+      "outputs": [],
+      "cache": true,
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "outputs": [],
+      "cache": false,
+      "dependsOn": ["build"]
+    },
+    "test:unit": {
+      "outputs": ["coverage/**"],
+      "cache": false
+    },
+    "test:e2e": {
+      "outputs": ["test-results/**", "playwright-report/**"],
+      "cache": false,
+      "dependsOn": ["build"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "generate": {
+      "cache": false
+    },
+    "migrate": {
+      "cache": false
+    },
+    "migrate:dev": {
+      "cache": false
+    },
+    "migrate:deploy": {
+      "cache": false
+    },
+    "push": {
+      "cache": false
+    },
+    "seed": {
+      "cache": false,
+      "dependsOn": ["generate"]
+    },
+    "studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "deploy": {
+      "dependsOn": ["build", "typecheck", "lint"],
+      "outputs": [],
+      "cache": false
+    }
+  }
+}
