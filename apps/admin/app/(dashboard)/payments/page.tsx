@@ -138,12 +138,6 @@ export default function PaymentsPage() {
           <p className="text-neutral-600 mt-2">Manage all payment transactions and refunds</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            leftIcon={<Download className="h-4 w-4" />}
-          >
-            Export
-          </Button>
         </div>
       </div>
 

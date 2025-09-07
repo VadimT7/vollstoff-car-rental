@@ -379,14 +379,6 @@ export default function AdvancedBookingsPage() {
           <p className="text-neutral-600 mt-2">Monitor and manage customer bookings from the website</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            leftIcon={<Download className="h-4 w-4" />}
-            onClick={handleExport}
-            title="Export bookings to CSV"
-          >
-            Export
-          </Button>
         </div>
       </div>
 

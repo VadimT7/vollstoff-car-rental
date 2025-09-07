@@ -190,6 +190,23 @@ export default function FeaturedFleetPage() {
         </Button>
       </div>
 
+      {/* Featured Fleet Guidelines */}
+      <Card className="p-4 bg-amber-50 border-amber-200">
+        <div className="flex gap-3">
+          <Star className="h-5 w-5 text-amber-600 mt-0.5" />
+          <div className="text-sm">
+            <p className="font-medium text-amber-900 mb-1">Featured Fleet Guidelines</p>
+            <ul className="space-y-1 text-amber-700">
+              <li>• Maximum of 6 vehicles can be featured at once</li>
+              <li>• Drag and drop to reorder featured vehicles</li>
+              <li>• Featured vehicles appear on the homepage</li>
+              <li>• Only active vehicles can be featured</li>
+              <li>• Remember to save after reordering</li>
+            </ul>
+          </div>
+        </div>
+      </Card>
+
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="p-4">
@@ -352,22 +369,6 @@ export default function FeaturedFleetPage() {
         )}
       </Card>
 
-      {/* Instructions */}
-      <Card className="p-4 bg-amber-50 border-amber-200">
-        <div className="flex gap-3">
-          <Star className="h-5 w-5 text-amber-600 mt-0.5" />
-          <div className="text-sm">
-            <p className="font-medium text-amber-900 mb-1">Featured Fleet Guidelines</p>
-            <ul className="space-y-1 text-amber-700">
-              <li>• Maximum of 6 vehicles can be featured at once</li>
-              <li>• Drag and drop to reorder featured vehicles</li>
-              <li>• Featured vehicles appear on the homepage</li>
-              <li>• Only active vehicles can be featured</li>
-              <li>• Remember to save after reordering</li>
-            </ul>
-          </div>
-        </div>
-      </Card>
     </div>
   )
 }

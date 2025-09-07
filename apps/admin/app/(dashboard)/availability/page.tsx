@@ -12,9 +12,7 @@ import {
   Wrench,
   Plus,
   Filter,
-  Settings,
-  Download,
-  Upload
+  Settings
 } from 'lucide-react'
 import { Button, Card } from '@valore/ui'
 import { 
@@ -237,18 +235,6 @@ export default function AvailabilityPage() {
           <p className="text-neutral-600 mt-2">Manage vehicle availability and block dates</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            leftIcon={<Upload className="h-4 w-4" />}
-          >
-            Import
-          </Button>
-          <Button 
-            variant="outline" 
-            leftIcon={<Download className="h-4 w-4" />}
-          >
-            Export
-          </Button>
           {selectedDates.length > 0 && (
             <Button 
               onClick={handleBlockDates} 
@@ -451,7 +437,7 @@ export default function AvailabilityPage() {
                           >
                             <Icon className="h-3 w-3 flex-shrink-0" />
                             <span className="truncate font-medium">
-                              {availability.customerName ? availability.customerName.split(' ')[0] : vehicle.plate}
+                              {availability.customerName ? `${vehicle.name} - ${availability.customerName.split(' ')[0]}` : vehicle.name}
                             </span>
                           </div>
                         )

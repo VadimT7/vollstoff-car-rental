@@ -189,12 +189,6 @@ export default function AnalyticsPage() {
           >
             Filters
           </Button>
-          <Button 
-            variant="outline" 
-            leftIcon={<Download className="h-4 w-4" />}
-          >
-            Export Report
-          </Button>
         </div>
       </div>
 
@@ -384,17 +378,29 @@ export default function AnalyticsPage() {
         
         {/* Simplified Chart Visualization */}
         <div className="h-64 flex items-end gap-2">
-          {(analytics?.revenue?.daily || []).slice(-14).map((day, idx) => (
-            <div key={idx} className="flex-1 flex flex-col items-center">
-              <div 
-                className="w-full bg-amber-500 rounded-t"
-                style={{ height: `${(day.amount / 10000) * 100}%` }}
-              />
-              <span className="text-xs text-neutral-600 mt-2 rotate-45 origin-left">
-                {day.date}
-              </span>
-            </div>
-          ))}
+          {(analytics?.revenue?.daily || []).slice(-14).map((day, idx) => {
+            const dailyData = analytics?.revenue?.daily || []
+            const maxAmount = Math.max(...dailyData.map(d => d.amount), 1000)
+            const heightPercentage = day.amount > 0 
+              ? Math.max(10, (day.amount / maxAmount) * 100)
+              : 3
+            return (
+              <div key={idx} className="flex-1 flex flex-col items-center">
+                <div 
+                  className={`w-full rounded-t transition-all duration-200 ${
+                    day.amount > 0 
+                      ? 'bg-amber-500 hover:bg-amber-600' 
+                      : 'bg-neutral-200 hover:bg-neutral-300'
+                  }`}
+                  style={{ height: `${heightPercentage}%` }}
+                  title={`${day.date}: $${day.amount.toLocaleString()}`}
+                />
+                <span className="text-xs text-neutral-600 mt-2 rotate-45 origin-left">
+                  {day.date}
+                </span>
+              </div>
+            )
+          })}
         </div>
       </Card>
 

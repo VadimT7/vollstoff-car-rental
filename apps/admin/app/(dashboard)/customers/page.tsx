@@ -308,20 +308,6 @@ export default function CustomersPage() {
           <p className="text-neutral-600 mt-2">Manage customer profiles, verification, and loyalty</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            leftIcon={<Download className="h-4 w-4" />}
-            onClick={handleExport}
-            title="Export customer data to CSV"
-          >
-            Export
-          </Button>
-          <Button 
-            leftIcon={<Users className="h-4 w-4" />}
-            title="Add a new customer"
-          >
-            Add Customer
-          </Button>
         </div>
       </div>
 
@@ -429,15 +415,6 @@ export default function CustomersPage() {
               >
                 <Mail className="h-4 w-4" />
                 Email ({selectedCustomers.length})
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => handleBulkAction('export')}
-                className="gap-2"
-                title="Export selected customers to CSV"
-              >
-                <Download className="h-4 w-4" />
-                Export
               </Button>
             </div>
           )}

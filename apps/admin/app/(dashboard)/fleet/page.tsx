@@ -235,7 +235,7 @@ export default function FleetPage() {
             <div>
               <p className="text-sm text-neutral-600">Avg. Utilization</p>
               <p className="text-2xl font-bold text-neutral-900">
-                {vehicles.length > 0 ? Math.round(vehicles.reduce((acc, v) => acc + v.utilization, 0) / vehicles.length) : 0}%
+                {vehicles.length > 0 ? Math.round(vehicles.reduce((acc, v) => acc + (v.utilization || 0), 0) / vehicles.length) : 0}%
               </p>
             </div>
             <Calendar className="h-8 w-8 text-blue-600" />
@@ -423,7 +423,7 @@ export default function FleetPage() {
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <p className="font-medium text-neutral-900">${vehicle.pricePerDay}</p>
+                      <p className="font-medium text-neutral-900">${vehicle.pricePerDay || 0}</p>
                     </td>
                     <td className="px-4 py-4">
                       <div className="space-y-1">
@@ -431,14 +431,14 @@ export default function FleetPage() {
                           <div className="flex-1 bg-neutral-200 rounded-full h-2">
                             <div
                               className="bg-amber-500 h-2 rounded-full"
-                              style={{ width: `${vehicle.utilization}%` }}
+                              style={{ width: `${vehicle.utilization || 0}%` }}
                             />
                           </div>
-                          <span className="text-sm text-neutral-600">{vehicle.utilization}%</span>
+                          <span className="text-sm text-neutral-600">{vehicle.utilization || 0}%</span>
                         </div>
                         <div className="flex gap-4 text-xs text-neutral-600">
-                          <span>{vehicle.bookingsCount} bookings</span>
-                          <span>${(vehicle.revenue / 1000).toFixed(1)}k revenue</span>
+                          <span>{vehicle.bookingsCount || 0} bookings</span>
+                          <span>${((vehicle.revenue || 0) / 1000).toFixed(1)}k revenue</span>
                         </div>
                       </div>
                     </td>
