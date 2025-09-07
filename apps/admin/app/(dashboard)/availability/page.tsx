@@ -86,16 +86,57 @@ export default function AvailabilityPage() {
 
   const fetchAvailability = async () => {
     try {
-      // No vehicles in empty database
-      const mockVehicles: VehicleAvailability[] = [
+      // Fetch bookings and vehicles from the API
+      const [bookingsResponse, vehiclesResponse] = await Promise.all([
+        fetch('/api/bookings?limit=100'),
+        fetch('/api/vehicles')
+      ])
 
+      const bookings = await bookingsResponse.json()
+      const vehiclesData = await vehiclesResponse.json()
 
-      ]
+      // Transform vehicles with availability data from bookings
+      const vehiclesWithAvailability: VehicleAvailability[] = vehiclesData.map((vehicle: any) => {
+        const availability: any = {}
+        
+        // Find bookings for this vehicle
+        const vehicleBookings = bookings.filter((booking: any) => 
+          booking.car?.id === vehicle.id && 
+          (booking.status === 'CONFIRMED' || booking.status === 'PENDING')
+        )
+
+        // Mark booked dates
+        vehicleBookings.forEach((booking: any) => {
+          const startDate = new Date(booking.startDate)
+          const endDate = new Date(booking.endDate)
+          const currentDate = new Date(startDate)
+
+          while (currentDate <= endDate) {
+            const dateStr = format(currentDate, 'yyyy-MM-dd')
+            availability[dateStr] = {
+              status: 'booked',
+              bookingId: booking.id,
+              customerName: booking.customer?.name || booking.guestName || 'Customer',
+              notes: booking.customerNotes
+            }
+            currentDate.setDate(currentDate.getDate() + 1)
+          }
+        })
+
+        return {
+          id: vehicle.id,
+          name: vehicle.displayName || `${vehicle.make} ${vehicle.model}`,
+          plate: vehicle.licensePlate || 'N/A',
+          category: vehicle.category || 'Standard',
+          availability
+        }
+      })
       
-      setVehicles([])
+      setVehicles(vehiclesWithAvailability)
       setLoading(false)
     } catch (error) {
       console.error('Failed to fetch availability:', error)
+      setVehicles([])
       setLoading(false)
     }
   }
@@ -391,6 +432,7 @@ export default function AvailabilityPage() {
                   {/* Vehicle availability for this day */}
                   <div className="space-y-1">
                     {(selectedVehicle === 'all' ? vehicles : vehicles.filter(v => v.id === selectedVehicle))
+                      .slice(0, 3) // Show max 3 bookings per day for cleaner design
                       .map(vehicle => {
                         const availability = vehicle.availability[dateStr]
                         if (!availability || availability.status === 'available') {
@@ -401,19 +443,25 @@ export default function AvailabilityPage() {
                         return (
                           <div
                             key={vehicle.id}
-                            className={`text-xs px-1.5 py-0.5 rounded flex items-center gap-1 ${
+                            className={`text-xs px-2 py-1 rounded-md flex items-center gap-1.5 ${
                               statusColors[availability.status]
-                            } border cursor-pointer`}
+                            } border transition-all hover:shadow-sm cursor-pointer`}
                             onClick={() => handleDateClick(day, vehicle.id)}
+                            title={`${vehicle.name} - ${availability.customerName}`}
                           >
-                            <Icon className="h-3 w-3" />
-                            <span className="truncate">
-                              {vehicle.plate}
-                              {availability.customerName && `: ${availability.customerName.split(' ')[0]}`}
+                            <Icon className="h-3 w-3 flex-shrink-0" />
+                            <span className="truncate font-medium">
+                              {availability.customerName ? availability.customerName.split(' ')[0] : vehicle.plate}
                             </span>
                           </div>
                         )
                       })}
+                    {/* Show count if more than 3 bookings */}
+                    {vehicles.filter(v => v.availability[dateStr] && v.availability[dateStr].status !== 'available').length > 3 && (
+                      <div className="text-xs text-neutral-500 font-medium pl-1">
+                        +{vehicles.filter(v => v.availability[dateStr] && v.availability[dateStr].status !== 'available').length - 3} more
+                      </div>
+                    )}
                   </div>
                 </div>
               )

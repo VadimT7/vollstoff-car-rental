@@ -110,3 +110,81 @@ export async function GET(request: NextRequest) {
     )
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  try {
+    console.log('🔄 Admin booking update API called')
+    
+    const { bookingId, status } = await request.json()
+
+    if (!bookingId || !status) {
+      return NextResponse.json(
+        { error: 'Missing bookingId or status' },
+        { status: 400 }
+      )
+    }
+
+    console.log(`📝 Updating booking ${bookingId} to status: ${status}`)
+
+    // Update the booking status in the database
+    const updatedBooking = await prisma.booking.update({
+      where: { id: bookingId },
+      data: { 
+        status: status as any,
+        updatedAt: new Date()
+      },
+      include: {
+        car: {
+          select: {
+            id: true,
+            displayName: true,
+            make: true,
+            model: true,
+            year: true,
+            primaryImageUrl: true,
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+          }
+        },
+        payments: {
+          where: {
+            type: 'RENTAL_FEE',
+          },
+          select: {
+            id: true,
+            amount: true,
+            status: true,
+            createdAt: true,
+          }
+        },
+      },
+    })
+
+    console.log(`✅ Booking ${bookingId} updated successfully to ${status}`)
+
+    return NextResponse.json({
+      success: true,
+      booking: {
+        id: updatedBooking.id,
+        bookingNumber: updatedBooking.bookingNumber,
+        status: updatedBooking.status,
+        updatedAt: updatedBooking.updatedAt,
+      }
+    })
+  } catch (error) {
+    console.error('❌ Failed to update booking:', error)
+    return NextResponse.json(
+      { 
+        error: 'Failed to update booking',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    )
+  }
+}

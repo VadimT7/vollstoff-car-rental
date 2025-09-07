@@ -230,7 +230,7 @@ export default function CarDetailPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="mb-8"
             >
-              <div className="relative h-96 rounded-2xl overflow-hidden mb-4">
+              <div className="relative h-[500px] rounded-2xl overflow-hidden mb-4">
                 <Image
                   src={carData.images[selectedImage]}
                   alt={carData.displayName}
@@ -462,12 +462,6 @@ export default function CarDetailPage() {
                       </span>
                     </Button>
                   </Link>
-                  <Button 
-                    variant="outline" 
-                    className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold py-3 transition-all duration-300"
-                  >
-                    Check Availability
-                  </Button>
                 </div>
 
                 {/* Included Services */}

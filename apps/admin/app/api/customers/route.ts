@@ -67,3 +67,71 @@ export async function GET(request: NextRequest) {
   }
 }
 
+export async function PATCH(request: NextRequest) {
+  try {
+    console.log('🔄 Admin customer update API called')
+    
+    const { customerId, status } = await request.json()
+
+    if (!customerId || !status) {
+      return NextResponse.json(
+        { error: 'Missing customerId or status' },
+        { status: 400 }
+      )
+    }
+
+    console.log(`📝 Updating customer ${customerId} to status: ${status}`)
+
+    // Update the customer status in the database
+    const updatedCustomer = await prisma.user.update({
+      where: { id: customerId },
+      data: { 
+        status: status as any,
+        updatedAt: new Date()
+      },
+      include: {
+        bookings: {
+          select: {
+            id: true,
+            bookingNumber: true,
+            status: true,
+            totalAmount: true,
+            startDate: true,
+            endDate: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 5,
+        },
+        _count: {
+          select: {
+            bookings: true,
+          }
+        }
+      },
+    })
+
+    console.log(`✅ Customer ${customerId} updated successfully to ${status}`)
+
+    return NextResponse.json({
+      success: true,
+      customer: {
+        id: updatedCustomer.id,
+        name: updatedCustomer.name,
+        email: updatedCustomer.email,
+        status: updatedCustomer.status,
+        updatedAt: updatedCustomer.updatedAt,
+      }
+    })
+  } catch (error) {
+    console.error('❌ Failed to update customer:', error)
+    return NextResponse.json(
+      { 
+        error: 'Failed to update customer',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    )
+  }
+}
+

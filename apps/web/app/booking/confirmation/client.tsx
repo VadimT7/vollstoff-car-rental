@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { CheckCircle, Calendar, MapPin, Car, FileText, Download, Mail } from 'lucide-react'
+import { CheckCircle, Calendar, MapPin, Car, FileText, Mail } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@valore/ui'
@@ -200,15 +200,15 @@ export default function BookingConfirmationClient() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex justify-center"
           >
-            <Button className="flex-1 flex items-center justify-center gap-2 hover:text-white" size="lg">
-              <Download className="w-4 h-4" />
-              Download Receipt
-            </Button>
-            <Button variant="outline" className="flex-1 flex items-center justify-center gap-2 hover:text-white" size="lg">
-              <Mail className="w-4 h-4" />
-              Email Confirmation
+            <Button 
+              variant="outline" 
+              className="flex items-center justify-center gap-2 border-2 border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400 transition-all duration-300 px-8 py-3" 
+              size="lg"
+            >
+              <Mail className="w-4 h-4 flex-shrink-0" />
+              <span>Email Confirmation</span>
             </Button>
           </motion.div>
 
@@ -219,17 +219,17 @@ export default function BookingConfirmationClient() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-12 text-center"
           >
-            <p className="text-slate-600 mb-4">
+            <p className="text-slate-600 mb-6 text-lg">
               Need help? Contact our concierge team
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="tel:+1234567890">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="lg" className="text-base">
                   +1 (234) 567-890
                 </Button>
               </Link>
               <Link href="mailto:flyrentalsca@gmail.com">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="lg" className="text-base">
                   flyrentalsca@gmail.com
                 </Button>
               </Link>
@@ -244,7 +244,7 @@ export default function BookingConfirmationClient() {
             className="mt-12 text-center"
           >
             <Link href="/fleet">
-              <Button variant="ghost">
+              <Button variant="ghost" size="lg" className="text-base">
                 Browse More Vehicles
               </Button>
             </Link>

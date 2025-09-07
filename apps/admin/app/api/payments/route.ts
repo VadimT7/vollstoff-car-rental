@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       customerName: payment.booking?.user?.name || 'Unknown',
       amount: parseFloat(payment.amount),
       currency: payment.currency,
-      type: payment.type as 'PAYMENT' | 'REFUND' | 'DEPOSIT' | 'HOLD',
+      type: payment.type, // Keep original type from DB
       method: payment.method as 'CARD' | 'CASH' | 'BANK_TRANSFER',
       status: payment.status as 'PENDING' | 'PROCESSING' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED',
       stripePaymentIntentId: payment.stripePaymentIntentId,

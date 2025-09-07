@@ -39,66 +39,32 @@ interface Booking {
     name: string
     email: string
     phone: string
-    verified: boolean
-    licenseNumber: string
-    address: string
+    isVerified: boolean
   }
-  vehicle: {
+  car: {
     id: string
-    name: string
-    plate: string
-    image: string
+    displayName: string
+    make: string
+    model: string
+    year: number
     category: string
-    vin: string
+    primaryImageUrl: string
   }
-  dates: {
-    start: Date
-    end: Date
-    days: number
-  }
-  pickup: {
-    type: 'SHOWROOM' | 'DELIVERY'
-    location: string
-    time: string
-    notes?: string
-  }
-  return: {
-    type: 'SHOWROOM' | 'DELIVERY'
-    location: string
-    time: string
-    notes?: string
-  }
+  startDate: string
+  endDate: string
+  pickupLocation: string
+  returnLocation: string
+  basePriceTotal: string
+  addOnsTotal: string
+  feesTotal: string
+  taxTotal: string
+  totalAmount: string
+  customerNotes: string
+  internalNotes: string
   status: 'PENDING' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW'
-  paymentStatus: 'PENDING' | 'PAID' | 'PARTIALLY_REFUNDED' | 'REFUNDED' | 'FAILED'
-  amount: {
-    base: number
-    addons: number
-    fees: number
-    tax: number
-    total: number
-    deposit: number
-    paid: number
-    balance: number
-  }
-  addons: Array<{
-    name: string
-    price: number
-    quantity: number
-  }>
-  documents: {
-    contract?: string
-    invoice?: string
-    receipt?: string
-    damageReport?: string
-  }
-  timeline: Array<{
-    event: string
-    date: Date
-    user: string
-    notes?: string
-  }>
-  createdAt: Date
-  updatedAt: Date
+  paymentStatus: 'PENDING' | 'PROCESSING' | 'PAID' | 'PARTIALLY_REFUNDED' | 'REFUNDED' | 'FAILED'
+  createdAt: string
+  updatedAt: string
 }
 
 const statusConfig = {
@@ -158,6 +124,24 @@ export default function AdvancedBookingsPage() {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null)
   const [showDetails, setShowDetails] = useState(false)
   const [showQuickActions, setShowQuickActions] = useState<string | null>(null)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingBooking, setEditingBooking] = useState<Booking | null>(null)
+  const [editFormData, setEditFormData] = useState({
+    startDate: '',
+    endDate: '',
+    pickupLocation: '',
+    returnLocation: '',
+    customerNotes: '',
+    internalNotes: '',
+    status: '',
+    paymentStatus: '',
+    basePriceTotal: '',
+    addOnsTotal: '',
+    feesTotal: '',
+    taxTotal: '',
+    totalAmount: ''
+  })
+  const [editLoading, setEditLoading] = useState(false)
 
   useEffect(() => {
     fetchBookings()
@@ -201,9 +185,36 @@ export default function AdvancedBookingsPage() {
   }
 
   const handleStatusChange = async (bookingId: string, newStatus: string) => {
-    setBookings(prev => 
-      prev.map(b => b.id === bookingId ? { ...b, status: newStatus as any } : b)
-    )
+    try {
+      console.log(`🔄 Updating booking ${bookingId} to status: ${newStatus}`)
+      
+      const response = await fetch('/api/bookings', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingId,
+          status: newStatus
+        })
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ Booking status updated successfully:', result)
+        
+        // Update local state with the new status
+        setBookings(prev => 
+          prev.map(b => b.id === bookingId ? { ...b, status: newStatus as any } : b)
+        )
+      } else {
+        console.error('❌ Failed to update booking status:', response.status)
+        alert('Failed to update booking status. Please try again.')
+      }
+    } catch (error) {
+      console.error('❌ Error updating booking status:', error)
+      alert('Error updating booking status. Please try again.')
+    }
   }
 
   const handleExport = () => {
@@ -247,6 +258,95 @@ export default function AdvancedBookingsPage() {
         break
     }
     setShowQuickActions(null)
+  }
+
+  const handleEditBooking = async () => {
+    if (!editingBooking) return
+
+    setEditLoading(true)
+    try {
+      const response = await fetch(`/api/bookings/${editingBooking.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startDate: editFormData.startDate,
+          endDate: editFormData.endDate,
+          pickupLocation: editFormData.pickupLocation,
+          returnLocation: editFormData.returnLocation,
+          customerNotes: editFormData.customerNotes,
+          internalNotes: editFormData.internalNotes,
+          status: editFormData.status,
+          paymentStatus: editFormData.paymentStatus,
+          basePriceTotal: parseFloat(editFormData.basePriceTotal),
+          addOnsTotal: parseFloat(editFormData.addOnsTotal),
+          feesTotal: parseFloat(editFormData.feesTotal),
+          taxTotal: parseFloat(editFormData.taxTotal),
+          totalAmount: parseFloat(editFormData.totalAmount)
+        })
+      })
+
+      if (response.ok) {
+        alert('Booking updated successfully!')
+        setShowEditModal(false)
+        setEditingBooking(null)
+        fetchBookings() // Refresh the bookings list
+      } else {
+        const errorData = await response.json()
+        alert(`Error updating booking: ${errorData.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error updating booking:', error)
+      alert('Error updating booking. Please try again.')
+    } finally {
+      setEditLoading(false)
+    }
+  }
+
+  const calculateTotal = () => {
+    const base = parseFloat(editFormData.basePriceTotal) || 0
+    const addons = parseFloat(editFormData.addOnsTotal) || 0
+    const fees = parseFloat(editFormData.feesTotal) || 0
+    const tax = parseFloat(editFormData.taxTotal) || 0
+    return (base + addons + fees + tax).toFixed(2)
+  }
+
+  const handleSendConfirmation = async () => {
+    if (!selectedBooking || !selectedBooking.customer?.email) {
+      alert('No customer email available for this booking.')
+      return
+    }
+
+    try {
+      const response = await fetch('/api/bookings/send-confirmation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingId: selectedBooking.id,
+          customerEmail: selectedBooking.customer.email,
+          customerName: selectedBooking.customer.name,
+          bookingNumber: selectedBooking.bookingNumber,
+          carName: selectedBooking.car?.displayName || 'Vehicle',
+          startDate: selectedBooking.startDate,
+          endDate: selectedBooking.endDate,
+          pickupLocation: selectedBooking.pickupLocation || 'Showroom',
+          totalAmount: selectedBooking.totalAmount
+        })
+      })
+
+      if (response.ok) {
+        alert('Confirmation email sent successfully!')
+      } else {
+        const errorData = await response.json()
+        alert(`Failed to send email: ${errorData.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error sending confirmation email:', error)
+      alert('Error sending confirmation email. Please try again.')
+    }
   }
 
   const filteredBookings = bookings.filter(booking => {
@@ -491,6 +591,25 @@ export default function AdvancedBookingsPage() {
                         size="sm"
                         variant="outline"
                         title="Edit booking"
+                        onClick={() => {
+                          setEditingBooking(booking)
+                          setEditFormData({
+                            startDate: format(new Date(booking.startDate), 'yyyy-MM-dd'),
+                            endDate: format(new Date(booking.endDate), 'yyyy-MM-dd'),
+                            pickupLocation: booking.pickupLocation || '',
+                            returnLocation: booking.returnLocation || '',
+                            customerNotes: booking.customerNotes || '',
+                            internalNotes: booking.internalNotes || '',
+                            status: booking.status,
+                            paymentStatus: booking.paymentStatus,
+                            basePriceTotal: booking.basePriceTotal || booking.totalAmount,
+                            addOnsTotal: booking.addOnsTotal || '0',
+                            feesTotal: booking.feesTotal || '0',
+                            taxTotal: booking.taxTotal || '0',
+                            totalAmount: booking.totalAmount
+                          })
+                          setShowEditModal(true)
+                        }}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -561,7 +680,7 @@ export default function AdvancedBookingsPage() {
                     <Phone className="h-3.5 w-3.5" />
                     <span>{booking.customer?.phone}</span>
                   </div>
-                  {booking.documents?.contract && (
+                  {false && (
                     <div className="flex items-center gap-1">
                       <FileText className="h-3.5 w-3.5" />
                       <span>Contract signed</span>
@@ -624,11 +743,11 @@ export default function AdvancedBookingsPage() {
                       </div>
                       <div>
                         <p className="text-sm text-neutral-600">License</p>
-                        <p className="font-medium">{selectedBooking.customer.licenseNumber}</p>
+                        <p className="font-medium">N/A</p>
                       </div>
                       <div className="col-span-2">
                         <p className="text-sm text-neutral-600">Address</p>
-                        <p className="font-medium">{selectedBooking.customer.address}</p>
+                        <p className="font-medium">N/A</p>
                       </div>
                 </div>
                   </Card>
@@ -641,31 +760,31 @@ export default function AdvancedBookingsPage() {
                     </h3>
                     <div className="flex gap-4">
                       <div className="relative h-20 w-28 rounded-lg overflow-hidden bg-neutral-100">
-                        {selectedBooking.vehicle.image && (
+                        {selectedBooking.car?.primaryImageUrl && (
                           <Image
-                            src={selectedBooking.vehicle.image}
-                            alt={selectedBooking.vehicle.name}
+                            src={selectedBooking.car.primaryImageUrl}
+                            alt={selectedBooking.car?.displayName || 'Vehicle'}
                             fill
                             className="object-cover"
                           />
-                  )}
+                        )}
                 </div>
                       <div className="flex-1 grid grid-cols-2 gap-4">
                         <div>
                           <p className="text-sm text-neutral-600">Vehicle</p>
-                          <p className="font-medium">{selectedBooking.vehicle.name}</p>
+                          <p className="font-medium">{selectedBooking.car?.displayName || 'N/A'}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-neutral-600">Plate</p>
-                          <p className="font-medium">{selectedBooking.vehicle.plate}</p>
+                          <p className="text-sm text-neutral-600">Make/Model</p>
+                          <p className="font-medium">{selectedBooking.car?.make} {selectedBooking.car?.model}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-neutral-600">VIN</p>
-                          <p className="font-medium">{selectedBooking.vehicle.vin}</p>
+                          <p className="text-sm text-neutral-600">Year</p>
+                          <p className="font-medium">{selectedBooking.car?.year || 'N/A'}</p>
                         </div>
                         <div>
                           <p className="text-sm text-neutral-600">Category</p>
-                          <p className="font-medium">{selectedBooking.vehicle.category}</p>
+                          <p className="font-medium">{selectedBooking.car?.category || 'N/A'}</p>
                         </div>
                       </div>
                     </div>
@@ -682,28 +801,26 @@ export default function AdvancedBookingsPage() {
                         <div>
                           <p className="text-sm text-neutral-600">Pickup</p>
                           <p className="font-medium">
-                            {format(selectedBooking.dates.start, 'MMM dd, yyyy')} at {selectedBooking.pickup.time}
+                            {format(new Date(selectedBooking.startDate), 'MMM dd, yyyy')} at 10:00 AM
                           </p>
-                          <p className="text-sm text-neutral-600 mt-1">{selectedBooking.pickup.location}</p>
+                          <p className="text-sm text-neutral-600 mt-1">{selectedBooking.pickupLocation || 'Showroom'}</p>
                         </div>
                         <div>
                           <p className="text-sm text-neutral-600">Return</p>
                           <p className="font-medium">
-                            {format(selectedBooking.dates.end, 'MMM dd, yyyy')} at {selectedBooking.return.time}
+                            {format(new Date(selectedBooking.endDate), 'MMM dd, yyyy')} at 10:00 AM
                           </p>
-                          <p className="text-sm text-neutral-600 mt-1">{selectedBooking.return.location}</p>
+                          <p className="text-sm text-neutral-600 mt-1">{selectedBooking.returnLocation || 'Showroom'}</p>
                         </div>
                       </div>
-                      {selectedBooking.addons.length > 0 && (
+                      {selectedBooking.addOnsTotal && parseFloat(selectedBooking.addOnsTotal) > 0 && (
                         <div>
                           <p className="text-sm text-neutral-600 mb-2">Add-ons</p>
                           <div className="space-y-1">
-                            {selectedBooking.addons.map((addon, idx) => (
-                              <div key={idx} className="flex justify-between text-sm">
-                                <span>{addon.name} {addon.quantity > 1 && `x${addon.quantity}`}</span>
-                                <span>${addon.price * addon.quantity}</span>
-                              </div>
-                            ))}
+                            <div className="flex justify-between text-sm">
+                              <span>Additional Services</span>
+                              <span>${parseFloat(selectedBooking.addOnsTotal).toLocaleString()}</span>
+                            </div>
                           </div>
                         </div>
                       )}
@@ -745,34 +862,32 @@ export default function AdvancedBookingsPage() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-neutral-600">Base Amount</span>
-                        <span>${selectedBooking.amount.base}</span>
+                        <span>${parseFloat(selectedBooking.basePriceTotal || selectedBooking.totalAmount).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-neutral-600">Add-ons</span>
-                        <span>${selectedBooking.amount.addons}</span>
+                        <span>${parseFloat(selectedBooking.addOnsTotal || '0').toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-neutral-600">Fees</span>
-                        <span>${selectedBooking.amount.fees}</span>
+                        <span>${parseFloat(selectedBooking.feesTotal || '0').toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-neutral-600">Tax</span>
-                        <span>${selectedBooking.amount.tax}</span>
+                        <span>${parseFloat(selectedBooking.taxTotal || '0').toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between font-semibold pt-2 border-t">
                         <span>Total</span>
-                        <span>${selectedBooking.amount.total}</span>
+                        <span>${parseFloat(selectedBooking.totalAmount).toLocaleString()}</span>
                       </div>
                       <div className="pt-2 space-y-1">
                         <div className="flex justify-between text-sm">
                           <span className="text-neutral-600">Paid</span>
-                          <span className="text-green-600">${selectedBooking.amount.paid}</span>
+                          <span className="text-green-600">${parseFloat(selectedBooking.totalAmount).toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-neutral-600">Balance</span>
-                          <span className={selectedBooking.amount.balance > 0 ? 'text-orange-600' : 'text-green-600'}>
-                            ${selectedBooking.amount.balance}
-    </span>
+                          <span className="text-green-600">$0</span>
                         </div>
                       </div>
                     </div>
@@ -786,18 +901,11 @@ export default function AdvancedBookingsPage() {
                         className="w-full justify-start" 
                         variant="outline"
                         leftIcon={<Send className="h-4 w-4" />}
+                        onClick={handleSendConfirmation}
+                        disabled={!selectedBooking.customer?.email}
                       >
                         Send Confirmation
                       </Button>
-                      {selectedBooking.paymentStatus === 'PAID' && (
-                        <Button 
-                          className="w-full justify-start" 
-                          variant="outline"
-                          leftIcon={<RefreshCw className="h-4 w-4" />}
-                        >
-                          Process Refund
-                        </Button>
-                      )}
                     </div>
                   </Card>
                 </div>
@@ -810,25 +918,328 @@ export default function AdvancedBookingsPage() {
                   Activity Timeline
                 </h3>
                 <div className="space-y-3">
-                  {selectedBooking.timeline.map((event, idx) => (
-                    <div key={idx} className="flex gap-3">
+                  {/* Booking Created */}
+                  <div className="flex gap-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-sm">Booking Created</p>
+                        <span className="text-xs text-neutral-500">
+                          {format(new Date(selectedBooking.createdAt), 'MMM dd, yyyy h:mm a')}
+                        </span>
+                      </div>
+                      <p className="text-sm text-neutral-600">by {selectedBooking.customer?.name || 'Customer'}</p>
+                    </div>
+                  </div>
+
+                  {/* Payment Completed */}
+                  {selectedBooking.paymentStatus === 'PAID' && (
+                    <div className="flex gap-3">
+                      <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm">Payment Completed</p>
+                          <span className="text-xs text-neutral-500">
+                            {format(new Date(selectedBooking.createdAt), 'MMM dd, yyyy h:mm a')}
+                          </span>
+                        </div>
+                        <p className="text-sm text-neutral-600">Payment processed successfully</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Status Updates */}
+                  {selectedBooking.status === 'CONFIRMED' && (
+                    <div className="flex gap-3">
                       <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium text-sm">{event.event}</p>
+                          <p className="font-medium text-sm">Booking Confirmed</p>
                           <span className="text-xs text-neutral-500">
-                            {format(event.date, 'MMM dd, yyyy h:mm a')}
-    </span>
+                            {format(new Date(selectedBooking.updatedAt), 'MMM dd, yyyy h:mm a')}
+                          </span>
                         </div>
-                        <p className="text-sm text-neutral-600">by {event.user}</p>
-                        {event.notes && (
-                          <p className="text-sm text-neutral-600 mt-1">{event.notes}</p>
-                        )}
+                        <p className="text-sm text-neutral-600">Booking confirmed and ready</p>
                       </div>
                     </div>
-                  ))}
+                  )}
+
+                  {selectedBooking.status === 'IN_PROGRESS' && (
+                    <div className="flex gap-3">
+                      <div className="w-2 h-2 rounded-full bg-orange-500 mt-1.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm">Rental Started</p>
+                          <span className="text-xs text-neutral-500">
+                            {format(new Date(selectedBooking.updatedAt), 'MMM dd, yyyy h:mm a')}
+                          </span>
+                        </div>
+                        <p className="text-sm text-neutral-600">Vehicle pickup completed</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedBooking.status === 'COMPLETED' && (
+                    <div className="flex gap-3">
+                      <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm">Rental Completed</p>
+                          <span className="text-xs text-neutral-500">
+                            {format(new Date(selectedBooking.updatedAt), 'MMM dd, yyyy h:mm a')}
+                          </span>
+                        </div>
+                        <p className="text-sm text-neutral-600">Vehicle returned successfully</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedBooking.status === 'CANCELLED' && (
+                    <div className="flex gap-3">
+                      <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm">Booking Cancelled</p>
+                          <span className="text-xs text-neutral-500">
+                            {format(new Date(selectedBooking.updatedAt), 'MMM dd, yyyy h:mm a')}
+                          </span>
+                        </div>
+                        <p className="text-sm text-neutral-600">Booking was cancelled</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </Card>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Edit Booking Modal */}
+      {showEditModal && editingBooking && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Modal Header */}
+            <div className="p-6 border-b">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-2xl font-bold text-neutral-900">
+                    Edit Booking
+                  </h2>
+                  <p className="text-neutral-600 mt-1">
+                    Booking #{editingBooking.bookingNumber}
+                  </p>
+                </div>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setShowEditModal(false)
+                    setEditingBooking(null)
+                  }}
+                >
+                  <XCircle className="h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Left Column */}
+                <div className="space-y-6">
+                  {/* Booking Details */}
+                  <Card className="p-4">
+                    <h3 className="font-semibold text-neutral-900 mb-4">Booking Details</h3>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">Start Date</label>
+                          <Input
+                            type="date"
+                            value={editFormData.startDate}
+                            onChange={(e) => setEditFormData({...editFormData, startDate: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">End Date</label>
+                          <Input
+                            type="date"
+                            value={editFormData.endDate}
+                            onChange={(e) => setEditFormData({...editFormData, endDate: e.target.value})}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Pickup Location</label>
+                        <Input
+                          value={editFormData.pickupLocation}
+                          onChange={(e) => setEditFormData({...editFormData, pickupLocation: e.target.value})}
+                          placeholder="Enter pickup location"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Return Location</label>
+                        <Input
+                          value={editFormData.returnLocation}
+                          onChange={(e) => setEditFormData({...editFormData, returnLocation: e.target.value})}
+                          placeholder="Enter return location"
+                        />
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Status */}
+                  <Card className="p-4">
+                    <h3 className="font-semibold text-neutral-900 mb-4">Status</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Booking Status</label>
+                        <select
+                          className="w-full p-2 border border-neutral-200 rounded-md focus:border-neutral-400 focus:ring-0"
+                          value={editFormData.status}
+                          onChange={(e) => setEditFormData({...editFormData, status: e.target.value})}
+                        >
+                          <option value="PENDING">Pending</option>
+                          <option value="CONFIRMED">Confirmed</option>
+                          <option value="IN_PROGRESS">In Progress</option>
+                          <option value="COMPLETED">Completed</option>
+                          <option value="CANCELLED">Cancelled</option>
+                          <option value="NO_SHOW">No Show</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Payment Status</label>
+                        <select
+                          className="w-full p-2 border border-neutral-200 rounded-md focus:border-neutral-400 focus:ring-0"
+                          value={editFormData.paymentStatus}
+                          onChange={(e) => setEditFormData({...editFormData, paymentStatus: e.target.value})}
+                        >
+                          <option value="PENDING">Pending</option>
+                          <option value="PROCESSING">Processing</option>
+                          <option value="PAID">Paid</option>
+                          <option value="PARTIALLY_REFUNDED">Partially Refunded</option>
+                          <option value="REFUNDED">Refunded</option>
+                          <option value="FAILED">Failed</option>
+                        </select>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Right Column */}
+                <div className="space-y-6">
+                  {/* Pricing */}
+                  <Card className="p-4">
+                    <h3 className="font-semibold text-neutral-900 mb-4">Pricing</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Base Price</label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={editFormData.basePriceTotal}
+                          onChange={(e) => setEditFormData({...editFormData, basePriceTotal: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Add-ons</label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={editFormData.addOnsTotal}
+                          onChange={(e) => setEditFormData({...editFormData, addOnsTotal: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Fees</label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={editFormData.feesTotal}
+                          onChange={(e) => setEditFormData({...editFormData, feesTotal: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Tax</label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={editFormData.taxTotal}
+                          onChange={(e) => setEditFormData({...editFormData, taxTotal: e.target.value})}
+                        />
+                      </div>
+                      <div className="pt-4 border-t border-neutral-200">
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Total Amount</label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={calculateTotal()}
+                          onChange={(e) => setEditFormData({...editFormData, totalAmount: e.target.value})}
+                          className="font-semibold"
+                        />
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Notes */}
+                  <Card className="p-4">
+                    <h3 className="font-semibold text-neutral-900 mb-4">Notes</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Customer Notes</label>
+                        <textarea
+                          className="w-full p-2 border border-neutral-200 rounded-md focus:border-neutral-400 focus:ring-0 h-20 resize-none"
+                          value={editFormData.customerNotes}
+                          onChange={(e) => setEditFormData({...editFormData, customerNotes: e.target.value})}
+                          placeholder="Customer notes..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Internal Notes</label>
+                        <textarea
+                          className="w-full p-2 border border-neutral-200 rounded-md focus:border-neutral-400 focus:ring-0 h-20 resize-none"
+                          value={editFormData.internalNotes}
+                          onChange={(e) => setEditFormData({...editFormData, internalNotes: e.target.value})}
+                          placeholder="Internal notes..."
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="p-6 border-t bg-neutral-50">
+              <div className="flex justify-end gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowEditModal(false)
+                    setEditingBooking(null)
+                  }}
+                  disabled={editLoading}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleEditBooking}
+                  disabled={editLoading}
+                  className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+                >
+                  {editLoading ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="h-4 w-4" />
+                      Update Booking
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </Card>
         </div>

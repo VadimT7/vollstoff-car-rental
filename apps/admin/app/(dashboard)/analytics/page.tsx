@@ -22,7 +22,7 @@ import {
   Star,
   Activity
 } from 'lucide-react'
-import { Button, Card } from '@valore/ui'
+import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import { format, subDays, startOfMonth, endOfMonth } from 'date-fns'
 
@@ -55,7 +55,7 @@ interface Analytics {
       name: string; 
       bookings: number; 
       revenue: number;
-      loyaltyTier: string 
+      loyaltyTier?: string 
     }>
     satisfaction: number
     retentionRate: number
@@ -74,7 +74,7 @@ interface Analytics {
       category: string;
       bookings: number;
       revenue: number;
-      avgPrice: number
+      avgPrice?: number
     }>
   }
   performance: {
@@ -99,32 +99,59 @@ export default function AnalyticsPage() {
     const fetchAnalytics = async () => {
     try {
       console.log('📊 Fetching analytics from API...')
-      const response = await fetch(`/api/analytics?days=${dateRange}`)
+      const days = dateRange.start && dateRange.end 
+        ? Math.ceil((new Date(dateRange.end).getTime() - new Date(dateRange.start).getTime()) / (1000 * 60 * 60 * 24))
+        : 30
+      const response = await fetch(`/api/analytics?days=${days}`)
       if (response.ok) {
         const apiAnalytics = await response.json()
-        console.log('✅ Analytics fetched successfully')
-        setAnalytics(apiAnalytics)
+        console.log('✅ Analytics fetched successfully', apiAnalytics)
+        
+        // Map the API response to the expected structure
+        const mappedAnalytics: Analytics = {
+          revenue: apiAnalytics.revenue || { current: 0, previous: 0, change: 0, trend: 'stable', daily: [], monthly: [] },
+          bookings: {
+            total: apiAnalytics.bookings?.total || 0,
+            completed: apiAnalytics.bookings?.completed || 0,
+            cancelled: apiAnalytics.bookings?.cancelled || 0,
+            pending: apiAnalytics.bookings?.pending || 0,
+            averageValue: apiAnalytics.bookings?.averageValue || 0,
+            averageDuration: apiAnalytics.bookings?.averageDuration || 0,
+            conversionRate: apiAnalytics.bookings?.conversionRate || 0,
+            byStatus: apiAnalytics.bookings?.byStatus || [],
+            byCategory: apiAnalytics.bookings?.byCategory || []
+          },
+          customers: {
+            total: apiAnalytics.customers?.total || 0,
+            new: apiAnalytics.customers?.new || 0,
+            returning: apiAnalytics.customers?.returning || 0,
+            verified: apiAnalytics.customers?.verified || 0,
+            topCustomers: apiAnalytics.customers?.topCustomers || [],
+            satisfaction: apiAnalytics.customers?.satisfactionScore || 0,
+            retentionRate: apiAnalytics.customers?.retentionRate || 0
+          },
+          vehicles: {
+            total: apiAnalytics.vehicles?.total || 0,
+            active: apiAnalytics.vehicles?.available || 0,
+            utilization: apiAnalytics.vehicles?.utilization || 0,
+            topPerformers: apiAnalytics.vehicles?.topPerformers || [],
+            categoryPerformance: apiAnalytics.vehicles?.categoryPerformance || []
+          },
+          performance: {
+            peakHours: [],
+            peakDays: [],
+            seasonalTrends: []
+          }
+        }
+        
+        setAnalytics(mappedAnalytics)
       } else {
         console.error('❌ Failed to fetch analytics:', response.status)
-        // Set empty analytics on error
-        setAnalytics({
-          revenue: { current: 0, previous: 0, change: 0, trend: 'stable', daily: [], monthly: [] },
-          bookings: { total: 0, completed: 0, cancelled: 0, pending: 0, averageValue: 0, averageDuration: 0, conversionRate: 0, change: 0, trend: 'stable', byStatus: [], byCategory: [] },
-          customers: { total: 0, verified: 0, new: 0, returning: 0, retentionRate: 0, satisfactionScore: 0, byTier: [] },
-          vehicles: { total: 0, available: 0, rented: 0, maintenance: 0, utilization: 0, topPerformers: [] },
-          recent: { bookings: [], payments: [] }
-        })
+        setAnalytics(null)
       }
     } catch (error) {
       console.error('❌ Error fetching analytics:', error)
-      // Set empty analytics on error
-      setAnalytics({
-        revenue: { current: 0, previous: 0, change: 0, trend: 'stable', daily: [], monthly: [] },
-        bookings: { total: 0, completed: 0, cancelled: 0, pending: 0, averageValue: 0, averageDuration: 0, conversionRate: 0, change: 0, trend: 'stable', byStatus: [], byCategory: [] },
-        customers: { total: 0, verified: 0, new: 0, returning: 0, retentionRate: 0, satisfactionScore: 0, byTier: [] },
-        vehicles: { total: 0, available: 0, rented: 0, maintenance: 0, utilization: 0, topPerformers: [] },
-        recent: { bookings: [], payments: [] }
-      })
+      setAnalytics(null)
     } finally {
       setLoading(false)
     }
@@ -411,13 +438,15 @@ export default function AnalyticsPage() {
                       <span className="text-sm text-neutral-600">
                         {customer.bookings} bookings
                       </span>
-                      <span className={`text-xs px-1.5 py-0.5 rounded ${
-                        customer.loyaltyTier === 'GOLD' ? 'bg-yellow-100 text-yellow-700' :
-                        customer.loyaltyTier === 'SILVER' ? 'bg-gray-100 text-gray-700' :
-                        'bg-orange-100 text-orange-700'
-                      }`}>
-                        {customer.loyaltyTier}
-                      </span>
+                      {customer.loyaltyTier && (
+                        <span className={`text-xs px-1.5 py-0.5 rounded ${
+                          customer.loyaltyTier === 'GOLD' ? 'bg-yellow-100 text-yellow-700' :
+                          customer.loyaltyTier === 'SILVER' ? 'bg-gray-100 text-gray-700' :
+                          'bg-orange-100 text-orange-700'
+                        }`}>
+                          {customer.loyaltyTier}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -436,13 +465,13 @@ export default function AnalyticsPage() {
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm font-medium text-neutral-900">{category.category}</span>
                   <span className="text-sm text-neutral-600">
-                    ${category.revenue.toLocaleString()} ({category.bookings} bookings)
+                    ${(category.revenue || 0).toLocaleString()} ({category.bookings} bookings)
                   </span>
                 </div>
                 <div className="w-full bg-neutral-200 rounded-full h-2">
                   <div 
                     className="bg-amber-500 h-2 rounded-full"
-                    style={{ width: `${(category.revenue / 250000) * 100}%` }}
+                    style={{ width: `${Math.min(100, ((category.revenue || 0) / 250000) * 100)}%` }}
                   />
                 </div>
               </div>

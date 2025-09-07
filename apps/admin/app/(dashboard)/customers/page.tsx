@@ -209,9 +209,36 @@ export default function CustomersPage() {
   }
 
   const handleStatusChange = async (customerId: string, newStatus: string) => {
-    setCustomers(prev => 
-      prev.map(c => c.id === customerId ? { ...c, status: newStatus as any } : c)
-    )
+    try {
+      console.log(`🔄 Updating customer ${customerId} to status: ${newStatus}`)
+      
+      const response = await fetch('/api/customers', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customerId,
+          status: newStatus
+        })
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ Customer status updated successfully:', result)
+        
+        // Update local state with the new status
+        setCustomers(prev => 
+          prev.map(c => c.id === customerId ? { ...c, status: newStatus as any } : c)
+        )
+      } else {
+        console.error('❌ Failed to update customer status:', response.status)
+        alert('Failed to update customer status. Please try again.')
+      }
+    } catch (error) {
+      console.error('❌ Error updating customer status:', error)
+      alert('Error updating customer status. Please try again.')
+    }
   }
 
   const handleVerification = async (customerId: string) => {

@@ -46,7 +46,10 @@ const typeConfig = {
   PAYMENT: { label: 'Payment', icon: ArrowDownLeft, color: 'text-green-600' },
   REFUND: { label: 'Refund', icon: ArrowUpRight, color: 'text-red-600' },
   DEPOSIT: { label: 'Deposit', icon: DollarSign, color: 'text-blue-600' },
-  HOLD: { label: 'Hold', icon: Clock, color: 'text-orange-600' }
+  HOLD: { label: 'Hold', icon: Clock, color: 'text-orange-600' },
+  RENTAL_FEE: { label: 'Rental Fee', icon: DollarSign, color: 'text-green-600' },
+  EXTRA_CHARGE: { label: 'Extra Charge', icon: ArrowDownLeft, color: 'text-yellow-600' },
+  DAMAGE_CHARGE: { label: 'Damage Charge', icon: XCircle, color: 'text-red-600' }
 }
 
 export default function PaymentsPage() {
@@ -264,10 +267,10 @@ export default function PaymentsPage() {
             </thead>
             <tbody className="divide-y">
               {filteredPayments.map((payment) => {
-                const status = statusConfig[payment.status]
+                const status = statusConfig[payment.status] || statusConfig.PENDING
                 const StatusIcon = status.icon
-                const type = typeConfig[payment.type]
-                const TypeIcon = type.icon
+                const type = typeConfig[payment.type as keyof typeof typeConfig] || typeConfig.PAYMENT
+                const TypeIcon = type?.icon || DollarSign
                 
                 return (
                   <tr key={payment.id} className="hover:bg-neutral-50">

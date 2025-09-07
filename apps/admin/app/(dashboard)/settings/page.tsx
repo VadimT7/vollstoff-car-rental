@@ -286,10 +286,6 @@ export default function SettingsPage() {
                 <Label htmlFor="stripeSecret">Stripe Secret Key</Label>
                 <Input id="stripeSecret" type="password" defaultValue="sk_test_••••••••••••••••" />
               </div>
-              <div>
-                <Label htmlFor="googleMaps">Google Maps API Key</Label>
-                <Input id="googleMaps" type="password" defaultValue="AIza••••••••••••••••" />
-              </div>
             </div>
           </Card>
 
