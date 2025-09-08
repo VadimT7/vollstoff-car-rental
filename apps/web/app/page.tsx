@@ -25,7 +25,7 @@ export default function HomePage() {
       </section>
       
       {/* Featured fleet */}
-      <section className="section-spacing">
+      <section className="section-spacing relative z-20">
         <div className="container-luxury">
           <Suspense fallback={<LoadingSpinner />}>
             <FeaturedFleet />

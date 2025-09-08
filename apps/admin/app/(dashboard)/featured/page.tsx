@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { Button, Card } from '@valore/ui'
 import Image from 'next/image'
+import { ConfirmationModal } from '../../../components/ui/confirmation-modal'
 
 interface Vehicle {
   id: string
@@ -34,6 +35,9 @@ export default function FeaturedFleetPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [draggedItem, setDraggedItem] = useState<Vehicle | null>(null)
+  const [removeModalOpen, setRemoveModalOpen] = useState(false)
+  const [vehicleToRemove, setVehicleToRemove] = useState<Vehicle | null>(null)
+  const [removing, setRemoving] = useState(false)
 
   useEffect(() => {
     fetchVehicles()
@@ -62,7 +66,7 @@ export default function FeaturedFleetPage() {
     
     try {
       const response = await fetch('/api/vehicles', {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: vehicle.id,
@@ -74,30 +78,51 @@ export default function FeaturedFleetPage() {
       if (response.ok) {
         setVehicles([...vehicles, updatedVehicle])
         setAvailableVehicles(availableVehicles.filter(v => v.id !== vehicle.id))
+      } else {
+        console.error('Failed to add vehicle to featured:', response.statusText)
+        // You could add a toast notification here
       }
     } catch (error) {
       console.error('Failed to update vehicle:', error)
     }
   }
 
-  const handleRemoveFromFeatured = async (vehicle: Vehicle) => {
+  const handleRemoveFromFeatured = (vehicle: Vehicle) => {
+    setVehicleToRemove(vehicle)
+    setRemoveModalOpen(true)
+  }
+
+  const confirmRemoveFromFeatured = async () => {
+    if (!vehicleToRemove) return
+    
+    setRemoving(true)
     try {
       const response = await fetch('/api/vehicles', {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          id: vehicle.id,
+          id: vehicleToRemove.id,
           featured: false,
           featuredOrder: 0
         })
       })
       
       if (response.ok) {
-        setVehicles(vehicles.filter(v => v.id !== vehicle.id))
-        setAvailableVehicles([...availableVehicles, { ...vehicle, featured: false, featuredOrder: 0 }])
+        // Remove from featured list
+        setVehicles(vehicles.filter(v => v.id !== vehicleToRemove.id))
+        // Add to available list
+        setAvailableVehicles([...availableVehicles, { ...vehicleToRemove, featured: false, featuredOrder: 0 }])
+      } else {
+        console.error('Failed to remove vehicle from featured:', response.statusText)
+        // You could add a toast notification here
       }
     } catch (error) {
       console.error('Failed to update vehicle:', error)
+      // You could add a toast notification here
+    } finally {
+      setRemoving(false)
+      setRemoveModalOpen(false)
+      setVehicleToRemove(null)
     }
   }
 
@@ -120,10 +145,10 @@ export default function FeaturedFleetPage() {
     
     try {
       // Update all featured vehicles with new order
-      await Promise.all(
+      const responses = await Promise.all(
         vehicles.map(vehicle => 
           fetch('/api/vehicles', {
-            method: 'PUT',
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               id: vehicle.id,
@@ -132,6 +157,12 @@ export default function FeaturedFleetPage() {
           })
         )
       )
+      
+      const allSuccessful = responses.every(response => response.ok)
+      if (!allSuccessful) {
+        console.error('Some vehicles failed to update order')
+        // You could add a toast notification here
+      }
       
       setSaving(false)
     } catch (error) {
@@ -191,21 +222,15 @@ export default function FeaturedFleetPage() {
       </div>
 
       {/* Featured Fleet Guidelines */}
-      <Card className="p-4 bg-amber-50 border-amber-200">
-        <div className="flex gap-3">
-          <Star className="h-5 w-5 text-amber-600 mt-0.5" />
-          <div className="text-sm">
-            <p className="font-medium text-amber-900 mb-1">Featured Fleet Guidelines</p>
-            <ul className="space-y-1 text-amber-700">
-              <li>• Maximum of 6 vehicles can be featured at once</li>
-              <li>• Drag and drop to reorder featured vehicles</li>
-              <li>• Featured vehicles appear on the homepage</li>
-              <li>• Only active vehicles can be featured</li>
-              <li>• Remember to save after reordering</li>
-            </ul>
-          </div>
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+        <div className="flex items-center gap-2 mb-2">
+          <Star className="h-4 w-4 text-amber-600" />
+          <p className="text-sm font-medium text-amber-900">Quick Guidelines</p>
         </div>
-      </Card>
+        <div className="text-xs text-amber-700 ml-6">
+          <span>Max 6 vehicles • Drag or click the arrows to reorder • Save after changes</span>
+        </div>
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -369,6 +394,22 @@ export default function FeaturedFleetPage() {
         )}
       </Card>
 
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        open={removeModalOpen}
+        onOpenChange={setRemoveModalOpen}
+        title="Remove from Featured"
+        description={
+          vehicleToRemove
+            ? `Are you sure you want to remove "${vehicleToRemove.displayName}" from the featured fleet? This will make it available to be featured again later.`
+            : ''
+        }
+        confirmText="Remove"
+        cancelText="Cancel"
+        variant="default"
+        onConfirm={confirmRemoveFromFeatured}
+        loading={removing}
+      />
     </div>
   )
 }

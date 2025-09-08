@@ -100,22 +100,11 @@ export function FeaturedFleet() {
         </p>
       </motion.div>
 
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-      >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {vehicles.map((vehicle) => (
-          <motion.div
-            key={vehicle.id}
-            variants={staggerItem}
-            whileHover={{ y: -10 }}
-            transition={{ duration: 0.3 }}
-          >
+          <div key={vehicle.id}>
             <Link href={`/cars/${vehicle.slug}`}>
-              <Card className="overflow-hidden group cursor-pointer h-full">
+              <Card className="overflow-hidden group cursor-pointer h-full bg-white text-black">
                 <div className="relative h-64 bg-gradient-to-br from-neutral-100 to-neutral-50">
                   <Image
                     src={vehicle.primaryImage}
@@ -132,35 +121,35 @@ export function FeaturedFleet() {
                   </div>
                 </div>
                 
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-neutral-900 mb-1">
+                <div className="p-6 bg-white">
+                  <h3 className="text-xl font-bold text-black mb-1">
                     {vehicle.displayName}
                   </h3>
-                  <p className="text-neutral-600 mb-4">{vehicle.year} Model</p>
+                  <p className="text-gray-600 mb-4">{vehicle.year} Model</p>
                   
                   <div className="grid grid-cols-3 gap-4 mb-6">
                     <div className="text-center">
-                      <p className="text-xs text-neutral-500 mb-1">Transmission</p>
-                      <p className="text-sm font-medium capitalize">
+                      <p className="text-xs text-gray-500 mb-1">Transmission</p>
+                      <p className="text-sm font-medium capitalize text-black">
                         {vehicle.specs.transmission.toLowerCase()}
                       </p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs text-neutral-500 mb-1">Seats</p>
-                      <p className="text-sm font-medium">{vehicle.specs.seats}</p>
+                      <p className="text-xs text-gray-500 mb-1">Seats</p>
+                      <p className="text-sm font-medium text-black">{vehicle.specs.seats}</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs text-neutral-500 mb-1">Doors</p>
-                      <p className="text-sm font-medium">{vehicle.specs.doors}</p>
+                      <p className="text-xs text-gray-500 mb-1">Doors</p>
+                      <p className="text-sm font-medium text-black">{vehicle.specs.doors}</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between pt-4 border-t">
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                     <div>
-                      <p className="text-sm text-neutral-600">Starting from</p>
-                      <p className="text-2xl font-bold text-primary">
+                      <p className="text-sm text-gray-600">Starting from</p>
+                      <p className="text-2xl font-bold text-amber-600">
                         ${vehicle.pricePerDay}
-                        <span className="text-sm text-neutral-600 font-normal">/day</span>
+                        <span className="text-sm text-gray-600 font-normal">/day</span>
                       </p>
                     </div>
                     <Button 
@@ -174,9 +163,9 @@ export function FeaturedFleet() {
                 </div>
               </Card>
             </Link>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

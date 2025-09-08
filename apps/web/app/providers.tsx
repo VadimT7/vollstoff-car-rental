@@ -8,16 +8,7 @@ import { trpc } from '@/lib/trpc/client'
 import { httpBatchLink } from '@trpc/client'
 import superjson from 'superjson'
 
-// Conditionally import ReactQueryDevtools only in development
-let ReactQueryDevtools: any = null
-if (process.env.NODE_ENV === 'development') {
-  try {
-    ReactQueryDevtools = require('@tanstack/react-query-devtools').ReactQueryDevtools
-  } catch (error) {
-    // Devtools not available, continue without them
-    console.warn('React Query Devtools not available:', error)
-  }
-}
+// ReactQueryDevtools removed to prevent QueryClient issues
 
 function makeQueryClient() {
   return new QueryClient({
@@ -67,7 +58,6 @@ export function Providers({ children }: { children: ReactNode }) {
             {children}
           </ThemeProvider>
         </SessionProvider>
-        {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </trpc.Provider>
   )
