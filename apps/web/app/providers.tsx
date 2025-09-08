@@ -4,10 +4,20 @@ import { ReactNode } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { SessionProvider } from 'next-auth/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { trpc } from '@/lib/trpc/client'
 import { httpBatchLink } from '@trpc/client'
 import superjson from 'superjson'
+
+// Conditionally import ReactQueryDevtools only in development
+let ReactQueryDevtools: any = null
+if (process.env.NODE_ENV === 'development') {
+  try {
+    ReactQueryDevtools = require('@tanstack/react-query-devtools').ReactQueryDevtools
+  } catch (error) {
+    // Devtools not available, continue without them
+    console.warn('React Query Devtools not available:', error)
+  }
+}
 
 function makeQueryClient() {
   return new QueryClient({
@@ -57,7 +67,7 @@ export function Providers({ children }: { children: ReactNode }) {
             {children}
           </ThemeProvider>
         </SessionProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </trpc.Provider>
   )

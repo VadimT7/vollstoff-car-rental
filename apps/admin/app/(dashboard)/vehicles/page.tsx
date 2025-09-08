@@ -24,6 +24,7 @@ import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { ConfirmationModal } from '../../../components/ui/confirmation-modal'
 
 interface Vehicle {
   id: string
@@ -83,6 +84,9 @@ export default function VehiclesPage() {
   const [filterCategory, setFilterCategory] = useState<string>('all')
   const [showFilters, setShowFilters] = useState(false)
   const [selectedVehicles, setSelectedVehicles] = useState<string[]>([])
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [vehiclesToDelete, setVehiclesToDelete] = useState<string[]>([])
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     fetchVehicles()
@@ -159,9 +163,23 @@ export default function VehiclesPage() {
   }
 
   const handleDelete = async (vehicleId: string) => {
-    if (confirm('Are you sure you want to delete this vehicle?')) {
+    setVehiclesToDelete([vehicleId])
+    setDeleteModalOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    setDeleting(true)
+    try {
       // In production, this would be an API call
-      setVehicles(prev => prev.filter(v => v.id !== vehicleId))
+      // For now, just remove from the list
+      setVehicles(prev => prev.filter(v => !vehiclesToDelete.includes(v.id)))
+      setSelectedVehicles(prev => prev.filter(id => !vehiclesToDelete.includes(id)))
+    } catch (error) {
+      console.error('Failed to delete vehicles:', error)
+    } finally {
+      setDeleting(false)
+      setDeleteModalOpen(false)
+      setVehiclesToDelete([])
     }
   }
 
@@ -177,9 +195,8 @@ export default function VehiclesPage() {
         selectedVehicles.forEach(id => handleStatusChange(id, 'RETIRED'))
         break
       case 'delete':
-        if (confirm(`Delete ${selectedVehicles.length} vehicles?`)) {
-          setVehicles(prev => prev.filter(v => !selectedVehicles.includes(v.id)))
-        }
+        setVehiclesToDelete([...selectedVehicles])
+        setDeleteModalOpen(true)
         break
     }
     setSelectedVehicles([])
@@ -544,6 +561,23 @@ export default function VehiclesPage() {
           </table>
         </div>
       </Card>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        title={vehiclesToDelete.length === 1 ? 'Delete Vehicle' : `Delete ${vehiclesToDelete.length} Vehicles`}
+        description={
+          vehiclesToDelete.length === 1
+            ? 'Are you sure you want to delete this vehicle? This action cannot be undone.'
+            : `Are you sure you want to delete ${vehiclesToDelete.length} vehicles? This action cannot be undone.`
+        }
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={confirmDelete}
+        loading={deleting}
+      />
     </div>
   )
 }

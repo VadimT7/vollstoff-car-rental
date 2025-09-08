@@ -281,7 +281,6 @@ export default function PaymentsPage() {
                     </td>
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-1.5">
-                        <TypeIcon className={`h-4 w-4 ${type.color}`} />
                         <span className={`text-sm font-medium ${type.color}`}>{type.label}</span>
                       </div>
                     </td>

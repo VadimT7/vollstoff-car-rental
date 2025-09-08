@@ -243,7 +243,7 @@ export async function POST(request: NextRequest) {
 
         <div class="footer">
             <p>Thank you for choosing FlyRentals!</p>
-            <p>© 2024 FlyRentals. All rights reserved.</p>
+            <p>© 2025 FlyRentals. All rights reserved.</p>
         </div>
     </div>
 </body>

@@ -175,7 +175,7 @@ export function Footer() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-6 text-sm">
-                              <span>&copy; 2024 FlyRentals. All rights reserved.</span>
+                              <span>&copy; 2025 FlyRentals. All rights reserved.</span>
               <div className="flex items-center gap-4">
                 <Link href="/terms" className="hover:text-primary transition-colors">
                   Terms

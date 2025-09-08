@@ -21,7 +21,7 @@ async function TodaysActivities() {
   let pendingActions = { verifications: 0, payments: 0, maintenance: 0, maintenanceVehicleName: null }
   
   try {
-    const response = await fetch('http://localhost:3001/api/dashboard/stats', { cache: 'no-store' })
+    const response = await fetch('/api/dashboard/stats', { cache: 'no-store' })
     if (response.ok) {
       const data = await response.json()
       activities = data.todaysActivities

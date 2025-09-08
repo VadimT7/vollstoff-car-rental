@@ -24,6 +24,7 @@ import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { ConfirmationModal } from '../../../components/ui/confirmation-modal'
 
 interface Vehicle {
   id: string
@@ -83,6 +84,9 @@ export default function FleetPage() {
   const [filterCategory, setFilterCategory] = useState<string>('all')
   const [showFilters, setShowFilters] = useState(false)
   const [selectedVehicles, setSelectedVehicles] = useState<string[]>([])
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [vehiclesToDelete, setVehiclesToDelete] = useState<string[]>([])
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     fetchVehicles()
@@ -125,19 +129,39 @@ export default function FleetPage() {
   }
 
   const handleDelete = async (vehicleId: string) => {
-    if (confirm('Are you sure you want to delete this vehicle?')) {
-      try {
-        const response = await fetch('/api/vehicles', {
+    setVehiclesToDelete([vehicleId])
+    setDeleteModalOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    setDeleting(true)
+    try {
+      // Delete all vehicles in the list
+      const deletePromises = vehiclesToDelete.map(vehicleId =>
+        fetch(`/api/vehicles?id=${vehicleId}`, {
           method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: vehicleId })
+          headers: { 'Content-Type': 'application/json' }
         })
-        if (response.ok) {
-          setVehicles(prev => prev.filter(v => v.id !== vehicleId))
-        }
-      } catch (error) {
-        console.error('Failed to delete vehicle:', error)
+      )
+      
+      const responses = await Promise.all(deletePromises)
+      const allSuccessful = responses.every(response => response.ok)
+      
+      if (allSuccessful) {
+        // Remove deleted vehicles from the list
+        setVehicles(prev => prev.filter(v => !vehiclesToDelete.includes(v.id)))
+        setSelectedVehicles(prev => prev.filter(id => !vehiclesToDelete.includes(id)))
+      } else {
+        console.error('Some vehicles failed to delete')
+        // You could add a toast notification here
       }
+    } catch (error) {
+      console.error('Failed to delete vehicles:', error)
+      // You could add a toast notification here
+    } finally {
+      setDeleting(false)
+      setDeleteModalOpen(false)
+      setVehiclesToDelete([])
     }
   }
 
@@ -153,9 +177,8 @@ export default function FleetPage() {
         selectedVehicles.forEach(id => handleStatusChange(id, 'RETIRED'))
         break
       case 'delete':
-        if (confirm(`Delete ${selectedVehicles.length} vehicles?`)) {
-          selectedVehicles.forEach(id => handleDelete(id))
-        }
+        setVehiclesToDelete([...selectedVehicles])
+        setDeleteModalOpen(true)
         break
     }
     setSelectedVehicles([])
@@ -506,6 +529,23 @@ export default function FleetPage() {
           </table>
         </div>
       </Card>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        title={vehiclesToDelete.length === 1 ? 'Delete Vehicle' : `Delete ${vehiclesToDelete.length} Vehicles`}
+        description={
+          vehiclesToDelete.length === 1
+            ? 'Are you sure you want to delete this vehicle? This action cannot be undone.'
+            : `Are you sure you want to delete ${vehiclesToDelete.length} vehicles? This action cannot be undone.`
+        }
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={confirmDelete}
+        loading={deleting}
+      />
     </div>
   )
 }

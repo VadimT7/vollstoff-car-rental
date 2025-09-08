@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     // Fetch all data in parallel
     const [vehicles, bookings, customers] = await Promise.all([
       vehicleService.findMany(),
-      bookingService.findMany(),
+      bookingService.findMany({}, { include: { car: true, user: true } }),
       userService.findMany({ where: { role: 'CUSTOMER' } })
     ])
 
@@ -37,26 +37,48 @@ export async function GET(request: NextRequest) {
     const pendingPayments = bookings.filter((b: any) => b.paymentStatus === 'PENDING').length
     const maintenanceScheduled = maintenanceVehicles.length
     
-    // Today's activities (mock for now - would need real booking dates)
-    const todaysPickups = bookings
-      .filter((b: any) => b.status === 'CONFIRMED')
-      .slice(0, 3)
-      .map((booking: any, index: number) => ({
+    // Today's activities - use real bookings if available, otherwise show sample data
+    let todaysPickups = []
+    let todaysReturns = []
+    
+    if (bookings.length > 0) {
+      // Use real booking data
+      todaysPickups = bookings
+        .filter((b: any) => b.status === 'CONFIRMED')
+        .slice(0, 3)
+        .map((booking: any, index: number) => ({
+          time: ['10:00 AM', '2:00 PM', '4:30 PM'][index],
+          vehicle: booking.car?.displayName || 'Unknown Vehicle',
+          customer: booking.user?.name || booking.guestName || 'Unknown Customer',
+          status: 'ready'
+        }))
+
+      todaysReturns = bookings
+        .filter((b: any) => b.status === 'IN_PROGRESS')
+        .slice(0, 2)
+        .map((booking: any, index: number) => ({
+          time: ['11:00 AM', '3:00 PM'][index],
+          vehicle: booking.car?.displayName || 'Unknown Vehicle',
+          customer: booking.user?.name || booking.guestName || 'Unknown Customer',
+          status: index === 0 ? 'completed' : 'scheduled'
+        }))
+    } else {
+      // Show sample data with real vehicle names
+      const sampleVehicles = vehicles.slice(0, 3)
+      todaysPickups = sampleVehicles.map((vehicle: any, index: number) => ({
         time: ['10:00 AM', '2:00 PM', '4:30 PM'][index],
-        vehicle: booking.car?.displayName || 'Unknown Vehicle',
-        customer: booking.user?.name || booking.guestName || 'Unknown Customer',
+        vehicle: vehicle.displayName,
+        customer: 'Vadim Tuchila',
         status: 'ready'
       }))
 
-    const todaysReturns = bookings
-      .filter((b: any) => b.status === 'IN_PROGRESS')
-      .slice(0, 2)
-      .map((booking: any, index: number) => ({
+      todaysReturns = sampleVehicles.slice(0, 2).map((vehicle: any, index: number) => ({
         time: ['11:00 AM', '3:00 PM'][index],
-        vehicle: booking.car?.displayName || 'Unknown Vehicle',
-        customer: booking.user?.name || booking.guestName || 'Unknown Customer',
+        vehicle: vehicle.displayName,
+        customer: 'Vadim Tuchila',
         status: index === 0 ? 'completed' : 'scheduled'
       }))
+    }
 
     const stats = {
       totalRevenue,

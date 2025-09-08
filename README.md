@@ -536,7 +536,7 @@ pnpm test:e2e:debug
 
 ## 📄 License
 
-Copyright © 2024 Valore Rental. All rights reserved.
+Copyright © 2025 FlyRentals. All rights reserved.
 
 This is proprietary software. Unauthorized copying, modification, or distribution is strictly prohibited.
 

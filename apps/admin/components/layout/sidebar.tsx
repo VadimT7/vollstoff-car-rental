@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { 
   LayoutDashboard,
@@ -38,10 +39,14 @@ export function Sidebar() {
       {/* Logo */}
       <div className="h-16 flex items-center px-6 border-b border-neutral-200">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">V</span>
-          </div>
-          <span className="font-semibold text-lg">FlyRentals Admin</span>
+          <Image
+            src="/logo.png"
+            alt="FlyRentals Logo"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+          <span className="font-semibold text-lg text-primary">FlyRentals Admin</span>
         </Link>
       </div>
 
@@ -54,7 +59,7 @@ export function Sidebar() {
           return (
             <Link
               key={item.name}
-              href={item.href}
+              href={item.href as any}
               className={cn(
                 'sidebar-link',
                 isActive && 'active'
@@ -68,12 +73,12 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-neutral-200">
-        <div className="text-xs text-neutral-500">
-          <p>© 2024 FlyRentals</p>
-          <p className="mt-1">Admin Panel v1.0</p>
+        <div className="p-4 border-t border-neutral-200">
+          <div className="text-xs text-neutral-500">
+            <p>© 2024 FlyRentals</p>
+            <p className="mt-1">Admin Panel v1.0</p>
+          </div>
         </div>
-      </div>
     </div>
   )
 }

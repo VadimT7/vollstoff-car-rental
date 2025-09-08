@@ -308,3 +308,75 @@ export async function PATCH(request: NextRequest) {
     )
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    console.log('🗑️ Deleting vehicle...')
+    
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Vehicle ID is required' },
+        { status: 400 }
+      )
+    }
+
+    // Check if vehicle has any active bookings
+    const activeBookings = await prisma.booking.count({
+      where: {
+        carId: id,
+        status: {
+          in: ['CONFIRMED', 'IN_PROGRESS']
+        }
+      }
+    })
+
+    if (activeBookings > 0) {
+      return NextResponse.json(
+        { error: 'Cannot delete vehicle with active bookings' },
+        { status: 400 }
+      )
+    }
+
+    // Delete the vehicle (this will cascade delete related records due to Prisma schema)
+    const deletedVehicle = await prisma.car.delete({
+      where: { id },
+      include: {
+        _count: {
+          select: { bookings: true }
+        }
+      }
+    })
+
+    console.log(`✅ Vehicle deleted successfully: ${deletedVehicle.id}`)
+    return NextResponse.json({
+      success: true,
+      message: 'Vehicle deleted successfully',
+      deletedVehicle: {
+        id: deletedVehicle.id,
+        displayName: deletedVehicle.displayName,
+        bookingsCount: deletedVehicle._count.bookings
+      }
+    })
+  } catch (error) {
+    console.error('❌ Failed to delete vehicle:', error)
+    
+    // Handle specific Prisma errors
+    if (error instanceof Error && error.message.includes('Record to delete does not exist')) {
+      return NextResponse.json(
+        { error: 'Vehicle not found' },
+        { status: 404 }
+      )
+    }
+    
+    return NextResponse.json(
+      { 
+        error: 'Failed to delete vehicle', 
+        details: error instanceof Error ? error.message : 'Unknown error' 
+      },
+      { status: 500 }
+    )
+  }
+}

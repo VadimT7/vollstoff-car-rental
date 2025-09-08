@@ -80,10 +80,9 @@ export default function VehicleViewPage() {
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this vehicle? This action cannot be undone.')) {
       try {
-        const response = await fetch('/api/vehicles', {
+        const response = await fetch(`/api/vehicles?id=${vehicleId}`, {
           method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: vehicleId })
+          headers: { 'Content-Type': 'application/json' }
         })
         
         if (response.ok) {
