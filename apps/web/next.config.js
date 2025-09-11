@@ -23,6 +23,7 @@ const nextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    unoptimized: false,
   },
   experimental: {
     typedRoutes: false,

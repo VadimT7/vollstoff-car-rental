@@ -1,6 +1,7 @@
 import { Providers } from '../providers'
 import { Sidebar } from '@/components/layout/sidebar'
 import { Header } from '@/components/layout/header'
+import { ToastContainer } from '@/components/ui/toast-notification'
 
 export default async function DashboardLayout({
   children,
@@ -35,6 +36,8 @@ export default async function DashboardLayout({
           </main>
         </div>
       </div>
+      {/* Toast notifications */}
+      <ToastContainer />
     </Providers>
   )
 }

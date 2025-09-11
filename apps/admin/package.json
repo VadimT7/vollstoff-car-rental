@@ -33,6 +33,7 @@
     "@valore/database": "workspace:*",
     "@valore/lib": "workspace:*",
     "@valore/ui": "workspace:*",
+    "@vercel/blob": "^1.1.1",
     "chart.js": "^4.4.1",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.314.0",

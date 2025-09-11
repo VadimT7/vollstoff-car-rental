@@ -1130,7 +1130,14 @@ export default function AdvancedBookingsPage() {
                           type="number"
                           step="0.01"
                           value={editFormData.basePriceTotal}
-                          onChange={(e) => setEditFormData({...editFormData, basePriceTotal: e.target.value})}
+                          onChange={(e) => {
+                            const newBase = e.target.value
+                            const addons = parseFloat(editFormData.addOnsTotal) || 0
+                            const fees = parseFloat(editFormData.feesTotal) || 0
+                            const tax = parseFloat(editFormData.taxTotal) || 0
+                            const total = (parseFloat(newBase) || 0) + addons + fees + tax
+                            setEditFormData({...editFormData, basePriceTotal: newBase, totalAmount: total.toFixed(2)})
+                          }}
                         />
                       </div>
                       <div>
@@ -1139,7 +1146,14 @@ export default function AdvancedBookingsPage() {
                           type="number"
                           step="0.01"
                           value={editFormData.addOnsTotal}
-                          onChange={(e) => setEditFormData({...editFormData, addOnsTotal: e.target.value})}
+                          onChange={(e) => {
+                            const newAddons = e.target.value
+                            const base = parseFloat(editFormData.basePriceTotal) || 0
+                            const fees = parseFloat(editFormData.feesTotal) || 0
+                            const tax = parseFloat(editFormData.taxTotal) || 0
+                            const total = base + (parseFloat(newAddons) || 0) + fees + tax
+                            setEditFormData({...editFormData, addOnsTotal: newAddons, totalAmount: total.toFixed(2)})
+                          }}
                         />
                       </div>
                       <div>
@@ -1148,7 +1162,14 @@ export default function AdvancedBookingsPage() {
                           type="number"
                           step="0.01"
                           value={editFormData.feesTotal}
-                          onChange={(e) => setEditFormData({...editFormData, feesTotal: e.target.value})}
+                          onChange={(e) => {
+                            const newFees = e.target.value
+                            const base = parseFloat(editFormData.basePriceTotal) || 0
+                            const addons = parseFloat(editFormData.addOnsTotal) || 0
+                            const tax = parseFloat(editFormData.taxTotal) || 0
+                            const total = base + addons + (parseFloat(newFees) || 0) + tax
+                            setEditFormData({...editFormData, feesTotal: newFees, totalAmount: total.toFixed(2)})
+                          }}
                         />
                       </div>
                       <div>
@@ -1157,17 +1178,24 @@ export default function AdvancedBookingsPage() {
                           type="number"
                           step="0.01"
                           value={editFormData.taxTotal}
-                          onChange={(e) => setEditFormData({...editFormData, taxTotal: e.target.value})}
+                          onChange={(e) => {
+                            const newTax = e.target.value
+                            const base = parseFloat(editFormData.basePriceTotal) || 0
+                            const addons = parseFloat(editFormData.addOnsTotal) || 0
+                            const fees = parseFloat(editFormData.feesTotal) || 0
+                            const total = base + addons + fees + (parseFloat(newTax) || 0)
+                            setEditFormData({...editFormData, taxTotal: newTax, totalAmount: total.toFixed(2)})
+                          }}
                         />
                       </div>
                       <div className="pt-4 border-t border-neutral-200">
-                        <label className="block text-sm font-medium text-neutral-700 mb-2">Total Amount</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Total Amount (Auto-calculated)</label>
                         <Input
                           type="number"
                           step="0.01"
                           value={calculateTotal()}
-                          onChange={(e) => setEditFormData({...editFormData, totalAmount: e.target.value})}
-                          className="font-semibold"
+                          disabled
+                          className="font-semibold bg-neutral-100 cursor-not-allowed opacity-75"
                         />
                       </div>
                     </div>

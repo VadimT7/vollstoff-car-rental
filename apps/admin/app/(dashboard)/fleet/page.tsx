@@ -92,6 +92,16 @@ export default function FleetPage() {
     fetchVehicles()
   }, [])
 
+  // Refresh data when the page becomes visible (e.g., returning from edit page)
+  useEffect(() => {
+    const handleFocus = () => {
+      fetchVehicles()
+    }
+    
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [])
+
   const fetchVehicles = async () => {
     try {
       // Fetch from the API route we created

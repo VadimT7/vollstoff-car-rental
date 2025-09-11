@@ -10,11 +10,11 @@ export async function GET(request: NextRequest) {
 
     console.log('👥 Fetching customers for admin dashboard...')
 
-    // Fetch customers with their booking count
+    // Fetch customers with their booking count (including all statuses)
     const customers = await prisma.user.findMany({
       where: {
         role: 'CUSTOMER',
-        status: 'ACTIVE',
+        // Remove status filter to show all customers
       },
       take: limit,
       skip: offset,

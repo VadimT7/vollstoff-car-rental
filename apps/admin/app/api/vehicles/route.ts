@@ -189,10 +189,18 @@ export async function POST(request: NextRequest) {
         create: []
       }
       
-      // Create uploads directory if it doesn't exist
-      const uploadsDir = join(process.cwd(), 'public', 'uploads', 'vehicles')
+      // Create uploads directory if it doesn't exist (admin app)
+      const adminUploadsDir = join(process.cwd(), 'public', 'uploads', 'vehicles')
       try {
-        await mkdir(uploadsDir, { recursive: true })
+        await mkdir(adminUploadsDir, { recursive: true })
+      } catch (error) {
+        // Directory might already exist
+      }
+      
+      // Create uploads directory for web app
+      const webUploadsDir = join(process.cwd(), '..', 'web', 'public', 'uploads', 'vehicles')
+      try {
+        await mkdir(webUploadsDir, { recursive: true })
       } catch (error) {
         // Directory might already exist
       }
@@ -202,13 +210,15 @@ export async function POST(request: NextRequest) {
         try {
           const timestamp = Date.now()
           const fileName = `${timestamp}-${vehicleData.displayName.replace(/\s+/g, '-')}-primary.jpg`
-          const filePath = join(uploadsDir, fileName)
+          const adminFilePath = join(adminUploadsDir, fileName)
+          const webFilePath = join(webUploadsDir, fileName)
           const imageUrl = `/uploads/vehicles/${fileName}`
           
-          // Save the file
+          // Save the file to both locations
           const bytes = await vehicleData.primaryImage.arrayBuffer()
           const buffer = Buffer.from(bytes)
-          await writeFile(filePath, buffer)
+          await writeFile(adminFilePath, buffer)
+          await writeFile(webFilePath, buffer)
           
           vehicleCreateData.images.create.push({
             url: imageUrl,
@@ -237,13 +247,15 @@ export async function POST(request: NextRequest) {
           try {
             const timestamp = Date.now()
             const fileName = `${timestamp}-${vehicleData.displayName.replace(/\s+/g, '-')}-gallery-${index + 1}.jpg`
-            const filePath = join(uploadsDir, fileName)
+            const adminFilePath = join(adminUploadsDir, fileName)
+            const webFilePath = join(webUploadsDir, fileName)
             const imageUrl = `/uploads/vehicles/${fileName}`
             
-            // Save the file
+            // Save the file to both locations
             const bytes = await image.arrayBuffer()
             const buffer = Buffer.from(bytes)
-            await writeFile(filePath, buffer)
+            await writeFile(adminFilePath, buffer)
+            await writeFile(webFilePath, buffer)
             
             vehicleCreateData.images.create.push({
               url: imageUrl,

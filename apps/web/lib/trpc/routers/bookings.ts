@@ -92,12 +92,20 @@ export const bookingsRouter = router({
           
           if (existingGuest) {
             userId = existingGuest.id;
+            // Update phone if provided
+            if (input.guestPhone && !existingGuest.phone) {
+              await tx.user.update({
+                where: { id: existingGuest.id },
+                data: { phone: input.guestPhone }
+              });
+            }
           } else {
-            // Create a guest user
+            // Create a guest user with all provided details
             const guestUser = await tx.user.create({
               data: {
                 email: input.guestEmail,
                 name: input.guestName || 'Guest User',
+                phone: input.guestPhone || null,
                 role: 'CUSTOMER',
                 status: 'ACTIVE',
               }

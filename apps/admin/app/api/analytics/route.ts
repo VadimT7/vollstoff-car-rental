@@ -109,51 +109,82 @@ export async function GET(request: NextRequest) {
     // Calculate satisfaction score (mock calculation based on completion rate)
     const satisfactionScore = Math.min(100, Math.max(0, completionRate + (100 - cancellationRate) / 2))
     
-    // Generate daily revenue data for the last 30 days
-    const dailyRevenue = []
+    // Generate daily revenue data for the last 30 days (optimized)
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+    thirtyDaysAgo.setHours(0, 0, 0, 0)
+    
+    // Fetch all payments for the last 30 days in one query
+    const recentPaymentsForChart = await prisma.payment.findMany({
+      where: {
+        status: 'SUCCEEDED',
+        createdAt: { gte: thirtyDaysAgo }
+      },
+      select: {
+        amount: true,
+        createdAt: true
+      }
+    })
+    
+    // Group payments by date
+    const dailyRevenueMap = new Map()
     for (let i = 29; i >= 0; i--) {
       const date = new Date()
       date.setDate(date.getDate() - i)
-      const dayStart = new Date(date)
-      dayStart.setHours(0, 0, 0, 0)
-      const dayEnd = new Date(date)
-      dayEnd.setHours(23, 59, 59, 999)
-      
-      const dayRevenue = await prisma.payment.aggregate({
-        where: {
-          status: 'SUCCEEDED',
-          createdAt: { gte: dayStart, lte: dayEnd }
-        },
-        _sum: { amount: true }
-      })
-      
-      dailyRevenue.push({
-        date: date.toISOString().split('T')[0],
-        amount: parseFloat(dayRevenue._sum.amount || '0')
-      })
+      const dateStr = date.toISOString().split('T')[0]
+      dailyRevenueMap.set(dateStr, 0)
     }
+    
+    recentPaymentsForChart.forEach(payment => {
+      const dateStr = payment.createdAt.toISOString().split('T')[0]
+      if (dailyRevenueMap.has(dateStr)) {
+        dailyRevenueMap.set(dateStr, dailyRevenueMap.get(dateStr) + parseFloat(payment.amount))
+      }
+    })
+    
+    const dailyRevenue = Array.from(dailyRevenueMap.entries()).map(([date, amount]) => ({
+      date,
+      amount
+    }))
 
-    // Generate monthly revenue data
-    const monthlyRevenue = []
+    // Generate monthly revenue data (optimized)
+    const twelveMonthsAgo = new Date()
+    twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12)
+    twelveMonthsAgo.setDate(1)
+    twelveMonthsAgo.setHours(0, 0, 0, 0)
+    
+    // Fetch all payments for the last 12 months in one query
+    const yearPayments = await prisma.payment.findMany({
+      where: {
+        status: 'SUCCEEDED',
+        createdAt: { gte: twelveMonthsAgo }
+      },
+      select: {
+        amount: true,
+        createdAt: true
+      }
+    })
+    
+    // Group payments by month
+    const monthlyRevenueMap = new Map()
     for (let i = 11; i >= 0; i--) {
       const date = new Date()
       date.setMonth(date.getMonth() - i)
-      const monthStart = new Date(date.getFullYear(), date.getMonth(), 1)
-      const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-      
-      const monthRevenue = await prisma.payment.aggregate({
-        where: {
-          status: 'SUCCEEDED',
-          createdAt: { gte: monthStart, lte: monthEnd }
-        },
-        _sum: { amount: true }
-      })
-      
-      monthlyRevenue.push({
-        month: date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
-        amount: parseFloat(monthRevenue._sum.amount || '0')
-      })
+      const monthKey = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      monthlyRevenueMap.set(monthKey, 0)
     }
+    
+    yearPayments.forEach(payment => {
+      const monthKey = payment.createdAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      if (monthlyRevenueMap.has(monthKey)) {
+        monthlyRevenueMap.set(monthKey, monthlyRevenueMap.get(monthKey) + parseFloat(payment.amount))
+      }
+    })
+    
+    const monthlyRevenue = Array.from(monthlyRevenueMap.entries()).map(([month, amount]) => ({
+      month,
+      amount
+    }))
 
     // Calculate booking trends
     const currentPeriodBookings = await prisma.booking.count({

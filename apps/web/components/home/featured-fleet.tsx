@@ -106,12 +106,32 @@ export function FeaturedFleet() {
             <Link href={`/cars/${vehicle.slug}`}>
               <Card className="overflow-hidden group cursor-pointer h-full bg-white text-black">
                 <div className="relative h-64 bg-gradient-to-br from-neutral-100 to-neutral-50">
-                  <Image
-                    src={vehicle.primaryImage}
-                    alt={vehicle.displayName}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  {vehicle.primaryImage ? (
+                    <Image
+                      src={vehicle.primaryImage}
+                      alt={vehicle.displayName}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={false}
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                        const parent = e.currentTarget.parentElement
+                        if (parent) {
+                          const fallback = parent.querySelector('.car-placeholder')
+                          if (fallback) {
+                            (fallback as HTMLElement).style.display = 'flex'
+                          }
+                        }
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className="car-placeholder absolute inset-0 flex items-center justify-center bg-gradient-to-br from-neutral-100 to-neutral-50" 
+                    style={{ display: vehicle.primaryImage ? 'none' : 'flex' }}
+                  >
+                    <Car className="h-16 w-16 text-neutral-400" />
+                  </div>
                   <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
                     {vehicle.category}
                   </div>

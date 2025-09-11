@@ -37,48 +37,41 @@ export async function GET(request: NextRequest) {
     const pendingPayments = bookings.filter((b: any) => b.paymentStatus === 'PENDING').length
     const maintenanceScheduled = maintenanceVehicles.length
     
-    // Today's activities - use real bookings if available, otherwise show sample data
-    let todaysPickups = []
-    let todaysReturns = []
+    // Today's activities - filter bookings by actual dates
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
     
-    if (bookings.length > 0) {
-      // Use real booking data
-      todaysPickups = bookings
-        .filter((b: any) => b.status === 'CONFIRMED')
-        .slice(0, 3)
-        .map((booking: any, index: number) => ({
-          time: ['10:00 AM', '2:00 PM', '4:30 PM'][index],
-          vehicle: booking.car?.displayName || 'Unknown Vehicle',
-          customer: booking.user?.name || booking.guestName || 'Unknown Customer',
-          status: 'ready'
-        }))
-
-      todaysReturns = bookings
-        .filter((b: any) => b.status === 'IN_PROGRESS')
-        .slice(0, 2)
-        .map((booking: any, index: number) => ({
-          time: ['11:00 AM', '3:00 PM'][index],
-          vehicle: booking.car?.displayName || 'Unknown Vehicle',
-          customer: booking.user?.name || booking.guestName || 'Unknown Customer',
-          status: index === 0 ? 'completed' : 'scheduled'
-        }))
-    } else {
-      // Show sample data with real vehicle names
-      const sampleVehicles = vehicles.slice(0, 3)
-      todaysPickups = sampleVehicles.map((vehicle: any, index: number) => ({
-        time: ['10:00 AM', '2:00 PM', '4:30 PM'][index],
-        vehicle: vehicle.displayName,
-        customer: 'Vadim Tuchila',
-        status: 'ready'
+    // Find bookings with pickup today (startDate is today)
+    const todaysPickups = bookings
+      .filter((b: any) => {
+        const startDate = new Date(b.startDate)
+        startDate.setHours(0, 0, 0, 0)
+        return startDate.getTime() === today.getTime() && 
+               (b.status === 'CONFIRMED' || b.status === 'PENDING')
+      })
+      .map((booking: any) => ({
+        time: '10:00 AM', // Default pickup time
+        vehicle: booking.car?.displayName || 'Unknown Vehicle',
+        customer: booking.user?.name || booking.guestName || 'Unknown Customer',
+        status: booking.status === 'CONFIRMED' ? 'ready' : 'preparing'
       }))
-
-      todaysReturns = sampleVehicles.slice(0, 2).map((vehicle: any, index: number) => ({
-        time: ['11:00 AM', '3:00 PM'][index],
-        vehicle: vehicle.displayName,
-        customer: 'Vadim Tuchila',
-        status: index === 0 ? 'completed' : 'scheduled'
+    
+    // Find bookings with return today (endDate is today)
+    const todaysReturns = bookings
+      .filter((b: any) => {
+        const endDate = new Date(b.endDate)
+        endDate.setHours(0, 0, 0, 0)
+        return endDate.getTime() === today.getTime() && 
+               (b.status === 'IN_PROGRESS' || b.status === 'CONFIRMED')
+      })
+      .map((booking: any) => ({
+        time: '10:00 PM', // Default return time
+        vehicle: booking.car?.displayName || 'Unknown Vehicle',
+        customer: booking.user?.name || booking.guestName || 'Unknown Customer',
+        status: 'scheduled'
       }))
-    }
 
     const stats = {
       totalRevenue,

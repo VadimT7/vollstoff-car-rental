@@ -32,6 +32,7 @@ import { formatCurrency } from '@valore/ui'
 import { format } from 'date-fns'
 import { exportToCSV, type ExportColumn, formatters } from '@/lib/export-utils'
 import Image from 'next/image'
+import { Toast, useToast } from '../../../components/ui/toast'
 
 interface Customer {
   id: string
@@ -110,6 +111,10 @@ export default function CustomersPage() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
   const [showDetails, setShowDetails] = useState(false)
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([])
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editFormData, setEditFormData] = useState<Partial<Customer>>({})
+  const [saving, setSaving] = useState(false)
+  const { toast, showToast, hideToast } = useToast()
 
   useEffect(() => {
     fetchCustomers()
@@ -248,9 +253,73 @@ export default function CustomersPage() {
   }
 
   const handleUnsuspend = async (customerId: string) => {
-    setCustomers(prev => 
-      prev.map(c => c.id === customerId ? { ...c, status: 'ACTIVE' } : c)
-    )
+    // Use the same API call method as handleStatusChange
+    await handleStatusChange(customerId, 'ACTIVE')
+  }
+
+  const handleEditCustomer = (customer: Customer) => {
+    setEditFormData({
+      id: customer.id,
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      status: customer.status,
+      loyaltyTier: customer.loyaltyTier,
+      address: { ...customer.address },
+      notes: customer.notes || ''
+    })
+    setShowEditModal(true)
+  }
+
+  const handleSaveCustomer = async () => {
+    if (!editFormData.id) return
+    
+    setSaving(true)
+    try {
+      console.log('💾 Saving customer updates:', editFormData)
+      
+      const response = await fetch('/api/customers', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customerId: editFormData.id,
+          ...editFormData
+        })
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ Customer updated successfully:', result)
+        
+        // Update local state with the new data
+        setCustomers(prev => 
+          prev.map(c => c.id === editFormData.id ? {
+            ...c,
+            name: editFormData.name || c.name,
+            email: editFormData.email || c.email,
+            phone: editFormData.phone || c.phone,
+            status: editFormData.status || c.status,
+            loyaltyTier: editFormData.loyaltyTier || c.loyaltyTier,
+            address: editFormData.address || c.address,
+            notes: editFormData.notes
+          } : c)
+        )
+        
+        setShowEditModal(false)
+        setEditFormData({})
+        showToast('Customer information saved successfully!', 'success')
+      } else {
+        console.error('❌ Failed to update customer:', response.status)
+        showToast('Failed to update customer. Please try again.', 'error')
+      }
+    } catch (error) {
+      console.error('❌ Error updating customer:', error)
+      showToast('An error occurred. Please try again.', 'error')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const handleBulkAction = (action: string) => {
@@ -562,6 +631,7 @@ export default function CustomersPage() {
                         <Button
                           size="sm"
                           variant="ghost"
+                          onClick={() => handleEditCustomer(customer)}
                           title="Edit customer information"
                         >
                           <Edit className="h-4 w-4" />
@@ -772,6 +842,214 @@ export default function CustomersPage() {
             </div>
           </Card>
         </div>
+      )}
+
+      {/* Edit Customer Modal */}
+      {showEditModal && editFormData && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-6">
+                <h2 className="text-2xl font-bold text-neutral-900">Edit Customer Information</h2>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setShowEditModal(false)
+                    setEditFormData({})
+                  }}
+                >
+                  <XCircle className="h-5 w-5" />
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Basic Information */}
+                <div>
+                  <h3 className="font-semibold text-neutral-900 mb-3">Basic Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Name</label>
+                      <Input
+                        type="text"
+                        value={editFormData.name || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                        placeholder="Customer name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Email</label>
+                      <Input
+                        type="email"
+                        value={editFormData.email || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
+                        placeholder="Email address"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Phone</label>
+                      <Input
+                        type="tel"
+                        value={editFormData.phone || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
+                        placeholder="Phone number"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Status</label>
+                      <select
+                        value={editFormData.status || 'ACTIVE'}
+                        onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value as any })}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      >
+                        <option value="ACTIVE">Active</option>
+                        <option value="SUSPENDED">Suspended</option>
+                        <option value="DELETED">Deleted</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Address */}
+                <div>
+                  <h3 className="font-semibold text-neutral-900 mb-3">Address</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Address Line 1</label>
+                      <Input
+                        type="text"
+                        value={editFormData.address?.line1 || ''}
+                        onChange={(e) => setEditFormData({ 
+                          ...editFormData, 
+                          address: { ...editFormData.address!, line1: e.target.value }
+                        })}
+                        placeholder="Street address"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Address Line 2</label>
+                      <Input
+                        type="text"
+                        value={editFormData.address?.line2 || ''}
+                        onChange={(e) => setEditFormData({ 
+                          ...editFormData, 
+                          address: { ...editFormData.address!, line2: e.target.value }
+                        })}
+                        placeholder="Apartment, suite, etc. (optional)"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">City</label>
+                      <Input
+                        type="text"
+                        value={editFormData.address?.city || ''}
+                        onChange={(e) => setEditFormData({ 
+                          ...editFormData, 
+                          address: { ...editFormData.address!, city: e.target.value }
+                        })}
+                        placeholder="City"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">State/Province</label>
+                      <Input
+                        type="text"
+                        value={editFormData.address?.state || ''}
+                        onChange={(e) => setEditFormData({ 
+                          ...editFormData, 
+                          address: { ...editFormData.address!, state: e.target.value }
+                        })}
+                        placeholder="State or Province"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Postal Code</label>
+                      <Input
+                        type="text"
+                        value={editFormData.address?.postalCode || ''}
+                        onChange={(e) => setEditFormData({ 
+                          ...editFormData, 
+                          address: { ...editFormData.address!, postalCode: e.target.value }
+                        })}
+                        placeholder="Postal code"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Country</label>
+                      <Input
+                        type="text"
+                        value={editFormData.address?.country || ''}
+                        onChange={(e) => setEditFormData({ 
+                          ...editFormData, 
+                          address: { ...editFormData.address!, country: e.target.value }
+                        })}
+                        placeholder="Country"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Loyalty & Notes */}
+                <div>
+                  <h3 className="font-semibold text-neutral-900 mb-3">Loyalty & Notes</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Loyalty Tier</label>
+                      <select
+                        value={editFormData.loyaltyTier || 'BRONZE'}
+                        onChange={(e) => setEditFormData({ ...editFormData, loyaltyTier: e.target.value as any })}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      >
+                        <option value="BRONZE">Bronze</option>
+                        <option value="SILVER">Silver</option>
+                        <option value="GOLD">Gold</option>
+                        <option value="PLATINUM">Platinum</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-1">Notes</label>
+                      <textarea
+                        value={editFormData.notes || ''}
+                        onChange={(e) => setEditFormData({ ...editFormData, notes: e.target.value })}
+                        placeholder="Add any notes about this customer..."
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-2 mt-6 pt-6 border-t">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowEditModal(false)
+                    setEditFormData({})
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSaveCustomer}
+                  disabled={saving}
+                  className="min-w-[100px]"
+                >
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+        />
       )}
     </div>
   )

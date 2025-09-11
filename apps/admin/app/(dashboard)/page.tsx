@@ -14,6 +14,7 @@ import { RevenueChart } from '@/components/dashboard/revenue-chart'
 import { BookingsTable } from '@/components/dashboard/bookings-table'
 import { FleetUtilization } from '@/components/dashboard/fleet-utilization'
 import { LoadingCard } from '@/components/ui/loading-card'
+import { RealTimeMetrics } from '@/components/dashboard/real-time-metrics'
 
 async function TodaysActivities() {
   // Fetch real dashboard data including activities
@@ -113,6 +114,11 @@ export default function DashboardPage() {
           Welcome back! Here's an overview of your rental business.
         </p>
       </div>
+
+      {/* Real-time metrics */}
+      <Suspense fallback={<LoadingCard />}>
+        <RealTimeMetrics />
+      </Suspense>
 
       {/* Stats grid */}
       <Suspense fallback={<LoadingCard count={4} />}>

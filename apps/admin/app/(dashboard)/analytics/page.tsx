@@ -18,13 +18,57 @@ import {
   Minus,
   Clock,
   CheckCircle,
+  AlertCircle,
   XCircle,
   Star,
-  Activity
+  Activity,
+  Shield,
+  UserPlus
 } from 'lucide-react'
 import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import { format, subDays, startOfMonth, endOfMonth } from 'date-fns'
+
+// Chart Bar Component for Interactive Tooltips
+function ChartBar({ day, heightPercentage }: { day: any, heightPercentage: number }) {
+  const [showTooltip, setShowTooltip] = useState(false)
+  
+  return (
+    <div className="flex-1 flex flex-col items-center justify-end h-full relative">
+      <div 
+        className={`w-full rounded-t-md transition-all duration-300 cursor-pointer ${
+          day.amount > 0 
+            ? 'bg-amber-500 hover:bg-amber-600' 
+            : 'bg-neutral-200 hover:bg-neutral-300'
+        }`}
+        style={{ height: `${heightPercentage}%` }}
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      />
+      
+      {/* Interactive Tooltip */}
+      {showTooltip && (
+        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-10">
+          <div className="bg-neutral-900 text-white px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+            <div className="text-xs font-medium">
+              {format(new Date(day.date), 'MMM d, yyyy')}
+            </div>
+            <div className="text-sm font-bold">
+              ${(day.amount || 0).toLocaleString()}
+            </div>
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
+              <div className="border-4 border-transparent border-t-neutral-900" />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <span className="text-xs text-neutral-500 mt-2 whitespace-nowrap">
+        {format(new Date(day.date), 'MMM d')}
+      </span>
+    </div>
+  )
+}
 
 interface Analytics {
   revenue: {
@@ -87,22 +131,15 @@ interface Analytics {
 export default function AnalyticsPage() {
   const [analytics, setAnalytics] = useState<Analytics | null>(null)
   const [loading, setLoading] = useState(true)
-  const [showFilters, setShowFilters] = useState(false)
-  const [dateRange, setDateRange] = useState({ start: '', end: '' })
-  const [compareMode, setCompareMode] = useState(false)
-  const [selectedMetric, setSelectedMetric] = useState<'revenue' | 'bookings' | 'customers'>('revenue')
 
   useEffect(() => {
     fetchAnalytics()
-  }, [dateRange])
+  }, [])
 
     const fetchAnalytics = async () => {
     try {
       console.log('📊 Fetching analytics from API...')
-      const days = dateRange.start && dateRange.end 
-        ? Math.ceil((new Date(dateRange.end).getTime() - new Date(dateRange.start).getTime()) / (1000 * 60 * 60 * 24))
-        : 30
-      const response = await fetch(`/api/analytics?days=${days}`)
+      const response = await fetch('/api/analytics?days=30')
       if (response.ok) {
         const apiAnalytics = await response.json()
         console.log('✅ Analytics fetched successfully', apiAnalytics)
@@ -182,84 +219,9 @@ export default function AnalyticsPage() {
           <p className="text-neutral-600 mt-2">Track performance metrics and business insights</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            leftIcon={<Filter className="h-4 w-4" />}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            Filters
-          </Button>
         </div>
       </div>
 
-      {/* Filters Section */}
-      {showFilters && (
-        <Card className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                Date Range
-              </label>
-              <div className="flex gap-2">
-                <Input
-                  type="date"
-                  value={dateRange.start}
-                  onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
-                  className="text-sm"
-                />
-                <Input
-                  type="date"
-                  value={dateRange.end}
-                  onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
-                  className="text-sm"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                Primary Metric
-              </label>
-              <select
-                value={selectedMetric}
-                onChange={(e) => setSelectedMetric(e.target.value as any)}
-                className="w-full px-3 py-2 pr-8 border rounded-lg text-sm appearance-none bg-white"
-              >
-                <option value="revenue">Revenue</option>
-                <option value="bookings">Bookings</option>
-                <option value="customers">Customers</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                Compare Mode
-              </label>
-              <div className="flex items-center gap-2 pt-2">
-                <input
-                  type="checkbox"
-                  id="compareMode"
-                  checked={compareMode}
-                  onChange={(e) => setCompareMode(e.target.checked)}
-                  className="rounded"
-                />
-                <label htmlFor="compareMode" className="text-sm text-neutral-600">
-                  Compare with previous period
-                </label>
-              </div>
-            </div>
-            <div className="flex items-end">
-              <Button 
-                onClick={() => {
-                  console.log('Applying filters:', { dateRange, selectedMetric, compareMode })
-                  // Here you would typically refetch data with filters
-                }}
-                className="w-full"
-              >
-                Apply Filters
-              </Button>
-            </div>
-          </div>
-        </Card>
-      )}
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -341,66 +303,81 @@ export default function AnalyticsPage() {
       {/* Revenue Chart */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-neutral-900">Revenue Overview</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-neutral-900">Revenue Overview</h3>
+            <div className="group relative">
+              <AlertCircle className="h-4 w-4 text-neutral-400 cursor-help" />
+              <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block z-10">
+                <div className="bg-neutral-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+                  Revenue is shown for the date when payment was received
+                  <div className="absolute bottom-0 left-4 translate-y-full">
+                    <div className="border-4 border-transparent border-t-neutral-900" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="flex gap-2">
-            <button
-              onClick={() => setSelectedMetric('revenue')}
-              className={`px-3 py-1 text-sm rounded-lg transition-colors ${
-                selectedMetric === 'revenue' 
-                  ? 'bg-amber-100 text-amber-700' 
-                  : 'text-neutral-600 hover:bg-neutral-100'
-              }`}
-            >
-              Revenue
-            </button>
-            <button
-              onClick={() => setSelectedMetric('bookings')}
-              className={`px-3 py-1 text-sm rounded-lg transition-colors ${
-                selectedMetric === 'bookings' 
-                  ? 'bg-amber-100 text-amber-700' 
-                  : 'text-neutral-600 hover:bg-neutral-100'
-              }`}
-            >
-              Bookings
-            </button>
-            <button
-              onClick={() => setSelectedMetric('customers')}
-              className={`px-3 py-1 text-sm rounded-lg transition-colors ${
-                selectedMetric === 'customers' 
-                  ? 'bg-amber-100 text-amber-700' 
-                  : 'text-neutral-600 hover:bg-neutral-100'
-              }`}
-            >
-              Customers
-            </button>
+            <span className="px-3 py-1 text-sm bg-amber-100 text-amber-700 rounded-lg">
+              Daily Revenue
+            </span>
           </div>
         </div>
         
-        {/* Simplified Chart Visualization */}
-        <div className="h-64 flex items-end gap-2">
-          {(analytics?.revenue?.daily || []).slice(-14).map((day, idx) => {
-            const dailyData = analytics?.revenue?.daily || []
-            const maxAmount = Math.max(...dailyData.map(d => d.amount), 1000)
-            const heightPercentage = day.amount > 0 
-              ? Math.max(10, (day.amount / maxAmount) * 100)
-              : 3
-            return (
-              <div key={idx} className="flex-1 flex flex-col items-center">
-                <div 
-                  className={`w-full rounded-t transition-all duration-200 ${
-                    day.amount > 0 
-                      ? 'bg-amber-500 hover:bg-amber-600' 
-                      : 'bg-neutral-200 hover:bg-neutral-300'
-                  }`}
-                  style={{ height: `${heightPercentage}%` }}
-                  title={`${day.date}: $${day.amount.toLocaleString()}`}
-                />
-                <span className="text-xs text-neutral-600 mt-2 rotate-45 origin-left">
-                  {day.date}
-                </span>
+        {/* Revenue Chart - Enhanced with Y-axis and Interactive Tooltips */}
+        <div className="h-64 relative flex">
+          {analytics?.revenue?.daily && analytics.revenue.daily.length > 0 ? (
+            <>
+              {/* Y-axis */}
+              <div className="flex flex-col justify-between pr-2 text-xs text-neutral-600">
+                {(() => {
+                  const dailyData = analytics.revenue.daily || []
+                  const maxAmount = Math.max(...dailyData.map(d => d.amount || 0), 1000)
+                  const steps = 5
+                  return Array.from({ length: steps }).map((_, i) => {
+                    const value = Math.round((maxAmount / (steps - 1)) * (steps - 1 - i))
+                    return (
+                      <div key={i} className="text-right">
+                        ${value >= 1000 ? `${(value / 1000).toFixed(1)}k` : value}
+                      </div>
+                    )
+                  })
+                })()}
               </div>
-            )
-          })}
+              
+              {/* Chart */}
+              <div className="flex-1 relative">
+                <div className="h-full flex items-end gap-1">
+                  {analytics.revenue.daily.slice(-14).map((day, idx) => {
+                    const dailyData = analytics.revenue.daily || []
+                    const maxAmount = Math.max(...dailyData.map(d => d.amount || 0), 1000)
+                    const heightPercentage = day.amount > 0 
+                      ? Math.max(10, (day.amount / maxAmount) * 100)
+                      : 5
+                    
+                    return (
+                      <ChartBar 
+                        key={idx}
+                        day={day}
+                        heightPercentage={heightPercentage}
+                      />
+                    )
+                  })}
+                </div>
+                
+                {/* Horizontal grid lines */}
+                <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="border-t border-neutral-200 opacity-50" />
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-neutral-500">No revenue data available for the selected period</p>
+            </div>
+          )}
         </div>
       </Card>
 
@@ -462,7 +439,7 @@ export default function AnalyticsPage() {
           </div>
         </Card>
 
-        {/* Category Performance */}
+        {/* Category Performance - Simplified */}
         <Card className="p-6">
           <h3 className="text-lg font-semibold text-neutral-900 mb-4">Category Performance</h3>
           <div className="space-y-4">
@@ -474,12 +451,7 @@ export default function AnalyticsPage() {
                     ${(category.revenue || 0).toLocaleString()} ({category.bookings} bookings)
                   </span>
                 </div>
-                <div className="w-full bg-neutral-200 rounded-full h-2">
-                  <div 
-                    className="bg-amber-500 h-2 rounded-full"
-                    style={{ width: `${Math.min(100, ((category.revenue || 0) / 250000) * 100)}%` }}
-                  />
-                </div>
+                <div className="w-full bg-amber-500 rounded-full h-2" />
               </div>
             ))}
           </div>
@@ -517,38 +489,140 @@ export default function AnalyticsPage() {
         </Card>
       </div>
 
-      {/* Customer Metrics */}
+      {/* Customer Metrics - Enhanced with meaningful data */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Customer Metrics</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="text-center">
-            <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
-              <span className="text-2xl font-bold text-green-700">{analytics?.customers?.retentionRate || 0}%</span>
-            </div>
-            <p className="text-sm font-medium text-neutral-900">Retention Rate</p>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-neutral-900">Customer Insights</h3>
+          <div className="text-sm text-neutral-600">
+            Based on {analytics?.customers?.total || 0} total customers
           </div>
-          <div className="text-center">
-            <div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-              <div className="flex items-center gap-1">
-                <Star className="h-5 w-5 text-blue-700" />
-                <span className="text-2xl font-bold text-blue-700">{analytics?.customers?.satisfaction || 0}</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Active Customers */}
+          <div className="relative group">
+            <div className="text-center">
+              <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                <span className="text-2xl font-bold text-green-700">
+                  {analytics?.customers?.total || 0}
+                </span>
+              </div>
+              <p className="text-sm font-medium text-neutral-900">Total Customers</p>
+              <p className="text-xs text-neutral-600 mt-1">
+                +{analytics?.customers?.new || 0} new this month
+              </p>
+            </div>
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-10">
+              <div className="bg-neutral-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+                Total unique customers who have made at least one booking
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
+                  <div className="border-4 border-transparent border-t-neutral-900" />
+                </div>
               </div>
             </div>
-            <p className="text-sm font-medium text-neutral-900">Satisfaction Score</p>
           </div>
-          <div className="text-center">
-            <div className="h-20 w-20 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
-              <span className="text-2xl font-bold text-purple-700">{analytics?.customers?.verified || 0}</span>
+
+          {/* Repeat Customer Rate */}
+          <div className="relative group">
+            <div className="text-center">
+              <div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                <span className="text-2xl font-bold text-blue-700">
+                  {analytics?.customers?.returning || 0}
+                </span>
+              </div>
+              <p className="text-sm font-medium text-neutral-900">Repeat Customers</p>
+              <p className="text-xs text-neutral-600 mt-1">
+                {analytics?.customers?.total 
+                  ? `${((analytics.customers.returning / analytics.customers.total) * 100).toFixed(0)}% of total`
+                  : '0% of total'}
+              </p>
             </div>
-            <p className="text-sm font-medium text-neutral-900">Verified Customers</p>
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-10">
+              <div className="bg-neutral-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+                Customers who have made more than one booking
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
+                  <div className="border-4 border-transparent border-t-neutral-900" />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="h-20 w-20 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-2">
-              <span className="text-2xl font-bold text-amber-700">
-                {analytics?.customers?.total ? ((analytics.customers.returning / analytics.customers.total) * 100).toFixed(0) : 0}%
-              </span>
+
+          {/* Average Customer Value */}
+          <div className="relative group">
+            <div className="text-center">
+              <div className="h-20 w-20 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                <span className="text-xl font-bold text-purple-700">
+                  ${analytics?.customers?.total && analytics?.revenue?.current
+                    ? Math.round(analytics.revenue.current / analytics.customers.total).toLocaleString()
+                    : '0'}
+                </span>
+              </div>
+              <p className="text-sm font-medium text-neutral-900">Avg Customer Value</p>
+              <p className="text-xs text-neutral-600 mt-1">
+                Lifetime revenue per customer
+              </p>
             </div>
-            <p className="text-sm font-medium text-neutral-900">Returning Customers</p>
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-10">
+              <div className="bg-neutral-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+                Total revenue divided by total customers
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
+                  <div className="border-4 border-transparent border-t-neutral-900" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Booking Frequency */}
+          <div className="relative group">
+            <div className="text-center">
+              <div className="h-20 w-20 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-2">
+                <span className="text-2xl font-bold text-amber-700">
+                  {analytics?.customers?.total && analytics?.bookings?.total
+                    ? (analytics.bookings.total / analytics.customers.total).toFixed(1)
+                    : '0'}
+                </span>
+              </div>
+              <p className="text-sm font-medium text-neutral-900">Avg Bookings</p>
+              <p className="text-xs text-neutral-600 mt-1">
+                Per customer
+              </p>
+            </div>
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-10">
+              <div className="bg-neutral-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+                Average number of bookings per customer
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
+                  <div className="border-4 border-transparent border-t-neutral-900" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Customer Insights */}
+        <div className="mt-6 pt-6 border-t grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+            <div>
+              <p className="text-xs text-neutral-600">Verified Customers</p>
+              <p className="text-lg font-semibold text-neutral-900">{analytics?.customers?.verified || 0}</p>
+            </div>
+            <Shield className="h-5 w-5 text-blue-600" />
+          </div>
+          <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+            <div>
+              <p className="text-xs text-neutral-600">New This Month</p>
+              <p className="text-lg font-semibold text-neutral-900">{analytics?.customers?.new || 0}</p>
+            </div>
+            <UserPlus className="h-5 w-5 text-green-600" />
+          </div>
+          <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+            <div>
+              <p className="text-xs text-neutral-600">Conversion Rate</p>
+              <p className="text-lg font-semibold text-neutral-900">{analytics?.bookings?.conversionRate || 0}%</p>
+            </div>
+            <TrendingUp className="h-5 w-5 text-amber-600" />
           </div>
         </div>
       </Card>

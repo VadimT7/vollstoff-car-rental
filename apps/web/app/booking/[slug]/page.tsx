@@ -20,11 +20,12 @@ import { useParams, useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button, Card, Input, Label } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
+import { AutoOpenInput } from '@/components/ui/auto-open-input'
 // Removed static data import - now using API
 import dynamic from 'next/dynamic'
 
 // Dynamically import PaymentForm to avoid SSR issues with Stripe
-const PaymentForm = dynamic(() => import('@/components/booking/payment-form'), {
+const PaymentForm = dynamic(() => import('@/components/booking/payment-form-simple'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center py-12">
@@ -161,7 +162,12 @@ export default function BookingPage() {
   const calculateTotal = () => {
     const days = calculateDays()
     const basePrice = carData.pricePerDay * days
-    const addOnsPrice = 0 // Calculate add-ons price
+    let addOnsPrice = 0
+    
+    if (bookingData.addOns.extraMileage) addOnsPrice += 50 * days
+    if (bookingData.addOns.childSeat) addOnsPrice += 25 * days
+    if (bookingData.addOns.chauffeur) addOnsPrice += 200 * days
+    
     return basePrice + addOnsPrice
   }
 
@@ -331,7 +337,7 @@ export default function BookingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <Label htmlFor="startDate">Pick-up Date <span className="text-red-500">*</span></Label>
-                <Input
+                <AutoOpenInput
                   id="startDate"
                   type="date"
                   value={bookingData.startDate}
@@ -341,7 +347,7 @@ export default function BookingPage() {
               </div>
               <div>
                 <Label htmlFor="startTime">Pick-up Time <span className="text-red-500">*</span></Label>
-                <Input
+                <AutoOpenInput
                   id="startTime"
                   type="time"
                   value={bookingData.startTime}
@@ -350,7 +356,7 @@ export default function BookingPage() {
               </div>
               <div>
                 <Label htmlFor="endDate">Return Date <span className="text-red-500">*</span></Label>
-                <Input
+                <AutoOpenInput
                   id="endDate"
                   type="date"
                   value={bookingData.endDate}
@@ -360,7 +366,7 @@ export default function BookingPage() {
               </div>
               <div>
                 <Label htmlFor="endTime">Return Time <span className="text-red-500">*</span></Label>
-                <Input
+                <AutoOpenInput
                   id="endTime"
                   type="time"
                   value={bookingData.endTime}
@@ -428,7 +434,7 @@ export default function BookingPage() {
                 <div>
                   <h3 className="font-semibold text-blue-900 mb-1">Location Information</h3>
                   <p className="text-blue-700 text-sm">
-                    Our showroom is located in downtown Montreal. Airport and hotel delivery services are available 
+                    Our showroom is located at 123 Luxury Street, Montreal, QC H3A 1A1. Airport and hotel delivery services are available 
                     for an additional fee. Please contact us for specific arrangements.
                   </p>
                 </div>
@@ -527,29 +533,8 @@ export default function BookingPage() {
               <Card className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-slate-900">Insurance Coverage</h3>
-                    <p className="text-slate-600 text-sm">Choose your insurance level</p>
-                  </div>
-                  <select
-                    value={bookingData.addOns.insurance}
-                    onChange={(e) => setBookingData(prev => ({ 
-                      ...prev, 
-                      addOns: { ...prev.addOns, insurance: e.target.value }
-                    }))}
-                    className="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="basic">Basic ($25/day)</option>
-                    <option value="premium">Premium ($50/day)</option>
-                    <option value="comprehensive">Comprehensive ($75/day)</option>
-                  </select>
-                </div>
-              </Card>
-
-              <Card className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
                     <h3 className="font-semibold text-slate-900">Extra Mileage Package</h3>
-                    <p className="text-slate-600 text-sm">Additional 200km per day</p>
+                    <p className="text-slate-600 text-sm">Additional 200km per day ($50/day)</p>
                   </div>
                   <input
                     type="checkbox"
@@ -567,7 +552,7 @@ export default function BookingPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold text-slate-900">Child Safety Seat</h3>
-                    <p className="text-slate-600 text-sm">For children 0-12 years old</p>
+                    <p className="text-slate-600 text-sm">For children 0-12 years old ($25/day)</p>
                   </div>
                   <input
                     type="checkbox"
@@ -585,7 +570,7 @@ export default function BookingPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold text-slate-900">Professional Chauffeur</h3>
-                    <p className="text-slate-600 text-sm">Let us drive for you</p>
+                    <p className="text-slate-600 text-sm">Let us drive for you ($200/day)</p>
                   </div>
                   <input
                     type="checkbox"
@@ -653,20 +638,16 @@ export default function BookingPage() {
                     <span className="text-slate-600">Base Rate ({calculateDays()} days):</span>
                     <span className="font-medium">{formatCurrency(carData.pricePerDay * calculateDays())} CAD</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Insurance:</span>
-                    <span className="font-medium">{formatCurrency(25 * calculateDays())} CAD</span>
-                  </div>
                   {bookingData.addOns.extraMileage && (
                     <div className="flex justify-between">
                       <span className="text-slate-600">Extra Mileage:</span>
-                      <span className="font-medium">{formatCurrency(30 * calculateDays())} CAD</span>
+                      <span className="font-medium">{formatCurrency(50 * calculateDays())} CAD</span>
                     </div>
                   )}
                   {bookingData.addOns.childSeat && (
                     <div className="flex justify-between">
                       <span className="text-slate-600">Child Seat:</span>
-                      <span className="font-medium">{formatCurrency(15 * calculateDays())} CAD</span>
+                      <span className="font-medium">{formatCurrency(25 * calculateDays())} CAD</span>
                     </div>
                   )}
                   {bookingData.addOns.chauffeur && (

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   Calendar as CalendarIcon,
   ChevronLeft,
@@ -8,11 +9,21 @@ import {
   Car,
   AlertCircle,
   CheckCircle,
+  Eye,
+  User,
+  CalendarDays,
+  DollarSign,
   XCircle,
   Wrench,
   Plus,
   Filter,
-  Settings
+  Settings,
+  Mail,
+  Phone,
+  MapPin,
+  CreditCard,
+  FileText,
+  Send
 } from 'lucide-react'
 import { Button, Card } from '@valore/ui'
 import { 
@@ -27,7 +38,11 @@ import {
   subMonths,
   isToday,
   addDays,
-  differenceInDays
+  differenceInDays,
+  startOfWeek,
+  endOfWeek,
+  addWeeks,
+  subWeeks
 } from 'date-fns'
 
 interface VehicleAvailability {
@@ -69,6 +84,7 @@ const statusIcons = {
 }
 
 export default function AvailabilityPage() {
+  const router = useRouter()
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [vehicles, setVehicles] = useState<VehicleAvailability[]>([])
   const [selectedVehicle, setSelectedVehicle] = useState<string>('all')
@@ -77,6 +93,11 @@ export default function AvailabilityPage() {
   const [showBlockModal, setShowBlockModal] = useState(false)
   const [selectedDates, setSelectedDates] = useState<Date[]>([])
   const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [selectedBooking, setSelectedBooking] = useState<any>(null)
+  const [showBookingModal, setShowBookingModal] = useState(false)
+  const [bookingDetails, setBookingDetails] = useState<any>(null)
+  const [loadingBookingDetails, setLoadingBookingDetails] = useState(false)
+  const [currentWeek, setCurrentWeek] = useState(new Date())
 
   useEffect(() => {
     fetchAvailability()
@@ -97,10 +118,12 @@ export default function AvailabilityPage() {
       const vehiclesWithAvailability: VehicleAvailability[] = vehiclesData.map((vehicle: any) => {
         const availability: any = {}
         
-        // Find bookings for this vehicle
+        // Find bookings for this vehicle - include all active statuses
         const vehicleBookings = bookings.filter((booking: any) => 
           booking.car?.id === vehicle.id && 
-          (booking.status === 'CONFIRMED' || booking.status === 'PENDING')
+          (booking.status === 'CONFIRMED' || 
+           booking.status === 'PENDING' || 
+           booking.status === 'IN_PROGRESS')
         )
 
         // Mark booked dates
@@ -139,6 +162,24 @@ export default function AvailabilityPage() {
     }
   }
 
+  const fetchBookingDetails = async (bookingId: string) => {
+    setLoadingBookingDetails(true)
+    try {
+      console.log('Fetching booking details for:', bookingId)
+      const response = await fetch(`/api/bookings/${bookingId}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      console.log('Booking details received:', data)
+      setBookingDetails(data)
+    } catch (error) {
+      console.error('Failed to fetch booking details:', error)
+    } finally {
+      setLoadingBookingDetails(false)
+    }
+  }
+
   const handleDateClick = (date: Date, vehicleId: string) => {
     const dateStr = format(date, 'yyyy-MM-dd')
     const vehicle = vehicles.find(v => v.id === vehicleId)
@@ -153,6 +194,18 @@ export default function AvailabilityPage() {
       } else {
         setSelectedDates([...selectedDates, date])
       }
+    } else if (availability.status === 'booked' && availability.bookingId) {
+      // Show booking details modal
+      setSelectedBooking({
+        id: availability.bookingId,
+        customerName: availability.customerName,
+        vehicle: vehicle.name,
+        date: date,
+        status: availability.status
+      })
+      setShowBookingModal(true)
+      // Fetch detailed booking information
+      fetchBookingDetails(availability.bookingId)
     }
   }
 
@@ -353,30 +406,139 @@ export default function AvailabilityPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+              onClick={() => {
+                if (viewMode === 'month') {
+                  setCurrentMonth(subMonths(currentMonth, 1))
+                } else if (viewMode === 'week') {
+                  setCurrentWeek(subWeeks(currentWeek, 1))
+                }
+              }}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <div className="px-3 py-1 text-sm font-medium">
-              {format(currentMonth, 'MMMM yyyy')}
+              {viewMode === 'month' 
+                ? format(currentMonth, 'MMMM yyyy')
+                : `${format(startOfWeek(currentWeek, { weekStartsOn: 0 }), 'MMM d')} - ${format(endOfWeek(currentWeek, { weekStartsOn: 0 }), 'MMM d, yyyy')}`
+              }
             </div>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+              onClick={() => {
+                if (viewMode === 'month') {
+                  setCurrentMonth(addMonths(currentMonth, 1))
+                } else if (viewMode === 'week') {
+                  setCurrentWeek(addWeeks(currentWeek, 1))
+                }
+              }}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentMonth(new Date())}
+              onClick={() => {
+                const today = new Date()
+                if (viewMode === 'month') {
+                  setCurrentMonth(today)
+                } else if (viewMode === 'week') {
+                  setCurrentWeek(today)
+                }
+              }}
             >
               Today
             </Button>
           </div>
         </div>
       </Card>
+
+      {/* Week View */}
+      {viewMode === 'week' && (
+        <Card className="p-4">
+          <div className="grid grid-cols-8 gap-px bg-neutral-200 rounded-lg overflow-hidden">
+            {/* Time column header */}
+            <div className="bg-neutral-50 p-2 text-center">
+              <span className="text-xs font-medium text-neutral-600">Time</span>
+            </div>
+            
+            {/* Week days header */}
+            {(() => {
+              const weekStart = startOfWeek(currentWeek, { weekStartsOn: 0 })
+              const weekDays = []
+              for (let i = 0; i < 7; i++) {
+                const day = addDays(weekStart, i)
+                weekDays.push(day)
+              }
+              return weekDays.map((day, idx) => (
+                <div key={idx} className="bg-neutral-50 p-2 text-center">
+                  <div className="text-xs font-medium text-neutral-600">
+                    {format(day, 'EEE')}
+                  </div>
+                  <div className={`text-sm font-medium ${
+                    isToday(day) ? 'text-amber-600' : 'text-neutral-900'
+                  }`}>
+                    {format(day, 'd')}
+                  </div>
+                </div>
+              ))
+            })()}
+            
+            {/* Time slots and bookings */}
+            {(() => {
+              const weekStart = startOfWeek(currentWeek, { weekStartsOn: 0 })
+              const weekDays = []
+              for (let i = 0; i < 7; i++) {
+                weekDays.push(addDays(weekStart, i))
+              }
+              
+              // Show full day view
+              return (
+                <>
+                  <div className="bg-white p-2 text-xs text-neutral-600">All Day</div>
+                  {weekDays.map((day, dayIdx) => {
+                    const dateStr = format(day, 'yyyy-MM-dd')
+                    const vehicleBookings = (selectedVehicle === 'all' ? vehicles : vehicles.filter(v => v.id === selectedVehicle))
+                      .filter(v => v.availability[dateStr] && v.availability[dateStr].status !== 'available')
+                    
+                    return (
+                      <div key={dayIdx} className="bg-white p-2 min-h-[120px]">
+                        <div className="space-y-1">
+                          {vehicleBookings.slice(0, 3).map(vehicle => {
+                            const availability = vehicle.availability[dateStr]
+                            const Icon = statusIcons[availability.status]
+                            return (
+                              <div
+                                key={vehicle.id}
+                                className={`text-xs px-2 py-1 rounded-md flex items-center gap-1 ${
+                                  statusColors[availability.status]
+                                } border transition-all hover:shadow-sm cursor-pointer`}
+                                onClick={() => handleDateClick(day, vehicle.id)}
+                                title={`${vehicle.name} - ${availability.customerName}`}
+                              >
+                                <Icon className="h-3 w-3 flex-shrink-0" />
+                                <span className="truncate text-xs">
+                                  {vehicle.name}
+                                </span>
+                              </div>
+                            )
+                          })}
+                          {vehicleBookings.length > 3 && (
+                            <div className="text-xs text-neutral-500 pl-1">
+                              +{vehicleBookings.length - 3} more
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </>
+              )
+            })()}
+          </div>
+          
+        </Card>
+      )}
 
       {/* Calendar View */}
       {viewMode === 'month' && (
@@ -542,6 +704,17 @@ export default function AvailabilityPage() {
                               <Button
                                 size="sm"
                                 variant="ghost"
+                                onClick={() => {
+                                  setSelectedBooking({
+                                    id: availability.bookingId,
+                                    customerName: availability.customerName,
+                                    vehicle: vehicle.name,
+                                    date: date,
+                                    status: availability.status
+                                  })
+                                  setShowBookingModal(true)
+                                  fetchBookingDetails(availability.bookingId!)
+                                }}
                               >
                                 View Booking
                               </Button>
@@ -560,7 +733,15 @@ export default function AvailabilityPage() {
 
       {/* Block Dates Modal */}
       {showBlockModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowBlockModal(false)
+              setSelectedDates([])
+            }
+          }}
+        >
           <Card className="w-full max-w-md">
             <div className="p-6">
               <h2 className="text-xl font-bold text-neutral-900 mb-4">Block Selected Dates</h2>
@@ -617,6 +798,264 @@ export default function AvailabilityPage() {
               </div>
             </div>
           </Card>
+        </div>
+      )}
+
+      {/* Comprehensive Booking Details Modal */}
+      {showBookingModal && selectedBooking && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowBookingModal(false)
+              setSelectedBooking(null)
+              setBookingDetails(null)
+            }
+          }}
+        >
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <Card className="w-full">
+              <div className="p-6">
+                {/* Header */}
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-neutral-900 mb-2">
+                      {bookingDetails?.customer?.name || selectedBooking.customerName || 'Customer'} - {bookingDetails?.vehicle?.displayName || bookingDetails?.car?.displayName || selectedBooking.vehicle || 'Vehicle'}
+                    </h3>
+                    <p className="text-sm text-neutral-600">
+                      Booking #{bookingDetails?.id || selectedBooking.id} • Created on {format(selectedBooking.date, 'MMMM dd, yyyy')}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowBookingModal(false)
+                      setSelectedBooking(null)
+                      setBookingDetails(null)
+                    }}
+                    className="text-neutral-400 hover:text-neutral-600"
+                  >
+                    <XCircle className="h-6 w-6" />
+                  </button>
+                </div>
+
+                {loadingBookingDetails ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                  </div>
+                ) : bookingDetails ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Left Column */}
+                    <div className="space-y-6">
+                      {/* Customer Information */}
+                      <div>
+                        <h4 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+                          <User className="h-5 w-5" />
+                          Customer Information
+                        </h4>
+                        <div className="space-y-3">
+                            <div>
+                              <label className="text-sm text-neutral-600">Name</label>
+                              <p className="font-medium text-neutral-900">{bookingDetails.customer?.name || selectedBooking.customerName || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <label className="text-sm text-neutral-600">Email</label>
+                              <p className="font-medium text-neutral-900">{bookingDetails.customer?.email || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <label className="text-sm text-neutral-600">Phone</label>
+                              <p className="font-medium text-neutral-900">{bookingDetails.customer?.phone || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <label className="text-sm text-neutral-600">License</label>
+                              <p className="font-medium text-neutral-900">{bookingDetails.customer?.licenseNumber || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <label className="text-sm text-neutral-600">Address</label>
+                              <p className="font-medium text-neutral-900">{bookingDetails.customer?.address || 'N/A'}</p>
+                            </div>
+                        </div>
+                      </div>
+
+                      {/* Vehicle Details */}
+                      <div>
+                        <h4 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+                          <Car className="h-5 w-5" />
+                          Vehicle Details
+                        </h4>
+                        <div className="space-y-3">
+                            <div>
+                              <label className="text-sm text-neutral-600">Vehicle</label>
+                              <p className="font-medium text-neutral-900">{bookingDetails.vehicle?.displayName || bookingDetails.car?.displayName || selectedBooking.vehicle || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <label className="text-sm text-neutral-600">Make/Model</label>
+                              <p className="font-medium text-neutral-900">
+                                {(bookingDetails.vehicle?.make && bookingDetails.vehicle?.model) 
+                                  ? `${bookingDetails.vehicle.make} ${bookingDetails.vehicle.model}`
+                                  : (bookingDetails.car?.make && bookingDetails.car?.model)
+                                  ? `${bookingDetails.car.make} ${bookingDetails.car.model}`
+                                  : 'N/A'
+                                }
+                              </p>
+                            </div>
+                            <div>
+                              <label className="text-sm text-neutral-600">Year</label>
+                              <p className="font-medium text-neutral-900">{bookingDetails.vehicle?.year || bookingDetails.car?.year || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <label className="text-sm text-neutral-600">Category</label>
+                              <p className="font-medium text-neutral-900">{bookingDetails.vehicle?.category || bookingDetails.car?.category || 'N/A'}</p>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column */}
+                    <div className="space-y-6">
+                      {/* Rental Details */}
+                      <div>
+                        <h4 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+                          <CalendarDays className="h-5 w-5" />
+                          Rental Details
+                        </h4>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-sm text-neutral-600">Pickup</label>
+                            <p className="font-medium text-neutral-900">
+                              {format(new Date(bookingDetails.startDate), 'MMM dd, yyyy')} at {bookingDetails.startTime}
+                            </p>
+                            <p className="text-sm text-neutral-600">{bookingDetails.pickupLocation || 'Showroom'}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm text-neutral-600">Return</label>
+                            <p className="font-medium text-neutral-900">
+                              {format(new Date(bookingDetails.endDate), 'MMM dd, yyyy')} at {bookingDetails.endTime}
+                            </p>
+                            <p className="text-sm text-neutral-600">{bookingDetails.returnLocation || 'Showroom'}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Status */}
+                      <div>
+                        <h4 className="text-lg font-semibold text-neutral-900 mb-4">Status</h4>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-sm text-neutral-600">Booking Status</label>
+                            <p className="font-medium text-neutral-900 capitalize">{bookingDetails.status || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm text-neutral-600">Payment Status</label>
+                            <p className="font-medium text-neutral-900 capitalize">{bookingDetails.paymentStatus || 'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Payment Summary */}
+                      <div>
+                        <h4 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+                          <DollarSign className="h-5 w-5" />
+                          Payment Summary
+                        </h4>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-neutral-600">Base Amount</span>
+                            <span className="font-medium">${bookingDetails.basePriceTotal || 0}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-neutral-600">Add-ons</span>
+                            <span className="font-medium">${bookingDetails.addOnsTotal || 0}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-neutral-600">Fees</span>
+                            <span className="font-medium">${bookingDetails.feesTotal || 0}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-neutral-600">Tax</span>
+                            <span className="font-medium">${bookingDetails.taxTotal || 0}</span>
+                          </div>
+                          <div className="border-t pt-2 flex justify-between font-semibold">
+                            <span>Total</span>
+                            <span>${bookingDetails.totalAmount || 0}</span>
+                          </div>
+                          <div className="flex justify-between text-green-600">
+                            <span>Paid</span>
+                            <span>${bookingDetails.totalAmount || 0}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Balance</span>
+                            <span>$0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-neutral-600">Failed to load booking details</p>
+                  </div>
+                )}
+
+                {/* Quick Actions */}
+                <div className="mt-8 pt-6 border-t">
+                  <h4 className="text-lg font-semibold text-neutral-900 mb-4">Quick Actions</h4>
+                  <div className="flex flex-wrap gap-3">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        const subject = `Booking Confirmation - ${bookingDetails?.bookingNumber || bookingDetails?.id}`
+                        const body = `Dear ${bookingDetails?.customer?.name || 'Customer'},\n\nYour booking has been confirmed!\n\nBooking Details:\n- Booking ID: ${bookingDetails?.id}\n- Vehicle: ${bookingDetails?.vehicle?.displayName || 'N/A'}\n- Pick-up Date: ${bookingDetails?.startDate ? format(new Date(bookingDetails.startDate), 'MMM dd, yyyy') : 'N/A'} at ${bookingDetails?.startTime || '10:00 AM'}\n- Return Date: ${bookingDetails?.endDate ? format(new Date(bookingDetails.endDate), 'MMM dd, yyyy') : 'N/A'} at ${bookingDetails?.endTime || '10:00 AM'}\n- Pick-up Location: ${bookingDetails?.pickupLocation || 'Showroom'}\n- Return Location: ${bookingDetails?.returnLocation || 'Showroom'}\n- Total Amount: $${bookingDetails?.totalAmount || 0}\n\nPayment Status: ${bookingDetails?.paymentStatus || 'N/A'}\n\nThank you for choosing us!\n\nBest regards,\nFlyRentals Team`
+                        const mailtoLink = `mailto:${bookingDetails?.customer?.email || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+                        window.open(mailtoLink, '_blank')
+                      }}
+                    >
+                      <Send className="h-4 w-4 mr-2" />
+                      Send Confirmation
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Activity Timeline */}
+                {bookingDetails && (
+                  <div className="mt-8 pt-6 border-t">
+                    <h4 className="text-lg font-semibold text-neutral-900 mb-4">Activity Timeline</h4>
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                        <div>
+                          <p className="font-medium text-neutral-900">Booking Created</p>
+                          <p className="text-sm text-neutral-600">
+                            {format(new Date(bookingDetails.createdAt), 'MMM dd, yyyy h:mm a')} by {bookingDetails.customer?.name}
+                          </p>
+                        </div>
+                      </div>
+                      {bookingDetails.paymentStatus === 'PAID' && (
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                          <div>
+                            <p className="font-medium text-neutral-900">Payment Completed</p>
+                            <p className="text-sm text-neutral-600">
+                              {format(new Date(bookingDetails.updatedAt), 'MMM dd, yyyy h:mm a')} - Payment processed successfully
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-amber-500 rounded-full mt-2"></div>
+                        <div>
+                          <p className="font-medium text-neutral-900">Booking Confirmed</p>
+                          <p className="text-sm text-neutral-600">
+                            {format(new Date(bookingDetails.updatedAt), 'MMM dd, yyyy h:mm a')} - Booking confirmed and ready
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+          </div>
         </div>
       )}
     </div>

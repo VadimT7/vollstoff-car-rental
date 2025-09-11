@@ -14,7 +14,9 @@ import {
   Clock,
   RefreshCw,
   ArrowUpRight,
-  ArrowDownLeft
+  ArrowDownLeft,
+  Eye,
+  Calendar
 } from 'lucide-react'
 import { Button, Card, Input } from '@valore/ui'
 import { format } from 'date-fns'
@@ -24,12 +26,14 @@ interface Payment {
   id: string
   bookingNumber: string
   customerName: string
+  customerEmail?: string
   amount: number
   currency: string
   type: 'PAYMENT' | 'REFUND' | 'DEPOSIT' | 'HOLD'
   method: 'CARD' | 'CASH' | 'BANK_TRANSFER'
   status: 'PENDING' | 'PROCESSING' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED'
   stripePaymentIntentId?: string
+  stripeChargeId?: string
   createdAt: Date
   processedAt?: Date
 }
@@ -59,10 +63,14 @@ export default function PaymentsPage() {
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [filterType, setFilterType] = useState<string>('all')
   const [dateRange, setDateRange] = useState({ start: '', end: '' })
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null)
+  const [showDetailsModal, setShowDetailsModal] = useState(false)
+  const [selectedBooking, setSelectedBooking] = useState<any>(null)
+  const [showBookingModal, setShowBookingModal] = useState(false)
 
   useEffect(() => {
     fetchPayments()
-  }, [])
+  }, [dateRange])
 
   const fetchPayments = async () => {
     try {
@@ -110,7 +118,12 @@ export default function PaymentsPage() {
     const matchesStatus = filterStatus === 'all' || payment.status === filterStatus
     const matchesType = filterType === 'all' || payment.type === filterType
     
-    return matchesSearch && matchesStatus && matchesType
+    // Date filter
+    const paymentDate = new Date(payment.createdAt)
+    const matchesDateRange = (!dateRange.start || paymentDate >= new Date(dateRange.start)) &&
+                            (!dateRange.end || paymentDate <= new Date(dateRange.end + 'T23:59:59'))
+    
+    return matchesSearch && matchesStatus && matchesType && matchesDateRange
   })
 
   const stats = {
@@ -315,7 +328,17 @@ export default function PaymentsPage() {
                     </td>
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-2">
-                        <Button size="sm" variant="ghost">View</Button>
+                        <Button 
+                          size="sm" 
+                          variant="ghost"
+                          onClick={() => {
+                            setSelectedPayment(payment)
+                            setShowDetailsModal(true)
+                          }}
+                          title="View transaction details"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
                         {payment.status === 'SUCCEEDED' && payment.type === 'PAYMENT' && (
                           <Button size="sm" variant="ghost" className="text-red-600">
                             Refund
@@ -330,6 +353,170 @@ export default function PaymentsPage() {
           </table>
         </div>
       </Card>
+
+      {/* Payment Details Modal */}
+      {showDetailsModal && selectedPayment && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowDetailsModal(false)
+              setSelectedPayment(null)
+            }
+          }}
+        >
+          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-6">
+                <h2 className="text-2xl font-bold text-neutral-900">Payment Details</h2>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setShowDetailsModal(false)
+                    setSelectedPayment(null)
+                  }}
+                >
+                  <XCircle className="h-5 w-5" />
+                </Button>
+              </div>
+
+              <div className="space-y-6">
+                {/* Transaction Info */}
+                <div>
+                  <h3 className="font-semibold text-neutral-900 mb-3">Transaction Information</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-neutral-600">Transaction ID</p>
+                      <p className="font-medium text-neutral-900">{selectedPayment.id}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-600">Booking Number</p>
+                      <p className="font-medium text-neutral-900">{selectedPayment.bookingNumber}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-600">Type</p>
+                      <p className="font-medium text-neutral-900">{selectedPayment.type}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-600">Status</p>
+                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg ${
+                        statusConfig[selectedPayment.status].bg
+                      }`}>
+                        <span className={`text-sm font-medium ${statusConfig[selectedPayment.status].color}`}>
+                          {statusConfig[selectedPayment.status].label}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Details */}
+                <div>
+                  <h3 className="font-semibold text-neutral-900 mb-3">Payment Details</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-neutral-600">Amount</p>
+                      <p className="font-medium text-neutral-900 text-lg">${selectedPayment.amount.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-600">Method</p>
+                      <p className="font-medium text-neutral-900">{selectedPayment.method}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-600">Date</p>
+                      <p className="font-medium text-neutral-900">
+                        {format(selectedPayment.createdAt, 'MMMM dd, yyyy h:mm a')}
+                      </p>
+                    </div>
+                    {selectedPayment.processedAt && (
+                      <div>
+                        <p className="text-sm text-neutral-600">Processed At</p>
+                        <p className="font-medium text-neutral-900">
+                          {format(selectedPayment.processedAt, 'MMMM dd, yyyy h:mm a')}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Customer Info */}
+                <div>
+                  <h3 className="font-semibold text-neutral-900 mb-3">Customer Information</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-neutral-600">Name</p>
+                      <p className="font-medium text-neutral-900">{selectedPayment.customerName}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-600">Email</p>
+                      <p className="font-medium text-neutral-900">{selectedPayment.customerEmail || 'N/A'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stripe Info */}
+                {selectedPayment.stripePaymentIntentId && (
+                  <div>
+                    <h3 className="font-semibold text-neutral-900 mb-3">Stripe Information</h3>
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-sm text-neutral-600">Payment Intent ID</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-mono text-sm text-neutral-900">{selectedPayment.stripePaymentIntentId}</p>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              if (selectedPayment.stripePaymentIntentId) {
+                                navigator.clipboard.writeText(selectedPayment.stripePaymentIntentId)
+                              }
+                            }}
+                            title="Copy to clipboard"
+                          >
+                            <CreditCard className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                      {selectedPayment.stripeChargeId && (
+                        <div>
+                          <p className="text-sm text-neutral-600">Charge ID</p>
+                          <p className="font-mono text-sm text-neutral-900">{selectedPayment.stripeChargeId}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="flex justify-end gap-2 pt-4 border-t">
+                  {selectedPayment.status === 'SUCCEEDED' && selectedPayment.type === 'PAYMENT' && (
+                    <Button
+                      variant="outline"
+                      className="text-red-600"
+                    >
+                      Process Refund
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    onClick={() => window.print()}
+                  >
+                    Print Receipt
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setShowDetailsModal(false)
+                      setSelectedPayment(null)
+                    }}
+                  >
+                    Close
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }

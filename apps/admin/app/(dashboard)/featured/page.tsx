@@ -16,6 +16,7 @@ import {
 import { Button, Card } from '@valore/ui'
 import Image from 'next/image'
 import { ConfirmationModal } from '../../../components/ui/confirmation-modal'
+import { Toast, useToast } from '../../../components/ui/toast'
 
 interface Vehicle {
   id: string
@@ -38,6 +39,7 @@ export default function FeaturedFleetPage() {
   const [removeModalOpen, setRemoveModalOpen] = useState(false)
   const [vehicleToRemove, setVehicleToRemove] = useState<Vehicle | null>(null)
   const [removing, setRemoving] = useState(false)
+  const { toast, showToast, hideToast } = useToast()
 
   useEffect(() => {
     fetchVehicles()
@@ -61,6 +63,7 @@ export default function FeaturedFleetPage() {
   }
 
   const handleAddToFeatured = async (vehicle: Vehicle) => {
+    // Add to the end with proper ordering
     const newOrder = vehicles.length + 1
     const updatedVehicle = { ...vehicle, featured: true, featuredOrder: newOrder }
     
@@ -76,11 +79,14 @@ export default function FeaturedFleetPage() {
       })
       
       if (response.ok) {
-        setVehicles([...vehicles, updatedVehicle])
+        // Add the new vehicle and ensure proper ordering
+        const newVehicles = [...vehicles, updatedVehicle].sort((a, b) => a.featuredOrder - b.featuredOrder)
+        setVehicles(newVehicles)
         setAvailableVehicles(availableVehicles.filter(v => v.id !== vehicle.id))
+        showToast(`${vehicle.displayName} added to featured fleet!`, 'success')
       } else {
         console.error('Failed to add vehicle to featured:', response.statusText)
-        // You could add a toast notification here
+        showToast('Failed to add vehicle. Please try again.', 'error')
       }
     } catch (error) {
       console.error('Failed to update vehicle:', error)
@@ -108,17 +114,36 @@ export default function FeaturedFleetPage() {
       })
       
       if (response.ok) {
-        // Remove from featured list
-        setVehicles(vehicles.filter(v => v.id !== vehicleToRemove.id))
+        // Remove from featured list and recalculate orders
+        const remainingVehicles = vehicles
+          .filter(v => v.id !== vehicleToRemove.id)
+          .map((v, index) => ({ ...v, featuredOrder: index + 1 }))
+        
+        setVehicles(remainingVehicles)
         // Add to available list
         setAvailableVehicles([...availableVehicles, { ...vehicleToRemove, featured: false, featuredOrder: 0 }])
+        
+        // Update the order in the backend for remaining vehicles
+        await Promise.all(
+          remainingVehicles.map(vehicle => 
+            fetch('/api/vehicles', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: vehicle.id,
+                featuredOrder: vehicle.featuredOrder
+              })
+            })
+          )
+        )
+        showToast(`${vehicleToRemove.displayName} removed from featured fleet!`, 'success')
       } else {
         console.error('Failed to remove vehicle from featured:', response.statusText)
-        // You could add a toast notification here
+        showToast('Failed to remove vehicle. Please try again.', 'error')
       }
     } catch (error) {
       console.error('Failed to update vehicle:', error)
-      // You could add a toast notification here
+      showToast('An error occurred. Please try again.', 'error')
     } finally {
       setRemoving(false)
       setRemoveModalOpen(false)
@@ -159,9 +184,11 @@ export default function FeaturedFleetPage() {
       )
       
       const allSuccessful = responses.every(response => response.ok)
-      if (!allSuccessful) {
+      if (allSuccessful) {
+        showToast('Featured fleet order saved successfully!', 'success')
+      } else {
         console.error('Some vehicles failed to update order')
-        // You could add a toast notification here
+        showToast('Failed to save order. Please try again.', 'error')
       }
       
       setSaving(false)
@@ -410,6 +437,15 @@ export default function FeaturedFleetPage() {
         onConfirm={confirmRemoveFromFeatured}
         loading={removing}
       />
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+        />
+      )}
     </div>
   )
 }

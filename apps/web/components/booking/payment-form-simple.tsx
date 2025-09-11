@@ -38,7 +38,6 @@ interface PaymentFormProps {
 function MockCheckoutForm({ amount, bookingData, onSuccess, onError }: PaymentFormProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
-  // Payment method is always card now
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,91 +59,47 @@ function MockCheckoutForm({ amount, bookingData, onSuccess, onError }: PaymentFo
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Payment Method Selection */}
+      {/* Payment Method */}
       <div className="space-y-4">
         <label className="text-sm font-medium text-neutral-700">Payment Method</label>
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => setPaymentMethod('card')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              paymentMethod === 'card'
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-neutral-200 hover:border-neutral-300'
-            }`}
-          >
-            <CreditCard className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
-            <p className="text-sm font-medium">Credit/Debit Card</p>
-            <p className="text-xs text-neutral-500 mt-1">Secure online payment</p>
-          </button>
-          
-          <button
-            type="button"
-            onClick={() => setPaymentMethod('cash')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              paymentMethod === 'cash'
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-neutral-200 hover:border-neutral-300'
-            }`}
-          >
-            <Shield className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
-            <p className="text-sm font-medium">Cash Payment</p>
-            <p className="text-xs text-neutral-500 mt-1">Pay at pickup (Card hold required)</p>
-          </button>
+        <div className="p-4 rounded-lg border-2 border-amber-500 bg-amber-50">
+          <CreditCard className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
+          <p className="text-sm font-medium text-center">Credit/Debit Card</p>
+          <p className="text-xs text-neutral-500 mt-1 text-center">Secure online payment</p>
         </div>
       </div>
 
       {/* Mock Payment Element */}
-      {paymentMethod === 'card' && (
-        <div className="space-y-4">
-          <Card className="p-6 bg-blue-50 border-blue-200">
-            <div className="flex items-center gap-3 mb-4">
-              <CreditCard className="h-6 w-6 text-blue-600" />
-              <div>
-                <p className="font-medium text-blue-900">Demo Payment Mode</p>
-                <p className="text-sm text-blue-700">No real Stripe keys configured</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="p-3 bg-white rounded border">
-                <p className="text-sm font-medium text-neutral-700">Card Number</p>
-                <p className="text-sm text-neutral-500">4242 4242 4242 4242 (Demo)</p>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-white rounded border">
-                  <p className="text-sm font-medium text-neutral-700">Expiry</p>
-                  <p className="text-sm text-neutral-500">12/25</p>
-                </div>
-                <div className="p-3 bg-white rounded border">
-                  <p className="text-sm font-medium text-neutral-700">CVC</p>
-                  <p className="text-sm text-neutral-500">123</p>
-                </div>
-              </div>
-            </div>
-            <p className="text-xs text-blue-600 mt-3">
-              💡 This is a demo payment. In production, real Stripe keys would be used.
-            </p>
-          </Card>
-        </div>
-      )}
-
-      {/* Cash Payment Notice */}
-      {paymentMethod === 'cash' && (
-        <Card className="bg-amber-50 border-amber-200">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-amber-900">Cash Payment Requirements</p>
-              <ul className="text-sm text-amber-700 mt-2 space-y-1">
-                <li>• A valid credit card is required for security deposit</li>
-                <li>• ${(amount * 0.3).toFixed(2)} will be held on your card</li>
-                <li>• Full payment due at vehicle pickup</li>
-                <li>• Accepted: Cash, Bank Transfer</li>
-              </ul>
+      <div className="space-y-4">
+        <Card className="p-6 bg-blue-50 border-blue-200">
+          <div className="flex items-center gap-3 mb-4">
+            <CreditCard className="h-6 w-6 text-blue-600" />
+            <div>
+              <p className="font-medium text-blue-900">Demo Payment Mode</p>
+              <p className="text-sm text-blue-700">No real Stripe keys configured</p>
             </div>
           </div>
+          <div className="space-y-3">
+            <div className="p-3 bg-white rounded border">
+              <p className="text-sm font-medium text-neutral-700">Card Number</p>
+              <p className="text-sm text-neutral-500">4242 4242 4242 4242 (Demo)</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-3 bg-white rounded border">
+                <p className="text-sm font-medium text-neutral-700">Expiry</p>
+                <p className="text-sm text-neutral-500">12/25</p>
+              </div>
+              <div className="p-3 bg-white rounded border">
+                <p className="text-sm font-medium text-neutral-700">CVC</p>
+                <p className="text-sm text-neutral-500">123</p>
+              </div>
+            </div>
+          </div>
+          <p className="text-xs text-blue-600 mt-3">
+            💡 This is a demo payment. In production, real Stripe keys would be used.
+          </p>
         </Card>
-      )}
+      </div>
 
       {/* Error Message */}
       {message && (
@@ -209,7 +164,6 @@ function StripeCheckoutForm({ amount, bookingData, onSuccess, onError }: Payment
   const elements = useElements()
   const [isProcessing, setIsProcessing] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
-  // Payment method is always card now
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -257,108 +211,64 @@ function StripeCheckoutForm({ amount, bookingData, onSuccess, onError }: Payment
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Payment Method Selection */}
+      {/* Payment Method */}
       <div className="space-y-4">
         <label className="text-sm font-medium text-neutral-700">Payment Method</label>
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => setPaymentMethod('card')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              paymentMethod === 'card'
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-neutral-200 hover:border-neutral-300'
-            }`}
-          >
-            <CreditCard className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
-            <p className="text-sm font-medium">Credit/Debit Card</p>
-            <p className="text-xs text-neutral-500 mt-1">Secure online payment</p>
-          </button>
-          
-          <button
-            type="button"
-            onClick={() => setPaymentMethod('cash')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              paymentMethod === 'cash'
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-neutral-200 hover:border-neutral-300'
-            }`}
-          >
-            <Shield className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
-            <p className="text-sm font-medium">Cash Payment</p>
-            <p className="text-xs text-neutral-500 mt-1">Pay at pickup (Card hold required)</p>
-          </button>
+        <div className="p-4 rounded-lg border-2 border-amber-500 bg-amber-50">
+          <CreditCard className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
+          <p className="text-sm font-medium text-center">Credit/Debit Card</p>
+          <p className="text-xs text-neutral-500 mt-1 text-center">Secure online payment</p>
         </div>
       </div>
 
       {/* Payment Element */}
-      {paymentMethod === 'card' && (
-        <div className="space-y-4">
-          {hasRealStripeKeys ? (
-            <PaymentElement 
-              options={{
-                layout: 'tabs',
-                fields: {
-                  billingDetails: {
-                    email: 'auto',
-                    phone: 'auto',
-                    address: {
-                      country: 'auto',
-                    }
+      <div className="space-y-4">
+        {hasRealStripeKeys ? (
+          <PaymentElement 
+            options={{
+              layout: 'tabs',
+              fields: {
+                billingDetails: {
+                  email: 'auto',
+                  phone: 'auto',
+                  address: {
+                    country: 'auto',
                   }
                 }
-              }}
-            />
-          ) : (
-            <Card className="p-6 bg-blue-50 border-blue-200">
-              <div className="flex items-center gap-3 mb-4">
-                <CreditCard className="h-6 w-6 text-blue-600" />
-                <div>
-                  <p className="font-medium text-blue-900">Demo Payment Mode</p>
-                  <p className="text-sm text-blue-700">No real Stripe keys configured</p>
-                </div>
+              }
+            }}
+          />
+        ) : (
+          <Card className="p-6 bg-blue-50 border-blue-200">
+            <div className="flex items-center gap-3 mb-4">
+              <CreditCard className="h-6 w-6 text-blue-600" />
+              <div>
+                <p className="font-medium text-blue-900">Demo Payment Mode</p>
+                <p className="text-sm text-blue-700">No real Stripe keys configured</p>
               </div>
-              <div className="space-y-3">
-                <div className="p-3 bg-white rounded border">
-                  <p className="text-sm font-medium text-neutral-700">Card Number</p>
-                  <p className="text-sm text-neutral-500">4242 4242 4242 4242 (Demo)</p>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-white rounded border">
-                    <p className="text-sm font-medium text-neutral-700">Expiry</p>
-                    <p className="text-sm text-neutral-500">12/25</p>
-                  </div>
-                  <div className="p-3 bg-white rounded border">
-                    <p className="text-sm font-medium text-neutral-700">CVC</p>
-                    <p className="text-sm text-neutral-500">123</p>
-                  </div>
-                </div>
-              </div>
-              <p className="text-xs text-blue-600 mt-3">
-                💡 This is a demo payment. In production, real Stripe keys would be used.
-              </p>
-            </Card>
-          )}
-        </div>
-      )}
-
-      {/* Cash Payment Notice */}
-      {paymentMethod === 'cash' && (
-        <Card className="bg-amber-50 border-amber-200">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-amber-900">Cash Payment Requirements</p>
-              <ul className="text-sm text-amber-700 mt-2 space-y-1">
-                <li>• A valid credit card is required for security deposit</li>
-                <li>• ${(amount * 0.3).toFixed(2)} will be held on your card</li>
-                <li>• Full payment due at vehicle pickup</li>
-                <li>• Accepted: Cash, Bank Transfer</li>
-              </ul>
             </div>
-          </div>
-        </Card>
-      )}
+            <div className="space-y-3">
+              <div className="p-3 bg-white rounded border">
+                <p className="text-sm font-medium text-neutral-700">Card Number</p>
+                <p className="text-sm text-neutral-500">4242 4242 4242 4242 (Demo)</p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 bg-white rounded border">
+                  <p className="text-sm font-medium text-neutral-700">Expiry</p>
+                  <p className="text-sm text-neutral-500">12/25</p>
+                </div>
+                <div className="p-3 bg-white rounded border">
+                  <p className="text-sm font-medium text-neutral-700">CVC</p>
+                  <p className="text-sm text-neutral-500">123</p>
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-blue-600 mt-3">
+              💡 This is a demo payment. In production, real Stripe keys would be used.
+            </p>
+          </Card>
+        )}
+      </div>
 
       {/* Error Message */}
       {message && (
@@ -503,4 +413,3 @@ export default function PaymentForm(props: PaymentFormProps) {
     </Elements>
   )
 }
-

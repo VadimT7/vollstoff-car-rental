@@ -317,7 +317,7 @@ export default function EditVehiclePage() {
 
       if (response.ok) {
         alert('Vehicle updated successfully!')
-        router.push(`/fleet/${vehicleId}`)
+        router.push('/fleet')
       } else {
         const errorData = await response.json()
         alert(`Failed to update vehicle: ${errorData.error || 'Unknown error'}`)

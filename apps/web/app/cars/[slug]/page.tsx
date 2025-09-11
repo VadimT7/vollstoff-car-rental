@@ -27,6 +27,8 @@ import { useParams } from 'next/navigation'
 import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import { staggerContainer, staggerItem } from '@valore/ui'
+import { AutoOpenInput } from '@/components/ui/auto-open-input'
+import { DateInputWithAvailability } from '@/components/ui/date-input-with-availability'
 
 // Default services and requirements for all cars
 const defaultServices = [
@@ -68,6 +70,8 @@ export default function CarDetailPage() {
   const [selectedDates, setSelectedDates] = useState({ start: '', end: '', startTime: '10:00', endTime: '10:00' })
   const [isFavorite, setIsFavorite] = useState(false)
   const [showDateWarning, setShowDateWarning] = useState(false)
+  const [blockedDates, setBlockedDates] = useState<Record<string, { booked: boolean, reason?: string }>>({})
+  const [availabilityLoading, setAvailabilityLoading] = useState(false)
 
   // Validate if dates are selected
   const areDatesSelected = selectedDates.start && selectedDates.end
@@ -84,6 +88,22 @@ export default function CarDetailPage() {
     // If dates are selected, let the Link handle navigation
   }
 
+  // Fetch car availability
+  const fetchAvailability = async (carId: string) => {
+    try {
+      setAvailabilityLoading(true)
+      const response = await fetch(`/api/availability?carId=${carId}`)
+      if (response.ok) {
+        const data = await response.json()
+        setBlockedDates(data.blockedDates || {})
+      }
+    } catch (error) {
+      console.error('Failed to fetch availability:', error)
+    } finally {
+      setAvailabilityLoading(false)
+    }
+  }
+
   useEffect(() => {
     const fetchCar = async () => {
       try {
@@ -93,6 +113,10 @@ export default function CarDetailPage() {
           const carData = await response.json()
           console.log('✅ Car data loaded:', carData)
           setCar(carData)
+          // Fetch availability after getting car data
+          if (carData.id) {
+            fetchAvailability(carData.id)
+          }
         } else {
           console.error('❌ Failed to fetch car:', response.status)
           setCar(null)
@@ -144,16 +168,16 @@ export default function CarDetailPage() {
     pricePerDay: car.pricePerDay,
     images: [car.primaryImage, ...(car.images || [])],
     specs: {
-      power: car.specs.horsePower ? `${car.specs.horsePower} HP` : 'N/A',
-      acceleration: car.specs.acceleration ? `${car.specs.acceleration}s` : 'N/A',
-      topSpeed: car.specs.topSpeed ? `${car.specs.topSpeed} km/h` : 'N/A',
-      engine: car.specs.engineType || 'N/A',
-      transmission: car.specs.transmission || 'Automatic',
-      drivetrain: car.specs.drivetrain || 'RWD',
-      fuelType: car.specs.fuelType || 'Petrol',
-      seats: car.specs.seats,
-      doors: car.specs.doors,
-      fuelConsumption: car.specs.fuelConsumption ? `${car.specs.fuelConsumption} L/100km` : 'N/A',
+      power: car.specs?.horsePower ? `${car.specs.horsePower} HP` : 'N/A',
+      acceleration: car.specs?.acceleration ? `${car.specs.acceleration}s` : 'N/A',
+      topSpeed: car.specs?.topSpeed ? `${car.specs.topSpeed} km/h` : 'N/A',
+      engine: car.specs?.engineType || 'N/A',
+      transmission: car.specs?.transmission || 'Automatic',
+      drivetrain: car.specs?.drivetrain || 'RWD',
+      fuelType: car.specs?.fuelType || 'Petrol',
+      seats: car.specs?.seats || 5,
+      doors: car.specs?.doors || 4,
+      fuelConsumption: car.specs?.fuelConsumption ? `${car.specs.fuelConsumption} L/100km` : 'N/A',
       weight: 'N/A',
     },
     rating: 4.9,
@@ -161,10 +185,12 @@ export default function CarDetailPage() {
     featured: car.featured,
     location: 'Montreal',
     available: true,
-    description: `Experience the ${car.brand} ${car.model}, a premium vehicle that combines luxury, performance, and cutting-edge technology. This ${car.year} model offers an exceptional driving experience with its powerful engine and sophisticated features.`,
-    features: defaultFeatures,
-    includedServices: defaultServices,
-    requirements: defaultRequirements,
+    // Use actual description from database, fallback to default if not available
+    description: car.description || `Experience the ${car.make} ${car.model}, a premium vehicle that combines luxury, performance, and cutting-edge technology. This ${car.year} model offers an exceptional driving experience with its powerful engine and sophisticated features.`,
+    // Use actual features from database if available, otherwise use defaults
+    features: car.features && car.features.length > 0 ? car.features : defaultFeatures,
+    includedServices: car.includedServices && car.includedServices.length > 0 ? car.includedServices : defaultServices,
+    requirements: car.requirements && car.requirements.length > 0 ? car.requirements : defaultRequirements,
   }
 
   return (
@@ -342,7 +368,7 @@ export default function CarDetailPage() {
             >
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Features</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {carData.features.map((feature, index) => (
+                {carData.features.map((feature: string, index: number) => (
                   <div key={index} className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                     <span className="text-slate-700">{feature}</span>
@@ -372,23 +398,26 @@ export default function CarDetailPage() {
                 {/* Date Selection */}
                 <div className="space-y-4 mb-6">
                   <h3 className="font-semibold text-slate-900 mb-4">Select Dates</h3>
+                  {availabilityLoading && (
+                    <div className="text-sm text-gray-500 mb-2">Loading availability...</div>
+                  )}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">
                         Pick-up Date
                       </label>
-                      <Input
-                        type="date"
+                      <DateInputWithAvailability
                         value={selectedDates.start}
                         onChange={(e) => setSelectedDates(prev => ({ ...prev, start: e.target.value }))}
                         min={new Date().toISOString().split('T')[0]}
+                        blockedDates={blockedDates}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">
                         Pick-up Time
                       </label>
-                      <Input
+                      <AutoOpenInput
                         type="time"
                         value={selectedDates.startTime}
                         onChange={(e) => setSelectedDates(prev => ({ ...prev, startTime: e.target.value }))}
@@ -398,18 +427,18 @@ export default function CarDetailPage() {
                       <label className="block text-sm font-medium text-slate-700 mb-2">
                         Return Date
                       </label>
-                      <Input
-                        type="date"
+                      <DateInputWithAvailability
                         value={selectedDates.end}
                         onChange={(e) => setSelectedDates(prev => ({ ...prev, end: e.target.value }))}
                         min={selectedDates.start || new Date().toISOString().split('T')[0]}
+                        blockedDates={blockedDates}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">
                         Return Time
                       </label>
-                      <Input
+                      <AutoOpenInput
                         type="time"
                         value={selectedDates.endTime}
                         onChange={(e) => setSelectedDates(prev => ({ ...prev, endTime: e.target.value }))}
@@ -468,7 +497,7 @@ export default function CarDetailPage() {
                 <div className="border-t pt-6">
                   <h3 className="font-semibold text-slate-900 mb-4">Included Services</h3>
                   <div className="space-y-2">
-                    {carData.includedServices.map((service, index) => (
+                    {carData.includedServices.map((service: string, index: number) => (
                       <div key={index} className="flex items-center gap-2 text-sm text-slate-600">
                         <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                         {service}
@@ -481,7 +510,7 @@ export default function CarDetailPage() {
                 <div className="border-t pt-6 mt-6">
                   <h3 className="font-semibold text-slate-900 mb-4">Requirements</h3>
                   <div className="space-y-2">
-                    {carData.requirements.map((requirement, index) => (
+                    {carData.requirements.map((requirement: string, index: number) => (
                       <div key={index} className="flex items-center gap-2 text-sm text-slate-600">
                         <Shield className="w-4 h-4 text-blue-500 flex-shrink-0" />
                         {requirement}

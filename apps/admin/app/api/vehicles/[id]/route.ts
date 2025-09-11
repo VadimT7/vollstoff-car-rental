@@ -191,26 +191,59 @@ export async function PUT(
 
     // Update price rules
     if (vehicle) {
-      // For now, we'll assume there's one price rule to update
-      // In a real implementation, you might need to handle multiple price rules
       console.log('💰 Updating price rules...')
       
-      // This is a simplified approach - in production you'd want to properly handle price rule updates
-      const priceRuleData = {
-        basePricePerDay: pricePerDay.toString(),
-        weekendMultiplier: weekendMultiplier.toString(),
-        weeklyDiscount: weeklyDiscount.toString(),
-        monthlyDiscount: monthlyDiscount.toString(),
-        minimumDays,
-        maximumDays,
-        includedKmPerDay,
-        extraKmPrice: extraKmPrice.toString(),
-        depositAmount: depositAmount.toString(),
-        currency: 'CAD',
-        isActive: true
-      }
+      // Import prisma client directly for price rule operations
+      const { prisma } = await import('@valore/database')
+      
+      try {
+        // Find existing price rule for this vehicle
+        const existingPriceRule = await prisma.priceRule.findFirst({
+          where: { 
+            carId: vehicleId,
+            isActive: true 
+          }
+        })
 
-      console.log('Price rule update would happen here with:', priceRuleData)
+        const priceRuleData = {
+          basePricePerDay: pricePerDay,
+          weekendMultiplier: weekendMultiplier,
+          weeklyDiscount: weeklyDiscount,
+          monthlyDiscount: monthlyDiscount,
+          minimumDays,
+          maximumDays,
+          includedKmPerDay,
+          extraKmPrice: extraKmPrice,
+          depositAmount: depositAmount,
+          currency: 'CAD',
+          isActive: true,
+          validFrom: new Date(),
+          updatedAt: new Date()
+        }
+
+        if (existingPriceRule) {
+          // Update existing price rule
+          await prisma.priceRule.update({
+            where: { id: existingPriceRule.id },
+            data: priceRuleData
+          })
+          console.log('✅ Price rule updated successfully:', existingPriceRule.id)
+        } else {
+          // Create new price rule if none exists
+          await prisma.priceRule.create({
+            data: {
+              ...priceRuleData,
+              carId: vehicleId,
+              createdAt: new Date()
+            }
+          })
+          console.log('✅ New price rule created successfully')
+        }
+      } catch (priceRuleError) {
+        console.error('❌ Failed to update price rules:', priceRuleError)
+        // Don't fail the entire request if price rule update fails
+        // The vehicle update was successful, just log the price rule error
+      }
     }
 
     console.log('✅ Vehicle updated successfully:', vehicle?.id)
