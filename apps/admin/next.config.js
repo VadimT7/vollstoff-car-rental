@@ -52,7 +52,9 @@ const nextConfig = {
     return [
       {
         source: '/uploads/:path*',
-        destination: 'http://localhost:3000/uploads/:path*',
+        destination: process.env.NODE_ENV === 'production' 
+          ? 'https://flyrentals.ca/uploads/:path*'
+          : 'http://localhost:3000/uploads/:path*',
       },
     ]
   },

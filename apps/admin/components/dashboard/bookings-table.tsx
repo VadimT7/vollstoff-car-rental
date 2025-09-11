@@ -131,14 +131,6 @@ export function BookingsTable() {
                 <td className="font-medium">
                   ${Number(booking.totalAmount).toLocaleString()}
                 </td>
-                <td>
-                  <Link
-                    href={`/bookings/${booking.id}`}
-                    className="text-neutral-400 hover:text-neutral-600"
-                  >
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </td>
               </tr>
             )
           })}

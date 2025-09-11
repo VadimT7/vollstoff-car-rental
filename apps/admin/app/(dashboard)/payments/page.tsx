@@ -29,7 +29,7 @@ interface Payment {
   customerEmail?: string
   amount: number
   currency: string
-  type: 'PAYMENT' | 'REFUND' | 'DEPOSIT' | 'HOLD'
+  type: 'DEPOSIT' | 'RENTAL_FEE' | 'EXTRA_CHARGE' | 'REFUND' | 'DAMAGE_CHARGE'
   method: 'CARD' | 'CASH' | 'BANK_TRANSFER'
   status: 'PENDING' | 'PROCESSING' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED'
   stripePaymentIntentId?: string
@@ -47,12 +47,10 @@ const statusConfig = {
 }
 
 const typeConfig = {
-  PAYMENT: { label: 'Payment', icon: ArrowDownLeft, color: 'text-green-600' },
-  REFUND: { label: 'Refund', icon: ArrowUpRight, color: 'text-red-600' },
   DEPOSIT: { label: 'Deposit', icon: DollarSign, color: 'text-blue-600' },
-  HOLD: { label: 'Hold', icon: Clock, color: 'text-orange-600' },
   RENTAL_FEE: { label: 'Rental Fee', icon: DollarSign, color: 'text-green-600' },
   EXTRA_CHARGE: { label: 'Extra Charge', icon: ArrowDownLeft, color: 'text-yellow-600' },
+  REFUND: { label: 'Refund', icon: ArrowUpRight, color: 'text-red-600' },
   DAMAGE_CHARGE: { label: 'Damage Charge', icon: XCircle, color: 'text-red-600' }
 }
 
@@ -127,7 +125,7 @@ export default function PaymentsPage() {
   })
 
   const stats = {
-    total: payments.reduce((acc, p) => p.type === 'PAYMENT' ? acc + p.amount : acc, 0),
+    total: payments.reduce((acc, p) => (p.type === 'RENTAL_FEE' || p.type === 'EXTRA_CHARGE' || p.type === 'DAMAGE_CHARGE') ? acc + p.amount : acc, 0),
     refunded: payments.reduce((acc, p) => p.type === 'REFUND' ? acc + p.amount : acc, 0),
     pending: payments.filter(p => p.status === 'PENDING').reduce((acc, p) => acc + p.amount, 0),
     succeeded: payments.filter(p => p.status === 'SUCCEEDED').length,
@@ -236,10 +234,11 @@ export default function PaymentsPage() {
             className="px-3 py-2 pr-8 border rounded-lg text-sm appearance-none bg-white"
           >
             <option value="all">All Types</option>
-            <option value="PAYMENT">Payments</option>
-            <option value="REFUND">Refunds</option>
             <option value="DEPOSIT">Deposits</option>
-            <option value="HOLD">Holds</option>
+            <option value="RENTAL_FEE">Rental Fees</option>
+            <option value="EXTRA_CHARGE">Extra Charges</option>
+            <option value="REFUND">Refunds</option>
+            <option value="DAMAGE_CHARGE">Damage Charges</option>
           </select>
           <Input
             type="date"
@@ -276,7 +275,7 @@ export default function PaymentsPage() {
               {filteredPayments.map((payment) => {
                 const status = statusConfig[payment.status] || statusConfig.PENDING
                 const StatusIcon = status.icon
-                const type = typeConfig[payment.type as keyof typeof typeConfig] || typeConfig.PAYMENT
+                const type = typeConfig[payment.type as keyof typeof typeConfig] || typeConfig.RENTAL_FEE
                 const TypeIcon = type?.icon || DollarSign
                 
                 return (
@@ -339,7 +338,7 @@ export default function PaymentsPage() {
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
-                        {payment.status === 'SUCCEEDED' && payment.type === 'PAYMENT' && (
+                        {payment.status === 'SUCCEEDED' && (payment.type === 'RENTAL_FEE' || payment.type === 'EXTRA_CHARGE' || payment.type === 'DAMAGE_CHARGE') && (
                           <Button size="sm" variant="ghost" className="text-red-600">
                             Refund
                           </Button>
@@ -489,7 +488,7 @@ export default function PaymentsPage() {
 
                 {/* Actions */}
                 <div className="flex justify-end gap-2 pt-4 border-t">
-                  {selectedPayment.status === 'SUCCEEDED' && selectedPayment.type === 'PAYMENT' && (
+                  {selectedPayment.status === 'SUCCEEDED' && (selectedPayment.type === 'RENTAL_FEE' || selectedPayment.type === 'EXTRA_CHARGE' || selectedPayment.type === 'DAMAGE_CHARGE') && (
                     <Button
                       variant="outline"
                       className="text-red-600"

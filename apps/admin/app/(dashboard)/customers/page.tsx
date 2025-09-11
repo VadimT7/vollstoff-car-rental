@@ -704,15 +704,6 @@ export default function CustomersPage() {
                       <Phone className="h-4 w-4 text-neutral-400" />
                       <span>{selectedCustomer.phone}</span>
                     </div>
-                    <div className="flex items-start gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-neutral-400 mt-0.5" />
-                      <div>
-                        <p>{selectedCustomer.address.line1}</p>
-                        {selectedCustomer.address.line2 && <p>{selectedCustomer.address.line2}</p>}
-                        <p>{selectedCustomer.address.city}, {selectedCustomer.address.state} {selectedCustomer.address.postalCode}</p>
-                        <p>{selectedCustomer.address.country}</p>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
@@ -800,41 +791,40 @@ export default function CustomersPage() {
 
               {/* Actions */}
               <div className="flex justify-end gap-2 mt-6 pt-6 border-t">
-                <Button 
+                <Button
                   variant="outline"
                   onClick={() => {
                     window.open(`mailto:${selectedCustomer.email}`, '_blank')
                   }}
                   title="Open email app to send message"
-                  className="flex items-center gap-2"
+                  leftIcon={<Mail className="h-4 w-4" />}
                 >
-                  <Mail className="h-4 w-4" />
                   Send Email
                 </Button>
                 {selectedCustomer.status === 'ACTIVE' && (
-                  <Button 
+                  <Button
                     variant="outline"
-                    className="text-orange-600 flex items-center gap-2"
                     onClick={() => {
                       handleStatusChange(selectedCustomer.id, 'SUSPENDED')
                       setShowDetails(false)
                     }}
                     title="Suspend customer account"
+                    leftIcon={<Ban className="h-4 w-4" />}
+                    className="text-orange-600"
                   >
-                    <Ban className="h-4 w-4" />
                     Suspend Account
                   </Button>
                 )}
                 {selectedCustomer.status === 'SUSPENDED' && (
-                  <Button 
-                    className="text-green-600 flex items-center gap-2"
+                  <Button
                     onClick={() => {
                       handleUnsuspend(selectedCustomer.id)
                       setShowDetails(false)
                     }}
                     title="Reactivate suspended account"
+                    leftIcon={<UserCheck className="h-4 w-4" />}
+                    className="text-green-600"
                   >
-                    <UserCheck className="h-4 w-4" />
                     Unsuspend Account
                   </Button>
                 )}
