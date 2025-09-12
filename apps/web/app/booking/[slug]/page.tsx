@@ -20,12 +20,12 @@ import { useParams, useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button, Card, Input, Label } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
-import { AutoOpenInput } from '@/components/ui/auto-open-input'
+// import { AutoOpenInput } from '@/components/ui/auto-open-input'
 // Removed static data import - now using API
 import dynamic from 'next/dynamic'
 
 // Dynamically import PaymentForm to avoid SSR issues with Stripe
-const PaymentForm = dynamic(() => import('@/components/booking/payment-form-simple'), {
+const PaymentForm = dynamic(() => import('@/components/booking/payment-form'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center py-12">
