@@ -25,7 +25,7 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   experimental: {
-    typedRoutes: true,
+    typedRoutes: false,
   },
   async headers() {
     return [

@@ -3,5 +3,13 @@
   "installCommand": "pnpm install",
   "ignoreCommand": "git diff HEAD^ HEAD --quiet .",
   "framework": "nextjs",
-  "outputDirectory": "apps/web/.next"
+  "outputDirectory": "apps/web/.next",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
 }

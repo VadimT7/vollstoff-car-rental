@@ -1,9 +1,8 @@
-import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@valore/database'
 import bcrypt from 'bcryptjs'
 
-export const authOptions: NextAuthOptions = {
+export const authOptions: any = {
   session: {
     strategy: 'jwt',
   },
@@ -18,7 +17,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials: any) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Invalid credentials')
         }
@@ -29,7 +28,7 @@ export const authOptions: NextAuthOptions = {
           },
         })
 
-        if (!user || !user.password) {
+        if (!user || !(user as any).password) {
           throw new Error('Invalid credentials')
         }
 
@@ -40,7 +39,7 @@ export const authOptions: NextAuthOptions = {
 
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
-          user.password
+          (user as any).password
         )
 
         if (!isPasswordValid) {
@@ -58,14 +57,14 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id
         token.role = user.role
       }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (session?.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string

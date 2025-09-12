@@ -46,8 +46,8 @@ export async function GET(request: NextRequest) {
         bodyType: vehicle.bodyType,
         description: vehicle.description,
         primaryImage: vehicle.primaryImageUrl || '/placeholder-car.jpg',
-        images: vehicle.images?.map((img: any) => img.url) || [],
-        pricePerDay: Number(vehicle.priceRules?.[0]?.basePricePerDay) || 0,
+        images: (vehicle as any).images?.map((img: any) => img.url) || [],
+        pricePerDay: Number((vehicle as any).priceRules?.[0]?.basePricePerDay) || 0,
         features: vehicle.features as string[],
         specs: {
           transmission: vehicle.transmission,
@@ -64,15 +64,15 @@ export async function GET(request: NextRequest) {
           fuelConsumption: vehicle.fuelConsumption
         },
         pricing: {
-          basePricePerDay: vehicle.priceRules?.[0]?.basePricePerDay || 0,
-          weekendMultiplier: vehicle.priceRules?.[0]?.weekendMultiplier || 1,
-          weeklyDiscount: vehicle.priceRules?.[0]?.weeklyDiscount || 0,
-          monthlyDiscount: vehicle.priceRules?.[0]?.monthlyDiscount || 0,
-          minimumDays: vehicle.priceRules?.[0]?.minimumDays || 1,
-          maximumDays: vehicle.priceRules?.[0]?.maximumDays || 30,
-          includedKmPerDay: vehicle.priceRules?.[0]?.includedKmPerDay || 200,
-          extraKmPrice: vehicle.priceRules?.[0]?.extraKmPrice || 0.5,
-          depositAmount: vehicle.priceRules?.[0]?.depositAmount || 500
+          basePricePerDay: (vehicle as any).priceRules?.[0]?.basePricePerDay || 0,
+          weekendMultiplier: (vehicle as any).priceRules?.[0]?.weekendMultiplier || 1,
+          weeklyDiscount: (vehicle as any).priceRules?.[0]?.weeklyDiscount || 0,
+          monthlyDiscount: (vehicle as any).priceRules?.[0]?.monthlyDiscount || 0,
+          minimumDays: (vehicle as any).priceRules?.[0]?.minimumDays || 1,
+          maximumDays: (vehicle as any).priceRules?.[0]?.maximumDays || 30,
+          includedKmPerDay: (vehicle as any).priceRules?.[0]?.includedKmPerDay || 200,
+          extraKmPrice: (vehicle as any).priceRules?.[0]?.extraKmPrice || 0.5,
+          depositAmount: (vehicle as any).priceRules?.[0]?.depositAmount || 500
         }
       }
 
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
       bodyType: vehicle.bodyType,
       description: vehicle.description,
               primaryImage: vehicle.primaryImageUrl || '/placeholder-car.jpg',
-        pricePerDay: Number(vehicle.priceRules?.[0]?.basePricePerDay) || 0,
+        pricePerDay: Number((vehicle as any).priceRules?.[0]?.basePricePerDay) || 0,
         featured: vehicle.featured,
       featuredOrder: vehicle.featuredOrder,
       specs: {

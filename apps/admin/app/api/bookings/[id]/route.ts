@@ -130,7 +130,6 @@ export async function GET(
             email: true,
             phone: true,
             licenseNumber: true,
-            address: true,
             isVerified: true
           }
         },
@@ -162,8 +161,8 @@ export async function GET(
       paymentStatus: booking.paymentStatus,
       startDate: booking.startDate,
       endDate: booking.endDate,
-      startTime: booking.startTime || '10:00 AM',
-      endTime: booking.endTime || '10:00 AM',
+      startTime: (booking as any).startTime || '10:00 AM',
+      endTime: (booking as any).endTime || '10:00 AM',
       pickupLocation: booking.pickupLocation,
       returnLocation: booking.returnLocation,
       totalAmount: booking.totalAmount,
@@ -179,16 +178,16 @@ export async function GET(
       // Customer info (from user or guest fields)
       customer: booking.user ? {
         id: booking.user.id,
-        name: booking.user.name || booking.guestName,
-        email: booking.user.email || booking.guestEmail,
-        phone: booking.user.phone || booking.guestPhone,
-        licenseNumber: booking.user.licenseNumber || booking.guestLicense,
-        address: booking.user.address || null,
+        name: booking.user.name || (booking as any).guestName,
+        email: booking.user.email || (booking as any).guestEmail,
+        phone: booking.user.phone || (booking as any).guestPhone,
+        licenseNumber: booking.user.licenseNumber || (booking as any).guestLicense,
+        address: null,
       } : {
-        name: booking.guestName,
-        email: booking.guestEmail,
-        phone: booking.guestPhone,
-        licenseNumber: booking.guestLicense,
+        name: (booking as any).guestName,
+        email: (booking as any).guestEmail,
+        phone: (booking as any).guestPhone,
+        licenseNumber: (booking as any).guestLicense,
         address: null,
       },
       // Vehicle info (keep both car and vehicle for compatibility)

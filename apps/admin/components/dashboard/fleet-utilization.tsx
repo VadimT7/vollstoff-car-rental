@@ -31,7 +31,7 @@ export function FleetUtilization() {
         const vehiclesWithStats = data.map((vehicle: Vehicle) => ({
           ...vehicle,
           utilization: vehicle.utilization || 0,
-          bookings: vehicle.bookingsCount || 0
+          bookings: (vehicle as any).bookingsCount || 0
         }))
         setVehicles(vehiclesWithStats)
       } else {

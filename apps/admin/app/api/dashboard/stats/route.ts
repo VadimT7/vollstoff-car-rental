@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     // Pending actions
     const pendingVerifications = customers.filter((c: any) => !c.licenseVerified).length
     const pendingPayments = bookings.filter((b: any) => b.paymentStatus === 'PENDING').length
-    const maintenanceScheduled = maintenanceVehicles.length
+    const maintenanceScheduled = maintenanceVehicles
     
     // Today's activities - filter bookings by actual dates
     const today = new Date()

@@ -488,14 +488,14 @@ export default function VehiclesPage() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => router.push(`/vehicles/${vehicle.id}`)}
+                          onClick={() => router.push(`/vehicles/${vehicle.id}` as any)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => router.push(`/vehicles/${vehicle.id}/edit`)}
+                          onClick={() => router.push(`/vehicles/${vehicle.id}/edit` as any)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>

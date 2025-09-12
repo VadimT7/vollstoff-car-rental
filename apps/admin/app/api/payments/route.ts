@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       id: payment.id,
       bookingNumber: payment.booking?.bookingNumber || 'N/A',
       customerName: payment.booking?.user?.name || 'Unknown',
-      amount: parseFloat(payment.amount),
+      amount: parseFloat(String(payment.amount)),
       currency: payment.currency,
       type: payment.type, // Keep original type from DB
       method: payment.method as 'CARD' | 'CASH' | 'BANK_TRANSFER',

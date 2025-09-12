@@ -38,6 +38,7 @@ interface PaymentFormProps {
 function MockCheckoutForm({ amount, bookingData, onSuccess, onError }: PaymentFormProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
+  const [paymentMethod, setPaymentMethod] = useState('card')
   // Payment method is always card now
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -209,6 +210,7 @@ function StripeCheckoutForm({ amount, bookingData, onSuccess, onError }: Payment
   const elements = useElements()
   const [isProcessing, setIsProcessing] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
+  const [paymentMethod, setPaymentMethod] = useState('card')
   // Payment method is always card now
 
   const handleSubmit = async (e: React.FormEvent) => {

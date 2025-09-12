@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
 
 import './globals.css'
 import { Providers } from './providers'

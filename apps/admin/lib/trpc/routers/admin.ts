@@ -6,7 +6,7 @@ import { startOfMonth, endOfMonth, subMonths } from 'date-fns'
 
 // Admin-only procedure that checks for admin role
 const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
-  if (ctx.session.user.role !== 'ADMIN' && ctx.session.user.role !== 'SUPER_ADMIN') {
+  if ((ctx.session.user as any).role !== 'ADMIN' && (ctx.session.user as any).role !== 'SUPER_ADMIN') {
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'Admin access required',
@@ -77,8 +77,8 @@ export const adminRouter = router({
     const utilization = totalCars > 0 ? (carsInUse / totalCars) * 100 : 0
 
     // Calculate revenue change
-    const currentRevenue = thisMonthRevenue._sum.amount || 0
-    const previousRevenue = lastMonthRevenue._sum.amount || 0
+    const currentRevenue = Number(thisMonthRevenue._sum.amount || 0)
+    const previousRevenue = Number(lastMonthRevenue._sum.amount || 0)
     const revenueChange = previousRevenue > 0
       ? ((currentRevenue - previousRevenue) / previousRevenue) * 100
       : 0

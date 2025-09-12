@@ -1,53 +1,35 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
-import { Input } from '@valore/ui'
+import { forwardRef, useEffect, useRef } from 'react'
+import { cn } from '@/lib/utils'
 
-interface AutoOpenInputProps {
-  type: 'date' | 'time'
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  min?: string
-  max?: string
-  id?: string
-  className?: string
-  placeholder?: string
+export interface AutoOpenInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  autoOpen?: boolean
 }
 
-export function AutoOpenInput({ type, value, onChange, min, max, id, className, placeholder }: AutoOpenInputProps) {
-  const inputRef = useRef<HTMLInputElement>(null)
+const AutoOpenInput = forwardRef<HTMLInputElement, AutoOpenInputProps>(
+  ({ className, autoOpen = false, ...props }, ref) => {
+    const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleClick = () => {
-    if (inputRef.current) {
-      // For date inputs
-      if (type === 'date' && 'showPicker' in inputRef.current) {
-        (inputRef.current as any).showPicker()
-      }
-      // For time inputs
-      else if (type === 'time' && 'showPicker' in inputRef.current) {
-        (inputRef.current as any).showPicker()
-      }
-      // Fallback for browsers that don't support showPicker
-      else {
+    useEffect(() => {
+      if (autoOpen && inputRef.current) {
         inputRef.current.focus()
-        inputRef.current.click()
       }
-    }
-  }
+    }, [autoOpen])
 
-  return (
-    <div onClick={handleClick} className="cursor-pointer">
-      <Input
-        ref={inputRef}
-        type={type}
-        value={value}
-        onChange={onChange}
-        min={min}
-        max={max}
-        id={id}
-        className={className}
-        placeholder={placeholder || (type === 'date' ? 'yyyy-mm-dd' : '10:00 AM')}
+    return (
+      <input
+        className={cn(
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref || inputRef}
+        {...props}
       />
-    </div>
-  )
-}
+    )
+  }
+)
+AutoOpenInput.displayName = "AutoOpenInput"
+
+export { AutoOpenInput }

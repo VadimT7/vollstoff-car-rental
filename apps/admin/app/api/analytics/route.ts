@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
     ])
 
     // Calculate metrics
-    const totalRevenueAmount = parseFloat(totalRevenue._sum.amount || '0')
+    const totalRevenueAmount = parseFloat(String(totalRevenue._sum.amount || '0'))
     const averageBookingValue = totalBookings > 0 ? totalRevenueAmount / totalBookings : 0
     const completionRate = totalBookings > 0 ? (completedBookings / totalBookings) * 100 : 0
     const cancellationRate = totalBookings > 0 ? (cancelledBookings / totalBookings) * 100 : 0
@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
     recentPaymentsForChart.forEach(payment => {
       const dateStr = payment.createdAt.toISOString().split('T')[0]
       if (dailyRevenueMap.has(dateStr)) {
-        dailyRevenueMap.set(dateStr, dailyRevenueMap.get(dateStr) + parseFloat(payment.amount))
+        dailyRevenueMap.set(dateStr, dailyRevenueMap.get(dateStr) + parseFloat(String(payment.amount)))
       }
     })
     
@@ -177,7 +177,7 @@ export async function GET(request: NextRequest) {
     yearPayments.forEach(payment => {
       const monthKey = payment.createdAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
       if (monthlyRevenueMap.has(monthKey)) {
-        monthlyRevenueMap.set(monthKey, monthlyRevenueMap.get(monthKey) + parseFloat(payment.amount))
+        monthlyRevenueMap.set(monthKey, monthlyRevenueMap.get(monthKey) + parseFloat(String(payment.amount)))
       }
     })
     
@@ -224,8 +224,8 @@ export async function GET(request: NextRequest) {
       _sum: { amount: true }
     })
     
-    const currentRevenueAmount = parseFloat(currentPeriodRevenue._sum.amount || '0')
-    const previousRevenueAmount = parseFloat(previousPeriodRevenue._sum.amount || '0')
+    const currentRevenueAmount = parseFloat(String(currentPeriodRevenue._sum.amount || '0'))
+    const previousRevenueAmount = parseFloat(String(previousPeriodRevenue._sum.amount || '0'))
     const revenueChange = previousRevenueAmount > 0 
       ? ((currentRevenueAmount - previousRevenueAmount) / previousRevenueAmount) * 100 
       : 0
@@ -304,8 +304,8 @@ export async function GET(request: NextRequest) {
       },
       vehicles: {
         total: vehicleStats.length,
-        available: vehicleStats.filter(v => v.status === 'AVAILABLE').length,
-        rented: vehicleStats.filter(v => v.status === 'RENTED').length,
+        available: vehicleStats.filter(v => v.status === 'ACTIVE').length,
+        rented: vehicleStats.filter(v => v._count.bookings > 0 && v.status === 'ACTIVE').length,
         maintenance: vehicleStats.filter(v => v.status === 'MAINTENANCE').length,
         utilization: vehicleStats.length > 0 ? Math.round((vehicleStats.filter(v => v._count.bookings > 0).length / vehicleStats.length) * 100) : 0,
         topPerformers: vehicleStats
@@ -331,7 +331,7 @@ export async function GET(request: NextRequest) {
           bookingNumber: booking.bookingNumber,
           customer: booking.user?.name || 'Unknown',
           vehicle: booking.car?.displayName || 'Unknown',
-          amount: parseFloat(booking.totalAmount),
+          amount: parseFloat(String(booking.totalAmount)),
           status: booking.status,
           createdAt: booking.createdAt
         })),
@@ -339,7 +339,7 @@ export async function GET(request: NextRequest) {
           id: payment.id,
           bookingNumber: payment.booking?.bookingNumber || 'N/A',
           customer: payment.booking?.user?.name || 'Unknown',
-          amount: parseFloat(payment.amount),
+          amount: parseFloat(String(payment.amount)),
           status: payment.status,
           createdAt: payment.createdAt
         }))
