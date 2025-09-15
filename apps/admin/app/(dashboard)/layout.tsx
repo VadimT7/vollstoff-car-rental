@@ -12,7 +12,7 @@ export default async function DashboardLayout({
   const mockUser = {
     id: 'admin-1',
     name: 'Admin User',
-    email: 'admin@flyrentals.com',
+    email: 'flyrentalsca@gmail.com',
     role: 'ADMIN',
     image: null
   }

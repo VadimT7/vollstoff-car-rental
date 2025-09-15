@@ -87,7 +87,7 @@ npx prisma migrate reset
 
 The seed script will create:
 - 4 luxury vehicles (Mercedes-AMG C43, Porsche Cayenne, etc.)
-- Admin user: admin@flyrentals.com
+- Admin user: flyrentalsca@gmail.com
 - Test customer: customer@example.com
 - Sample bookings
 - Add-ons and pricing rules

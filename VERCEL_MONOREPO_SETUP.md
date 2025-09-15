@@ -65,9 +65,9 @@ NEXTAUTH_URL=https://admin.flyrentals.ca
 CORS_ALLOWED_ORIGINS=https://flyrentals.ca,https://admin.flyrentals.ca
 
 # Update email domains
-EMAIL_FROM=noreply@flyrentals.ca
-EMAIL_REPLY_TO=concierge@flyrentals.ca
-ADMIN_EMAIL=admin@flyrentals.ca
+EMAIL_FROM=flyrentalsca@gmail.com
+EMAIL_REPLY_TO=flyrentalsca@gmail.com
+ADMIN_EMAIL=flyrentalsca@gmail.com
 
 # Update R2 public URL
 NEXT_PUBLIC_R2_PUBLIC_URL=https://assets.flyrentals.ca
@@ -119,7 +119,7 @@ RESEND_API_KEY=re_your_api_key
 # SMS
 TWILIO_ACCOUNT_SID=your_account_sid
 TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_PHONE_NUMBER=+1234567890
+TWILIO_PHONE_NUMBER=+14386803936
 
 # Feature Flags
 NEXT_PUBLIC_ENABLE_3D_MODELS=true

@@ -484,7 +484,7 @@ export default function BookingPage() {
                   type="tel"
                   value={bookingData.driverPhone}
                   onChange={(e) => setBookingData(prev => ({ ...prev, driverPhone: e.target.value }))}
-                  placeholder="+1 (514) 555-0123"
+                  placeholder="+1 (438) 680-3936"
                 />
               </div>
               <div>

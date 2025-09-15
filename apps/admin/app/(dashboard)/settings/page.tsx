@@ -86,11 +86,11 @@ export default function SettingsPage() {
               </div>
               <div>
                 <Label htmlFor="email">Contact Email</Label>
-                <Input id="email" type="email" defaultValue="info@flyrentals.com" />
+                <Input id="email" type="email" defaultValue="flyrentalsca@gmail.com" />
               </div>
               <div>
                 <Label htmlFor="phone">Contact Phone</Label>
-                <Input id="phone" defaultValue="+1 234 567 8900" />
+                <Input id="phone" defaultValue="+1 (438) 680-3936" />
               </div>
               <div className="md:col-span-2">
                 <Label htmlFor="address">Business Address</Label>

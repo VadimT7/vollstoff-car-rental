@@ -59,14 +59,14 @@ NEXT_PUBLIC_R2_PUBLIC_URL=https://assets.flyrentals.com
 
 # Email
 RESEND_API_KEY=re_your_api_key
-EMAIL_FROM=noreply@flyrentals.com
-EMAIL_REPLY_TO=concierge@flyrentals.com
-ADMIN_EMAIL=admin@flyrentals.com
+EMAIL_FROM=flyrentalsca@gmail.com
+EMAIL_REPLY_TO=flyrentalsca@gmail.com
+ADMIN_EMAIL=flyrentalsca@gmail.com
 
 # SMS/WhatsApp
 TWILIO_ACCOUNT_SID=your_account_sid
 TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_PHONE_NUMBER=+1234567890
+TWILIO_PHONE_NUMBER=+14386803936
 
 # Analytics (optional)
 NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX

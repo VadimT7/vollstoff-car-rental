@@ -23,7 +23,7 @@ export default function BookingConfirmationClient() {
   const returnLocation = searchParams.get('returnLocation') || 'showroom'
   const driverName = searchParams.get('driverName') || 'Driver'
   const driverEmail = searchParams.get('driverEmail') || 'driver@example.com'
-  const driverPhone = searchParams.get('driverPhone') || '+1 (555) 123-4567'
+  const driverPhone = searchParams.get('driverPhone') || '+1 (438) 680-3936'
   const totalPrice = searchParams.get('totalPrice') || '0'
   const days = searchParams.get('days') || '1'
 
@@ -233,7 +233,7 @@ The FlyRentals Team`
     pdf.setFontSize(10)
     pdf.setTextColor(150, 150, 150)
     pdf.text('Thank you for choosing FlyRentals!', 105, 280, { align: 'center' })
-    pdf.text('Contact: +1 (514) 555-0123 | info@flyrentals.com', 105, 287, { align: 'center' })
+    pdf.text('Contact: +1 (438) 680-3936 | flyrentalsca@gmail.com', 105, 287, { align: 'center' })
     
     // Save the PDF
     pdf.save(`FlyRentals_Booking_${bookingId}.pdf`)
@@ -394,9 +394,9 @@ The FlyRentals Team`
               Need help? Contact our concierge team
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="tel:+1234567890">
+              <Link href="tel:+14386803936">
                 <Button variant="outline" size="lg" className="text-base">
-                  +1 (234) 567-890
+                  +1 (438) 680-3936
                 </Button>
               </Link>
               <Link href="mailto:flyrentalsca@gmail.com">

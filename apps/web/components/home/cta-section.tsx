@@ -53,7 +53,7 @@ export function CTASection() {
                 </Button>
               </Link>
               
-              <a href="tel:+1234567890">
+              <a href="tel:+14386803936">
                 <Button 
                   size="xl" 
                   className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-black min-w-[200px] shadow-lg hover:shadow-xl transition-all duration-300"

@@ -92,7 +92,7 @@ SANITY_API_TOKEN=your-sanity-token
 ### Email (Resend)
 ```
 RESEND_API_KEY=re_your_api_key
-EMAIL_FROM=noreply@yourdomain.com
+EMAIL_FROM=flyrentalsca@gmail.com
 ```
 
 ### File Storage (Cloudflare R2)

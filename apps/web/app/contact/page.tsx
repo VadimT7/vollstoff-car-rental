@@ -18,15 +18,15 @@ const contactInfo = [
   {
     icon: Phone,
     title: 'Phone',
-    details: '+1 (514) 555-0123',
-    href: 'tel:+15145550123',
+    details: '+1 (438) 680-3936',
+    href: 'tel:+14386803936',
     description: '24/7 Premium Support'
   },
   {
     icon: Mail,
     title: 'Email',
-    details: 'info@valorerent.com',
-    href: 'mailto:info@valorerent.com',
+    details: 'flyrentalsca@gmail.com',
+    href: 'mailto:flyrentalsca@gmail.com',
     description: 'Quick Response Guaranteed'
   },
   {
@@ -166,7 +166,7 @@ export default function ContactPage() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       className="bg-slate-800 border-slate-700 text-white placeholder-slate-400 focus:border-primary focus:ring-primary"
-                      placeholder="+1 (514) 555-0123"
+                      placeholder="+1 (438) 680-3936"
                     />
                   </div>
                   

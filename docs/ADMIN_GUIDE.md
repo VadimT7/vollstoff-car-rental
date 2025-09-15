@@ -464,7 +464,7 @@ Configure at **Settings → Booking**:
 
 ### Emergency Contacts
 
-- Technical Support: tech@valorerent.com
+- Technical Support: flyrentalsca@gmail.com
 - Stripe Support: [Dashboard](https://dashboard.stripe.com)
 - Insurance: [Policy details]
 - Legal: [Contact info]
@@ -493,14 +493,14 @@ Configure at **Settings → Booking**:
 - Video tutorials: [Training portal]
 - Documentation: This guide
 - Practice environment: staging.valorerent.com
-- Support: admin-support@valorerent.com
+- Support: flyrentalsca@gmail.com
 
 ## 🆘 Getting Help
 
 ### Support Channels
 - **Urgent**: Call admin hotline
-- **Non-urgent**: admin-support@valorerent.com
-- **Technical**: tech-support@valorerent.com
+- **Non-urgent**: flyrentalsca@gmail.com
+- **Technical**: flyrentalsca@gmail.com
 - **Feature requests**: Via admin panel feedback
 
 ### Useful Links

@@ -234,8 +234,8 @@ export async function POST(request: NextRequest) {
 
         <div class="contact-info">
             <h4>📞 Need Help?</h4>
-            <p><strong>Phone:</strong> +1 (514) 555-0123</p>
-            <p><strong>Email:</strong> info@flyrentals.com</p>
+            <p><strong>Phone:</strong> +1 (438) 680-3936</p>
+            <p><strong>Email:</strong> flyrentalsca@gmail.com</p>
             <p><strong>Hours:</strong> 24/7 Premium Service</p>
         </div>
 

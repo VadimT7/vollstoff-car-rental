@@ -576,7 +576,7 @@ Base URL: `https://staging-api.valorerent.com/trpc`
 ### Test Credentials
 
 ```
-Email: test@valorerent.com
+Email: flyrentalsca@gmail.com
 Password: test123
 ```
 

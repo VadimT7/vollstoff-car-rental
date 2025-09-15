@@ -315,7 +315,7 @@ async function main() {
   console.log('👤 Creating admin user...')
   await prisma.user.create({
     data: {
-      email: 'admin@flyrentals.com',
+      email: 'flyrentalsca@gmail.com',
       name: 'Admin User',
       role: Role.ADMIN,
       status: UserStatus.ACTIVE,
@@ -331,7 +331,7 @@ async function main() {
     data: {
       email: 'customer@example.com',
       name: 'John Doe',
-      phone: '+1234567890',
+      phone: '+14386803936',
       role: Role.CUSTOMER,
       status: UserStatus.ACTIVE,
       isVerified: true,
@@ -516,7 +516,7 @@ async function main() {
   console.log('✅ Database seed completed successfully!')
   console.log(`
     Created:
-    - 2 users (admin@valorrental.com, customer@example.com)
+    - 2 users (flyrentalsca@gmail.com, customer@example.com)
     - ${cars.length} luxury cars with images and pricing
     - ${ADD_ONS.length} add-ons
     - ${COUPONS.length} coupons

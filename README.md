@@ -198,7 +198,7 @@ For detailed deployment instructions, see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.m
 ### Default Credentials
 
 #### Admin User
-- Email: `admin@valorerent.com`
+- Email: `flyrentalsca@gmail.com`
 - Password: `admin123`
 
 #### Test Customer
@@ -518,7 +518,7 @@ pnpm test:e2e:debug
 - **Documentation**: Check `/docs` folder
 - **Issues**: GitHub Issues for bug reports
 - **Discussions**: GitHub Discussions for questions
-- **Email**: support@valorerent.com
+- **Email**: flyrentalsca@gmail.com
 
 ### Common Issues
 

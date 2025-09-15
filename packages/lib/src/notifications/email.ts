@@ -28,11 +28,11 @@ export interface SendEmailParams {
 export async function sendEmail({
   to,
   template,
-  replyTo = process.env.EMAIL_REPLY_TO || 'noreply@example.com',
+  replyTo = process.env.EMAIL_REPLY_TO || 'flyrentalsca@gmail.com',
   attachments = [],
 }: SendEmailParams): Promise<string> {
   const { data, error } = await resend.emails.send({
-    from: process.env.EMAIL_FROM || 'noreply@example.com',
+    from: process.env.EMAIL_FROM || 'flyrentalsca@gmail.com',
     to: Array.isArray(to) ? to : [to],
     subject: template.subject,
     html: template.html,
@@ -333,8 +333,8 @@ function generateBookingConfirmationTemplate(booking: any): EmailTemplate {
           <p>
             If you have any questions or need to make changes to your booking, 
             please don't hesitate to contact us at 
-            <a href="mailto:concierge@flyrentals.com">concierge@flyrentals.com</a> 
-            or call us at +1 (555) 123-4567.
+            <a href="mailto:flyrentalsca@gmail.com">flyrentalsca@gmail.com</a> 
+            or call us at +1 (438) 680-3936.
           </p>
         </div>
         
@@ -373,7 +373,7 @@ WHAT'S NEXT?
 2. Please bring your valid driver's license and the credit card used for booking
 3. Our concierge team is available 24/7 for any special requests
 
-If you have any questions or need to make changes to your booking, please contact us at concierge@flyrentals.com or call +1 (555) 123-4567.
+If you have any questions or need to make changes to your booking, please contact us at flyrentalsca@gmail.com or call +1 (438) 680-3936.
 
 © ${new Date().getFullYear()} FlyRentals. All rights reserved.
   `.trim()

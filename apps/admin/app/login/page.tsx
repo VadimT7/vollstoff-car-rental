@@ -81,7 +81,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@valorerent.com"
+                  placeholder="flyrentalsca@gmail.com"
                   className="pl-10"
                   required
                 />
@@ -120,10 +120,10 @@ export default function LoginPage() {
         <p className="text-center text-sm text-neutral-600 mt-6">
           Need help? Contact{' '}
           <a
-            href="mailto:support@valorerent.com"
+            href="mailto:flyrentalsca@gmail.com"
             className="text-primary hover:underline"
           >
-            support@flyrentals.com
+            flyrentalsca@gmail.com
           </a>
         </p>
       </div>

@@ -45,7 +45,7 @@ pnpm dev
 
 ### Seeded Data:
 - 4 luxury vehicles with full specifications
-- Admin user (admin@flyrentals.com)
+- Admin user (flyrentalsca@gmail.com)
 - Test customer
 - Sample booking
 - Add-ons and pricing rules

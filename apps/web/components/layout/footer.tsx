@@ -50,8 +50,8 @@ const socialLinks = [
 ]
 
 const contactInfo = [
-  { icon: Phone, text: '+1 (514) 555-0123', href: 'tel:+15145550123' },
-  { icon: Mail, text: 'info@flyrentals.com', href: 'mailto:info@flyrentals.com' },
+  { icon: Phone, text: '+1 (438) 680-3936', href: 'tel:+14386803936' },
+  { icon: Mail, text: 'flyrentalsca@gmail.com', href: 'mailto:flyrentalsca@gmail.com' },
   { icon: MapPin, text: 'Montreal, Quebec', href: '/contact' },
 ]
 
