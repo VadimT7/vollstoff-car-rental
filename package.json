@@ -55,7 +55,7 @@
     "vercel:admin": "vercel --cwd apps/admin",
     "vercel:web:prod": "vercel --cwd apps/web --prod",
     "vercel:admin:prod": "vercel --cwd apps/admin --prod",
-    "postinstall": "pnpm db:generate"
+    "postinstall": "pnpm db:generate || true"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
