@@ -50,7 +50,11 @@
     "deploy:admin": "turbo deploy --filter=@valore/admin",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset publish",
+    "vercel:web": "vercel --cwd apps/web",
+    "vercel:admin": "vercel --cwd apps/admin",
+    "vercel:web:prod": "vercel --cwd apps/web --prod",
+    "vercel:admin:prod": "vercel --cwd apps/admin --prod"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
