@@ -1,10 +1,8 @@
 {
+  "installCommand": "cd ../.. && pnpm install", 
   "buildCommand": "cd ../.. && pnpm db:generate && pnpm build --filter=@valore/admin",
-  "installCommand": "cd ../.. && pnpm install",
+  "devCommand": "cd ../.. && pnpm dev --filter=@valore/admin",
   "framework": "nextjs",
-  "env": {
-    "PRISMA_GENERATE_DATAPROXY": "true"
-  },
   "functions": {
     "app/api/**/*.js": {
       "maxDuration": 30

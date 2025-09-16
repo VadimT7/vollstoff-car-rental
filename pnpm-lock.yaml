@@ -125,6 +125,9 @@ importers:
       '@vercel/blob':
         specifier: ^1.1.1
         version: 1.1.1
+      autoprefixer:
+        specifier: ^10.4.21
+        version: 10.4.21(postcss@8.5.6)
       chart.js:
         specifier: ^4.4.1
         version: 4.5.0
@@ -140,6 +143,9 @@ importers:
       next-auth:
         specifier: 5.0.0-beta.4
         version: 5.0.0-beta.4(next@14.1.0)(react@18.3.1)
+      postcss:
+        specifier: ^8.5.6
+        version: 8.5.6
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -161,6 +167,9 @@ importers:
       superjson:
         specifier: ^2.2.1
         version: 2.2.2
+      tailwindcss:
+        specifier: ^3.4.1
+        version: 3.4.17
       zod:
         specifier: ^3.22.4
         version: 3.25.76
@@ -177,21 +186,12 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.18
         version: 18.3.7(@types/react@18.3.24)
-      autoprefixer:
-        specifier: ^10.4.21
-        version: 10.4.21(postcss@8.5.6)
       eslint:
         specifier: ^8.56.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.1.0
         version: 14.1.0(eslint@8.57.1)(typescript@5.9.2)
-      postcss:
-        specifier: ^8.5.6
-        version: 8.5.6
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.17
       typescript:
         specifier: ^5.3.3
         version: 5.9.2
@@ -330,9 +330,6 @@ importers:
       superjson:
         specifier: ^2.2.1
         version: 2.2.2
-      tailwind-merge:
-        specifier: ^2.2.0
-        version: 2.6.0
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.17
