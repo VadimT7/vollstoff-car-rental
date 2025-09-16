@@ -1,0 +1,6 @@
+{
+    "framework": "nextjs",
+    "buildCommand": "pnpm install --filter=@valore/admin... && pnpm db:generate && pnpm --filter=@valore/admin build",
+    "outputDirectory": ".next"
+  }
+  

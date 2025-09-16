@@ -1,0 +1,6 @@
+{
+    "framework": "nextjs",
+    "buildCommand": "pnpm install --filter=@valore/web... && pnpm db:generate && pnpm --filter=@valore/web build",
+    "outputDirectory": ".next"
+  }
+  
