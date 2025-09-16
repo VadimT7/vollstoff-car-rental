@@ -27,8 +27,8 @@ import { useParams } from 'next/navigation'
 import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import { staggerContainer, staggerItem } from '@valore/ui'
-// import { AutoOpenInput } from '@/components/ui/auto-open-input'
-// import { DateInputWithAvailability } from '@/components/ui/date-input-with-availability'
+import { AutoOpenInput } from '@/components/ui/auto-open-input'
+import { DateInputWithAvailability } from '@/components/ui/date-input-with-availability'
 
 // Default services and requirements for all cars
 const defaultServices = [
