@@ -1,6 +1,5 @@
 {
-  "framework": "nextjs",
-  "installCommand": "pnpm install --prod=false --filter=@valore/database... --filter=@valore/web... --filter=@valore/lib... --filter=@valore/ui...",
-  "buildCommand": "cd ../.. && pnpm db:generate && pnpm --filter=@valore/web build",
-  "outputDirectory": ".next"
+  "buildCommand": "cd ../.. && npx pnpm@8.15.1 install && cd apps/web && npx pnpm@8.15.1 build",
+  "outputDirectory": ".next",
+  "framework": "nextjs"
 }
