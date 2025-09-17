@@ -1,0 +1,22 @@
+{
+  "name": "valore-admin",
+  "version": 2,
+  "scope": "tuchilavadim-1785s-projects",
+  "builds": [
+    {
+      "src": "apps/admin/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/apps/admin/$1"
+    }
+  ],
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm --filter @valore/admin build",
+  "outputDirectory": "apps/admin/.next",
+  "framework": "nextjs",
+  "rootDirectory": "apps/admin"
+}
