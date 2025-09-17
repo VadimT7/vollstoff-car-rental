@@ -1,10 +1,6 @@
 {
   "framework": "nextjs",
-  "installCommand": "pnpm install --filter=@valore/admin... --filter=@valore/database... --filter=@valore/lib... --filter=@valore/ui...",
+  "installCommand": "pnpm install --filter=@valore/database... --filter=@valore/admin... --filter=@valore/lib... --filter=@valore/ui... --include-dev",
   "buildCommand": "cd ../.. && pnpm db:generate && pnpm --filter=@valore/admin build",
-  "outputDirectory": ".next",
-  "env": {
-    "PRISMA_SKIP_POSTINSTALL_GENERATE": "true",
-    "PRISMA_CLI_BINARY_TARGETS": "debian-openssl-3.0.x"
-  }
+  "outputDirectory": ".next"
 }
