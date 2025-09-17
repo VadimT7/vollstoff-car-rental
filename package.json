@@ -6,8 +6,8 @@
   "author": "FlyRentals",
   "license": "PROPRIETARY",
   "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
+    "node": ">=20.0.0",
+    "pnpm": "8.x"
   },
   "packageManager": "pnpm@8.15.1",
   "scripts": {
@@ -69,6 +69,7 @@
     "lint-staged": "^15.2.0",
     "prettier": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
+    "prisma": "5.22.0",
     "turbo": "^1.13.4",
     "typescript": "^5.9.2"
   },
@@ -90,5 +91,8 @@
     "apps/*",
     "packages/*",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "@prisma/client": "5.22.0"
+  }
 }
