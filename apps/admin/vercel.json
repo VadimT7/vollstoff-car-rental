@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "installCommand": "pnpm install --prod=false --filter=@valore/database... --filter=@valore/admin... --filter=@valore/lib... --filter=@valore/ui...",
-  "buildCommand": "cd ../.. && pnpm db:generate && pnpm db:push && pnpm --filter=@valore/admin build",
+  "installCommand": "pnpm install --prod=false",
+  "buildCommand": "cd ../.. && pnpm db:generate && pnpm db:push && cd apps/admin && pnpm build",
   "outputDirectory": ".next"
 }
