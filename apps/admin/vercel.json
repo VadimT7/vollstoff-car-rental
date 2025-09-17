@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
   "installCommand": "pnpm install --prod=false",
-  "buildCommand": "cd ../.. && pnpm db:generate && pnpm db:push && pnpm run build:admin",
+  "buildCommand": "cd ../.. && pnpm db:generate && pnpm db:push && pnpm -C apps/admin exec next build",
   "outputDirectory": ".next"
 }
