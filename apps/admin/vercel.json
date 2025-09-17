@@ -1,5 +1,6 @@
 {
-  "buildCommand": "cd ../.. && npx pnpm@8.15.1 install && cd apps/admin && npx pnpm@8.15.1 build",
+  "installCommand": "echo 'Using custom build command'",
+  "buildCommand": "cd ../.. && npx pnpm@8.15.1 install && cd apps/admin && npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs"
 }
