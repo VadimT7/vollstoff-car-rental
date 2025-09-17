@@ -2,5 +2,5 @@
   "framework": "nextjs",
   "installCommand": "pnpm install --prod=false",
   "buildCommand": "pnpm -w db:generate && pnpm --dir apps/admin exec next build",
-  "outputDirectory": "apps/admin/.next"
+  "outputDirectory": ".next"
 }
