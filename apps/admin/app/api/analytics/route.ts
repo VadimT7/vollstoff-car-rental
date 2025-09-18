@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
     const cancellationRate = totalBookings > 0 ? (cancelledBookings / totalBookings) * 100 : 0
     
     // Calculate customer retention (customers with more than 1 booking)
-    const returningCustomers = customerBookings.filter(c => c._count.bookings > 1).length
+    const returningCustomers = customerBookings.filter((c: any) => c._count.bookings > 1).length
     const retentionRate = totalCustomers > 0 ? (returningCustomers / totalCustomers) * 100 : 0
     
     // Calculate satisfaction score (mock calculation based on completion rate)
@@ -245,10 +245,10 @@ export async function GET(request: NextRequest) {
 
     // Get top customers with booking details
     const topCustomers = customerBookings
-      .filter(c => c._count.bookings > 0)
-      .sort((a, b) => b._count.bookings - a._count.bookings)
+      .filter((c: any) => c._count.bookings > 0)
+      .sort((a: any, b: any) => b._count.bookings - a._count.bookings)
       .slice(0, 5)
-      .map(customer => ({
+      .map((customer: any) => ({
         name: customer.name || 'Unknown Customer',
         bookings: customer._count.bookings,
         revenue: customer._count.bookings * averageBookingValue,
