@@ -206,7 +206,7 @@ export function CalendarWithAvailability({
           placeholder="Select date"
           readOnly
           disabled={disabled}
-          className="flex-1 bg-transparent border-0 outline-none cursor-pointer text-sm min-w-0 truncate focus:ring-0 focus:border-0"
+          className="flex-1 bg-transparent border-0 outline-none cursor-pointer text-sm min-w-0 focus:ring-0 focus:border-0"
         />
         {value && !disabled && (
           <button

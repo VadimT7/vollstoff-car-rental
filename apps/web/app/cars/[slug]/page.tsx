@@ -29,6 +29,7 @@ import { formatCurrency } from '@valore/ui'
 import { staggerContainer, staggerItem } from '@valore/ui'
 import { AutoOpenInput } from '@/components/ui/auto-open-input'
 import { CalendarWithAvailability } from '@/components/ui/calendar-with-availability'
+import { ClickableTimeInput } from '@/components/ui/clickable-time-input'
 
 // Default services and requirements for all cars
 const defaultServices = [
@@ -401,8 +402,8 @@ export default function CarDetailPage() {
                   {availabilityLoading && (
                     <div className="text-sm text-gray-500 mb-2">Loading availability...</div>
                   )}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
+                  <div className="grid grid-cols-7 gap-3">
+                    <div className="col-span-4">
                       <CalendarWithAvailability
                         label="Pick-up Date"
                         value={selectedDates.start}
@@ -412,17 +413,14 @@ export default function CarDetailPage() {
                         blockedDates={blockedDates}
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Pick-up Time
-                      </label>
-                      <AutoOpenInput
-                        type="time"
+                    <div className="col-span-3">
+                      <ClickableTimeInput
+                        label="Pick-up Time"
                         value={selectedDates.startTime}
                         onChange={(e) => setSelectedDates(prev => ({ ...prev, startTime: e.target.value }))}
                       />
                     </div>
-                    <div>
+                    <div className="col-span-4">
                       <CalendarWithAvailability
                         label="Return Date"
                         value={selectedDates.end}
@@ -432,12 +430,9 @@ export default function CarDetailPage() {
                         blockedDates={blockedDates}
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Return Time
-                      </label>
-                      <AutoOpenInput
-                        type="time"
+                    <div className="col-span-3">
+                      <ClickableTimeInput
+                        label="Return Time"
                         value={selectedDates.endTime}
                         onChange={(e) => setSelectedDates(prev => ({ ...prev, endTime: e.target.value }))}
                       />

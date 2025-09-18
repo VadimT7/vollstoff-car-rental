@@ -22,6 +22,7 @@ import { Button, Card, Input, Label } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import { AutoOpenInput } from '@/components/ui/auto-open-input'
 import { CalendarWithAvailability } from '@/components/ui/calendar-with-availability'
+import { ClickableTimeInput } from '@/components/ui/clickable-time-input'
 // Removed static data import - now using API
 import dynamic from 'next/dynamic'
 
@@ -335,8 +336,8 @@ export default function BookingPage() {
               <p className="text-slate-600 mb-6">Choose when you'd like to pick up and return your luxury vehicle.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+              <div className="md:col-span-4">
                 <CalendarWithAvailability
                   id="startDate"
                   label="Pick-up Date"
@@ -347,16 +348,16 @@ export default function BookingPage() {
                   carId={car?.id}
                 />
               </div>
-              <div>
-                <Label htmlFor="startTime">Pick-up Time <span className="text-red-500">*</span></Label>
-                <AutoOpenInput
+              <div className="md:col-span-3">
+                <ClickableTimeInput
                   id="startTime"
-                  type="time"
+                  label="Pick-up Time"
+                  required
                   value={bookingData.startTime}
                   onChange={(e) => setBookingData(prev => ({ ...prev, startTime: e.target.value }))}
                 />
               </div>
-              <div>
+              <div className="md:col-span-4">
                 <CalendarWithAvailability
                   id="endDate"
                   label="Return Date"
@@ -367,11 +368,11 @@ export default function BookingPage() {
                   carId={car?.id}
                 />
               </div>
-              <div>
-                <Label htmlFor="endTime">Return Time <span className="text-red-500">*</span></Label>
-                <AutoOpenInput
+              <div className="md:col-span-3">
+                <ClickableTimeInput
                   id="endTime"
-                  type="time"
+                  label="Return Time"
+                  required
                   value={bookingData.endTime}
                   onChange={(e) => setBookingData(prev => ({ ...prev, endTime: e.target.value }))}
                 />
