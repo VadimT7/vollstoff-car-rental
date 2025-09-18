@@ -401,6 +401,9 @@ importers:
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
+      prisma:
+        specifier: ^5.22.0
+        version: 5.22.0
     devDependencies:
       '@faker-js/faker':
         specifier: ^8.4.0
@@ -411,9 +414,6 @@ importers:
       '@types/node':
         specifier: ^20.11.5
         version: 20.19.16
-      prisma:
-        specifier: ^5.22.0
-        version: 5.22.0
       tsx:
         specifier: ^4.7.0
         version: 4.20.5
