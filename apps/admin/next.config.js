@@ -25,7 +25,12 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   experimental: {
-    typedRoutes: false,
+    transpilePackages: ['@valore/database', '@valore/lib', '@valore/ui'],
+    typedRoutes: false
+  },
+  webpack: (config) => {
+    config.resolve.symlinks = false;
+    return config;
   },
   async headers() {
     return [

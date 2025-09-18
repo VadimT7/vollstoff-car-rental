@@ -1,5 +1,6 @@
 {
-  "installCommand": "cd ../.. && npm install -g pnpm@8.15.1 && pnpm install",
-  "buildCommand": "cd ../.. && pnpm --filter @valore/database generate && cd apps/admin && pnpm build",
-  "outputDirectory": ".next"
-} 
+  "framework": "nextjs",
+  "installCommand": "npm install -g pnpm@8.15.1 && pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm db:generate && pnpm db:push && cd apps/admin && NEXT_PRIVATE_LOCAL_WEBPACK=1 next build",
+  "outputDirectory": "apps/admin/.next"
+}
