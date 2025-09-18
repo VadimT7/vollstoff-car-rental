@@ -70,13 +70,13 @@ export default function BookingConfirmationClient() {
   const getLocationAddress = (location: string) => {
     switch (location) {
       case 'showroom':
-        return '123 Luxury Street, Montreal, QC H3A 1A1'
+        return '1555 Rue Richelieu, Montreal, QC H3J 1G8'
       case 'airport':
         return '975 Roméo-Vachon Blvd N, Dorval, QC H4Y 1H1'
       case 'hotel':
         return 'Your Hotel Address (Montreal Area)'
       default:
-        return '123 Luxury Street, Montreal, QC H3A 1A1'
+        return '1555 Rue Richelieu, Montreal, QC H3J 1G8'
     }
   }
 

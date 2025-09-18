@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
       {
         id: 'showroom',
         name: 'FlyRentals Showroom (Montreal)',
-        address: '123 Luxury Street, Montreal, QC H3A 1A1',
+        address: '1555 Rue Richelieu, Montreal, QC H3J 1G8',
         type: 'SHOWROOM',
         isDefault: true
       },

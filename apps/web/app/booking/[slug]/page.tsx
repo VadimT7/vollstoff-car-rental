@@ -434,7 +434,7 @@ export default function BookingPage() {
                 <div>
                   <h3 className="font-semibold text-blue-900 mb-1">Location Information</h3>
                   <p className="text-blue-700 text-sm">
-                    Our showroom is located at 123 Luxury Street, Montreal, QC H3A 1A1. Airport and hotel delivery services are available 
+                    Our original pick-up location is located at 1555 Rue Richelieu, Montreal, QC H3J 1G8. Airport and hotel delivery services are available 
                     for an additional fee. Please contact us for specific arrangements.
                   </p>
                 </div>
