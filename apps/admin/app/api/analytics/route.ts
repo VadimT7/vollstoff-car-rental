@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
       dailyRevenueMap.set(dateStr, 0)
     }
     
-    recentPaymentsForChart.forEach(payment => {
+    recentPaymentsForChart.forEach((payment: any) => {
       const dateStr = payment.createdAt.toISOString().split('T')[0]
       if (dailyRevenueMap.has(dateStr)) {
         dailyRevenueMap.set(dateStr, dailyRevenueMap.get(dateStr) + parseFloat(String(payment.amount)))
@@ -174,7 +174,7 @@ export async function GET(request: NextRequest) {
       monthlyRevenueMap.set(monthKey, 0)
     }
     
-    yearPayments.forEach(payment => {
+    yearPayments.forEach((payment: any) => {
       const monthKey = payment.createdAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
       if (monthlyRevenueMap.has(monthKey)) {
         monthlyRevenueMap.set(monthKey, monthlyRevenueMap.get(monthKey) + parseFloat(String(payment.amount)))
@@ -232,7 +232,7 @@ export async function GET(request: NextRequest) {
 
     // Group vehicles by category for category performance
     const categoryStats = new Map()
-    vehicleStats.forEach(vehicle => {
+    vehicleStats.forEach((vehicle: any) => {
       const category = vehicle.category || 'Standard'
       if (!categoryStats.has(category)) {
         categoryStats.set(category, { bookings: 0, revenue: 0, count: 0 })
