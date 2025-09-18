@@ -28,7 +28,7 @@ import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import { staggerContainer, staggerItem } from '@valore/ui'
 import { AutoOpenInput } from '@/components/ui/auto-open-input'
-import { DateInputWithAvailability } from '@/components/ui/date-input-with-availability'
+import { CalendarWithAvailability } from '@/components/ui/calendar-with-availability'
 
 // Default services and requirements for all cars
 const defaultServices = [
@@ -403,13 +403,12 @@ export default function CarDetailPage() {
                   )}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Pick-up Date
-                      </label>
-                      <DateInputWithAvailability
+                      <CalendarWithAvailability
+                        label="Pick-up Date"
                         value={selectedDates.start}
-                        onChange={(e) => setSelectedDates(prev => ({ ...prev, start: e.target.value }))}
+                        onChange={(date) => setSelectedDates(prev => ({ ...prev, start: date }))}
                         min={new Date().toISOString().split('T')[0]}
+                        carId={car?.id}
                         blockedDates={blockedDates}
                       />
                     </div>
@@ -424,13 +423,12 @@ export default function CarDetailPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Return Date
-                      </label>
-                      <DateInputWithAvailability
+                      <CalendarWithAvailability
+                        label="Return Date"
                         value={selectedDates.end}
-                        onChange={(e) => setSelectedDates(prev => ({ ...prev, end: e.target.value }))}
+                        onChange={(date) => setSelectedDates(prev => ({ ...prev, end: date }))}
                         min={selectedDates.start || new Date().toISOString().split('T')[0]}
+                        carId={car?.id}
                         blockedDates={blockedDates}
                       />
                     </div>

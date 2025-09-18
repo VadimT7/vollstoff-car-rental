@@ -21,6 +21,7 @@ import Link from 'next/link'
 import { Button, Card, Input, Label } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import { AutoOpenInput } from '@/components/ui/auto-open-input'
+import { CalendarWithAvailability } from '@/components/ui/calendar-with-availability'
 // Removed static data import - now using API
 import dynamic from 'next/dynamic'
 
@@ -336,13 +337,14 @@ export default function BookingPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="startDate">Pick-up Date <span className="text-red-500">*</span></Label>
-                <AutoOpenInput
+                <CalendarWithAvailability
                   id="startDate"
-                  type="date"
+                  label="Pick-up Date"
+                  required
                   value={bookingData.startDate}
-                  onChange={(e) => setBookingData(prev => ({ ...prev, startDate: e.target.value }))}
+                  onChange={(date) => setBookingData(prev => ({ ...prev, startDate: date }))}
                   min={new Date().toISOString().split('T')[0]}
+                  carId={car?.id}
                 />
               </div>
               <div>
@@ -355,13 +357,14 @@ export default function BookingPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="endDate">Return Date <span className="text-red-500">*</span></Label>
-                <AutoOpenInput
+                <CalendarWithAvailability
                   id="endDate"
-                  type="date"
+                  label="Return Date"
+                  required
                   value={bookingData.endDate}
-                  onChange={(e) => setBookingData(prev => ({ ...prev, endDate: e.target.value }))}
+                  onChange={(date) => setBookingData(prev => ({ ...prev, endDate: date }))}
                   min={bookingData.startDate || new Date().toISOString().split('T')[0]}
+                  carId={car?.id}
                 />
               </div>
               <div>
