@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Transform the data to match the expected format
-    const transformedCustomers = customers.map(customer => ({
+    const transformedCustomers = customers.map((customer: any) => ({
       id: customer.id,
       name: customer.name,
       email: customer.email,
