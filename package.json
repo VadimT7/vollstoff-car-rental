@@ -18,7 +18,7 @@
     "prebuild": "node scripts/guard-no-oldname.ts",
     "build": "turbo build",
     "build:web": "pnpm --filter @valore/database generate && pnpm --filter @valore/web build",
-    "build:admin": "pnpm --filter @valore/database generate && pnpm --filter @valore/admin build",
+    "build:admin": "pnpm --filter @valore/database generate && cd apps/admin && pnpm build",
     "start": "turbo start",
     "start:web": "turbo start --filter=@valore/web",
     "start:admin": "turbo start --filter=@valore/admin",

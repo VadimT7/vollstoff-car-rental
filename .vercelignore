@@ -1,10 +1,8 @@
 # Vercel ignore file
-packages/database/prisma/migrations
 packages/database/prisma/seed.ts
 **/node_modules
 **/.turbo
 **/dist
-**/.next
 **/coverage
 **/test-results
 **/.env*
@@ -17,5 +15,3 @@ tests
 .gitignore
 *.md
 !README.md
-!.prisma/
-!.prisma/client/
