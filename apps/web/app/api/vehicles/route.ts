@@ -118,27 +118,49 @@ export async function GET(request: NextRequest) {
       ]
     })
 
+    console.log('🚗 Raw vehicles from database:', {
+      count: vehicles.length,
+      vehicles: vehicles.map(v => ({
+        id: v.id,
+        displayName: v.displayName,
+        primaryImageUrl: v.primaryImageUrl,
+        hasImages: !!v.images,
+        imagesCount: v.images?.length || 0
+      }))
+    })
+
     // Transform to match frontend expectations
-    const transformed = vehicles.map((vehicle: any) => ({
-      id: vehicle.id,
-      slug: vehicle.slug,
-      displayName: vehicle.displayName,
-      make: vehicle.make,
-      model: vehicle.model,
-      year: vehicle.year,
-      category: vehicle.category,
-      bodyType: vehicle.bodyType,
-      description: vehicle.description,
-      primaryImage: vehicle.primaryImageUrl || vehicle.images?.[0]?.url || '/placeholder-car.jpg',
-      pricePerDay: Number((vehicle as any).priceRules?.[0]?.basePricePerDay) || 0,
-      featured: vehicle.featured,
-      featuredOrder: vehicle.featuredOrder,
-      specs: {
-        transmission: vehicle.transmission,
-        seats: vehicle.seats,
-        doors: vehicle.doors
+    const transformed = vehicles.map((vehicle: any) => {
+      console.log('🔍 Processing vehicle:', {
+        id: vehicle.id,
+        displayName: vehicle.displayName,
+        primaryImageUrl: vehicle.primaryImageUrl,
+        hasImages: !!vehicle.images,
+        imagesCount: vehicle.images?.length || 0,
+        firstImageUrl: vehicle.images?.[0]?.url
+      })
+      
+      return {
+        id: vehicle.id,
+        slug: vehicle.slug,
+        displayName: vehicle.displayName,
+        make: vehicle.make,
+        model: vehicle.model,
+        year: vehicle.year,
+        category: vehicle.category,
+        bodyType: vehicle.bodyType,
+        description: vehicle.description,
+        primaryImage: vehicle.primaryImageUrl || vehicle.images?.[0]?.url || '/placeholder-car.jpg',
+        pricePerDay: Number((vehicle as any).priceRules?.[0]?.basePricePerDay) || 0,
+        featured: vehicle.featured,
+        featuredOrder: vehicle.featuredOrder,
+        specs: {
+          transmission: vehicle.transmission,
+          seats: vehicle.seats,
+          doors: vehicle.doors
+        }
       }
-    }))
+    })
 
     return NextResponse.json(transformed)
   } catch (error) {

@@ -139,9 +139,17 @@ export default function EditVehiclePage() {
     const loadVehicleData = async () => {
       try {
         console.log('🔍 Loading vehicle data for ID:', vehicleId)
+        
+        // Reset form state first
+        setForm(initialFormData)
+        setErrors({})
+        setCurrentStep(0)
+        setInitialLoading(true)
+        
         const response = await fetch(`/api/vehicles?id=${vehicleId}`)
         if (response.ok) {
           const vehicleArray = await response.json()
+          console.log('📋 Raw API response:', vehicleArray)
           const vehicle = vehicleArray[0] // API returns array, take first item
           
           if (!vehicle) {
@@ -150,7 +158,7 @@ export default function EditVehiclePage() {
             return
           }
           
-          console.log('✅ Vehicle data loaded:', vehicle)
+          console.log('✅ Vehicle data loaded for ID:', vehicleId, 'Vehicle:', vehicle.displayName)
           
           // Populate form with existing data
           setForm({

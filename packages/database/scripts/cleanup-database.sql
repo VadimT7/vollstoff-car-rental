@@ -45,3 +45,4 @@ SELECT
 FROM pg_stat_user_tables 
 WHERE schemaname = 'public'
 ORDER BY tablename;
+

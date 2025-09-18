@@ -3,6 +3,7 @@ import { vehicleService, prisma } from '@valore/database'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
+import { saveImageToBothDirectories, deleteImageFromBothDirectories } from '../../../../lib/image-utils'
 
 export async function PUT(
   request: NextRequest,
@@ -118,39 +119,37 @@ export async function PUT(
     if (primaryImage) {
       console.log('💾 Processing new primary image...')
       
-      // Create upload directories if they don't exist
-      let webUploadDir = join(process.cwd(), 'apps/web/public/uploads/vehicles')
-      let adminUploadDir = join(process.cwd(), 'public/uploads/vehicles')
-      
-      if (process.cwd().includes('apps/admin')) {
-        webUploadDir = join(process.cwd(), '../web/public/uploads/vehicles')
-        adminUploadDir = join(process.cwd(), 'public/uploads/vehicles')
-      }
-      
-      // Ensure directories exist
-      if (!existsSync(webUploadDir)) {
-        await mkdir(webUploadDir, { recursive: true })
-      }
-      if (!existsSync(adminUploadDir)) {
-        await mkdir(adminUploadDir, { recursive: true })
-      }
-
       const timestamp = Date.now()
       const filename = `${slug}-primary-${timestamp}.${primaryImage.name.split('.').pop()}`
-      const webFilePath = join(webUploadDir, filename)
-      const adminFilePath = join(adminUploadDir, filename)
       
       try {
         const bytes = await primaryImage.arrayBuffer()
         const buffer = Buffer.from(bytes)
-        // Save to both locations
-        await writeFile(webFilePath, buffer)
-        await writeFile(adminFilePath, buffer)
-        primaryImageUrl = `/uploads/vehicles/${filename}`
-        console.log('✅ New primary image saved:', primaryImageUrl)
+        
+        // Use bulletproof image saving utility
+        const result = await saveImageToBothDirectories({
+          buffer,
+          filename,
+          baseDir: process.cwd()
+        })
+        
+        if (!result.success) {
+          console.error('❌ Failed to save image to both directories:', result.error)
+          return NextResponse.json({ 
+            error: 'Failed to save image', 
+            details: result.error 
+          }, { status: 500 })
+        }
+        
+        primaryImageUrl = result.imageUrl!
+        console.log('✅ New primary image saved successfully:', primaryImageUrl)
+        
       } catch (error) {
-        console.error('❌ Failed to save primary image:', error)
-        return NextResponse.json({ error: 'Failed to save image' }, { status: 500 })
+        console.error('❌ Failed to process primary image:', error)
+        return NextResponse.json({ 
+          error: 'Failed to process image', 
+          details: error instanceof Error ? error.message : 'Unknown error' 
+        }, { status: 500 })
       }
     }
 

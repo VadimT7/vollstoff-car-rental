@@ -24,6 +24,7 @@ const nextConfig = {
     ],
     formats: ['image/avif', 'image/webp'],
     unoptimized: false,
+    domains: ['localhost'],
   },
   experimental: {
     typedRoutes: false,

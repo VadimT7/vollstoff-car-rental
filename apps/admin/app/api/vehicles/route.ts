@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@valore/database'
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
+import { saveImageToBothDirectories } from '../../../lib/image-utils'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,10 +9,13 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : undefined
     const status = searchParams.get('status')
+    const id = searchParams.get('id')
 
     // Build where clause
     const where: any = {}
-    if (status) {
+    if (id) {
+      where.id = id
+    } else if (status) {
       where.status = status
     }
 
@@ -62,6 +64,11 @@ export async function GET(request: NextRequest) {
     })
 
     console.log(`✅ Found ${transformedVehicles.length} vehicles`)
+
+    // If an ID was provided, return the single vehicle, otherwise return the array
+    if (id && transformedVehicles.length > 0) {
+      return NextResponse.json([transformedVehicles[0]]) // Keep as array for backward compatibility
+    }
 
     return NextResponse.json(transformedVehicles)
   } catch (error) {
@@ -190,49 +197,48 @@ export async function POST(request: NextRequest) {
         create: []
       }
       
-      // Create uploads directory if it doesn't exist (admin app)
-      const adminUploadsDir = join(process.cwd(), 'public', 'uploads', 'vehicles')
-      try {
-        await mkdir(adminUploadsDir, { recursive: true })
-      } catch (error) {
-        // Directory might already exist
-      }
-      
-      // Create uploads directory for web app
-      const webUploadsDir = join(process.cwd(), '..', 'web', 'public', 'uploads', 'vehicles')
-      try {
-        await mkdir(webUploadsDir, { recursive: true })
-      } catch (error) {
-        // Directory might already exist
-      }
-      
       // Add primary image
       if (vehicleData.primaryImage) {
         try {
           const timestamp = Date.now()
           const fileName = `${timestamp}-${vehicleData.displayName.replace(/\s+/g, '-')}-primary.jpg`
-          const adminFilePath = join(adminUploadsDir, fileName)
-          const webFilePath = join(webUploadsDir, fileName)
-          const imageUrl = `/uploads/vehicles/${fileName}`
           
-          // Save the file to both locations
+          // Get image buffer
           const bytes = await vehicleData.primaryImage.arrayBuffer()
           const buffer = Buffer.from(bytes)
-          await writeFile(adminFilePath, buffer)
-          await writeFile(webFilePath, buffer)
           
-          // Set the primary image URL on the vehicle
-          vehicleCreateData.primaryImageUrl = imageUrl
-          
-          vehicleCreateData.images.create.push({
-            url: imageUrl,
-            alt: vehicleData.displayName,
-            caption: 'Primary image',
-            order: 0,
-            isGallery: false
+          // Use bulletproof image saving utility
+          const result = await saveImageToBothDirectories({
+            buffer,
+            filename: fileName,
+            baseDir: process.cwd()
           })
+          
+          if (result.success) {
+            // Set the primary image URL on the vehicle
+            vehicleCreateData.primaryImageUrl = result.imageUrl
+            
+            vehicleCreateData.images.create.push({
+              url: result.imageUrl!,
+              alt: vehicleData.displayName,
+              caption: 'Primary image',
+              order: 0,
+              isGallery: false
+            })
+            console.log('✅ Primary image saved successfully')
+          } else {
+            console.error('Failed to save primary image:', result.error)
+            // Keep default placeholder
+            vehicleCreateData.images.create.push({
+              url: '/placeholder-car.jpg',
+              alt: vehicleData.displayName,
+              caption: 'Primary image',
+              order: 0,
+              isGallery: false
+            })
+          }
         } catch (error) {
-          console.error('Failed to save primary image:', error)
+          console.error('Failed to process primary image:', error)
           // Keep default placeholder
           vehicleCreateData.images.create.push({
             url: '/placeholder-car.jpg',
@@ -251,25 +257,33 @@ export async function POST(request: NextRequest) {
           try {
             const timestamp = Date.now()
             const fileName = `${timestamp}-${vehicleData.displayName.replace(/\s+/g, '-')}-gallery-${index + 1}.jpg`
-            const adminFilePath = join(adminUploadsDir, fileName)
-            const webFilePath = join(webUploadsDir, fileName)
-            const imageUrl = `/uploads/vehicles/${fileName}`
             
-            // Save the file to both locations
+            // Get image buffer
             const bytes = await image.arrayBuffer()
             const buffer = Buffer.from(bytes)
-            await writeFile(adminFilePath, buffer)
-            await writeFile(webFilePath, buffer)
             
-            vehicleCreateData.images.create.push({
-              url: imageUrl,
-              alt: vehicleData.displayName,
-              caption: `Gallery image ${index + 1}`,
-              order: index + 1,
-              isGallery: true
+            // Use bulletproof image saving utility
+            const result = await saveImageToBothDirectories({
+              buffer,
+              filename: fileName,
+              baseDir: process.cwd()
             })
+            
+            if (result.success) {
+              vehicleCreateData.images.create.push({
+                url: result.imageUrl!,
+                alt: vehicleData.displayName,
+                caption: `Gallery image ${index + 1}`,
+                order: index + 1,
+                isGallery: true
+              })
+              console.log(`✅ Gallery image ${index + 1} saved successfully`)
+            } else {
+              console.error(`Failed to save gallery image ${index + 1}:`, result.error)
+              // Skip this image if it fails
+            }
           } catch (error) {
-            console.error(`Failed to save gallery image ${index + 1}:`, error)
+            console.error(`Failed to process gallery image ${index + 1}:`, error)
             // Skip this image if it fails
           }
         }

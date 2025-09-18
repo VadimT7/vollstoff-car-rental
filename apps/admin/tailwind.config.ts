@@ -20,6 +20,17 @@ const config: Config = {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          50: '#faf9f7',
+          100: '#f3f1eb',
+          200: '#e8e3d6',
+          300: '#d9cfba',
+          400: '#c7b595',
+          500: '#b59968',
+          600: '#9d7d4f',
+          700: '#836540',
+          800: '#6b5236',
+          900: '#59442f',
+          950: '#302316',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -44,6 +55,22 @@ const config: Config = {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
+        },
+        // Custom neutral colors from UI package
+        neutral: {
+          0: '#ffffff',
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+          950: '#0a0a0a',
+          1000: '#000000',
         },
       },
       fontFamily: {
