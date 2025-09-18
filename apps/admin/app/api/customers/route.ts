@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
       createdAt: customer.createdAt,
       updatedAt: customer.updatedAt,
       totalBookings: customer._count.bookings,
-      totalSpent: customer.bookings.reduce((sum, booking) => sum + parseFloat(String(booking.totalAmount)), 0),
+      totalSpent: customer.bookings.reduce((sum: number, booking: any) => sum + parseFloat(String(booking.totalAmount)), 0),
       recentBookings: customer.bookings,
     }))
 
