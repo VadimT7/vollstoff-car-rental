@@ -175,9 +175,9 @@ export const adminRouter = router({
       },
     })
 
-    const utilization = cars.map(car => {
+    const utilization = cars.map((car: any) => {
       const totalDays = 30
-      const bookedDays = car.bookings.reduce((sum, booking) => {
+      const bookedDays = car.bookings.reduce((sum: number, booking: any) => {
         const start = booking.startDate > thirtyDaysAgo ? booking.startDate : thirtyDaysAgo
         const end = booking.endDate < now ? booking.endDate : now
         const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
@@ -192,10 +192,10 @@ export const adminRouter = router({
     })
 
     // Sort by utilization
-    utilization.sort((a, b) => b.utilization - a.utilization)
+    utilization.sort((a: any, b: any) => b.utilization - a.utilization)
 
     const overallUtilization = utilization.length > 0
-      ? utilization.reduce((sum, car) => sum + car.utilization, 0) / utilization.length
+      ? utilization.reduce((sum: number, car: any) => sum + car.utilization, 0) / utilization.length
       : 0
 
     return {

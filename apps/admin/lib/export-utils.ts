@@ -11,11 +11,11 @@ export function exportToCSV(data: any[], columns: ExportColumn[], filename: stri
   }
 
   // Create CSV headers
-  const headers = columns.map(col => col.label).join(',')
+  const headers = columns.map((col: any) => col.label).join(',')
   
   // Create CSV rows
-  const rows = data.map(item => 
-    columns.map(col => {
+  const rows = data.map((item: any) => 
+    columns.map((col: any) => {
       let value = getNestedValue(item, col.key)
       
       // Apply formatting if provided
@@ -79,7 +79,7 @@ export function exportToJSON(data: any[], filename: string) {
 
 // Helper function to get nested object values using dot notation
 function getNestedValue(obj: any, path: string): any {
-  return path.split('.').reduce((current, key) => {
+  return path.split('.').reduce((current: any, key: string) => {
     return current && current[key] !== undefined ? current[key] : null
   }, obj)
 }
