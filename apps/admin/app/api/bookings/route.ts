@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Transform the data to match the expected format
-    const transformedBookings = bookings.map(booking => ({
+    const transformedBookings = bookings.map((booking: any) => ({
       id: booking.id,
       bookingNumber: booking.bookingNumber,
       status: booking.status,
