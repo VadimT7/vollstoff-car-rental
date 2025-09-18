@@ -159,7 +159,7 @@ export function RealTimeMetrics() {
       </div>
 
       <div className="mt-4 pt-4 border-t border-amber-200">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <div className="flex items-center gap-4 text-xs text-neutral-600">
             <span className="flex items-center gap-1">
               <div className="h-2 w-2 bg-green-500 rounded-full" />
@@ -174,12 +174,6 @@ export function RealTimeMetrics() {
               Critical
             </span>
           </div>
-          <button
-            onClick={fetchLiveMetrics}
-            className="text-xs text-amber-600 hover:text-amber-700 font-medium"
-          >
-            Refresh Now
-          </button>
         </div>
       </div>
     </Card>

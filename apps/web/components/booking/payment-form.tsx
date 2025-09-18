@@ -38,8 +38,7 @@ interface PaymentFormProps {
 function MockCheckoutForm({ amount, bookingData, onSuccess, onError }: PaymentFormProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
-  const [paymentMethod, setPaymentMethod] = useState('card')
-  // Payment method is always card now
+  // Payment method is always card
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,39 +63,17 @@ function MockCheckoutForm({ amount, bookingData, onSuccess, onError }: PaymentFo
       {/* Payment Method Selection */}
       <div className="space-y-4">
         <label className="text-sm font-medium text-neutral-700">Payment Method</label>
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => setPaymentMethod('card')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              paymentMethod === 'card'
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-neutral-200 hover:border-neutral-300'
-            }`}
-          >
+        <div className="max-w-sm">
+          <div className="p-4 rounded-lg border-2 border-amber-500 bg-amber-50">
             <CreditCard className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
-            <p className="text-sm font-medium">Credit/Debit Card</p>
-            <p className="text-xs text-neutral-500 mt-1">Secure online payment</p>
-          </button>
-          
-          <button
-            type="button"
-            onClick={() => setPaymentMethod('cash')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              paymentMethod === 'cash'
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-neutral-200 hover:border-neutral-300'
-            }`}
-          >
-            <Shield className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
-            <p className="text-sm font-medium">Cash Payment</p>
-            <p className="text-xs text-neutral-500 mt-1">Pay at pickup (Card hold required)</p>
-          </button>
+            <p className="text-sm font-medium text-center">Credit/Debit Card</p>
+            <p className="text-xs text-neutral-500 mt-1 text-center">Secure online payment</p>
+          </div>
         </div>
       </div>
 
       {/* Mock Payment Element */}
-      {paymentMethod === 'card' && (
+      {(
         <div className="space-y-4">
           <Card className="p-6 bg-blue-50 border-blue-200">
             <div className="flex items-center gap-3 mb-4">
@@ -129,23 +106,6 @@ function MockCheckoutForm({ amount, bookingData, onSuccess, onError }: PaymentFo
         </div>
       )}
 
-      {/* Cash Payment Notice */}
-      {paymentMethod === 'cash' && (
-        <Card className="bg-amber-50 border-amber-200">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-amber-900">Cash Payment Requirements</p>
-              <ul className="text-sm text-amber-700 mt-2 space-y-1">
-                <li>• A valid credit card is required for security deposit</li>
-                <li>• ${(amount * 0.3).toFixed(2)} will be held on your card</li>
-                <li>• Full payment due at vehicle pickup</li>
-                <li>• Accepted: Cash, Bank Transfer</li>
-              </ul>
-            </div>
-          </div>
-        </Card>
-      )}
 
       {/* Error Message */}
       {message && (
@@ -210,8 +170,7 @@ function StripeCheckoutForm({ amount, bookingData, onSuccess, onError }: Payment
   const elements = useElements()
   const [isProcessing, setIsProcessing] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
-  const [paymentMethod, setPaymentMethod] = useState('card')
-  // Payment method is always card now
+  // Payment method is always card
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -262,39 +221,17 @@ function StripeCheckoutForm({ amount, bookingData, onSuccess, onError }: Payment
       {/* Payment Method Selection */}
       <div className="space-y-4">
         <label className="text-sm font-medium text-neutral-700">Payment Method</label>
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => setPaymentMethod('card')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              paymentMethod === 'card'
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-neutral-200 hover:border-neutral-300'
-            }`}
-          >
+        <div className="max-w-sm">
+          <div className="p-4 rounded-lg border-2 border-amber-500 bg-amber-50">
             <CreditCard className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
-            <p className="text-sm font-medium">Credit/Debit Card</p>
-            <p className="text-xs text-neutral-500 mt-1">Secure online payment</p>
-          </button>
-          
-          <button
-            type="button"
-            onClick={() => setPaymentMethod('cash')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              paymentMethod === 'cash'
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-neutral-200 hover:border-neutral-300'
-            }`}
-          >
-            <Shield className="h-6 w-6 mx-auto mb-2 text-neutral-700" />
-            <p className="text-sm font-medium">Cash Payment</p>
-            <p className="text-xs text-neutral-500 mt-1">Pay at pickup (Card hold required)</p>
-          </button>
+            <p className="text-sm font-medium text-center">Credit/Debit Card</p>
+            <p className="text-xs text-neutral-500 mt-1 text-center">Secure online payment</p>
+          </div>
         </div>
       </div>
 
       {/* Payment Element */}
-      {paymentMethod === 'card' && (
+      {(
         <div className="space-y-4">
           {hasRealStripeKeys ? (
             <PaymentElement 
@@ -344,23 +281,6 @@ function StripeCheckoutForm({ amount, bookingData, onSuccess, onError }: Payment
         </div>
       )}
 
-      {/* Cash Payment Notice */}
-      {paymentMethod === 'cash' && (
-        <Card className="bg-amber-50 border-amber-200">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-amber-900">Cash Payment Requirements</p>
-              <ul className="text-sm text-amber-700 mt-2 space-y-1">
-                <li>• A valid credit card is required for security deposit</li>
-                <li>• ${(amount * 0.3).toFixed(2)} will be held on your card</li>
-                <li>• Full payment due at vehicle pickup</li>
-                <li>• Accepted: Cash, Bank Transfer</li>
-              </ul>
-            </div>
-          </div>
-        </Card>
-      )}
 
       {/* Error Message */}
       {message && (
