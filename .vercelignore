@@ -1,5 +1,4 @@
 # Vercel ignore file
-apps/admin
 packages/database/prisma/migrations
 packages/database/prisma/seed.ts
 **/node_modules
