@@ -1,5 +1,5 @@
 {
   "installCommand": "cd ../.. && npm install -g pnpm@8.15.1 && pnpm install",
-  "buildCommand": "cd ../.. && pnpm run build:admin",
+  "buildCommand": "cd ../.. && pnpm --filter @valore/database generate && cd apps/admin && pnpm build",
   "outputDirectory": ".next"
 }
