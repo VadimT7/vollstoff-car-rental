@@ -281,7 +281,7 @@ export async function GET(request: NextRequest) {
           { status: 'Cancelled', count: cancelledBookings, percentage: Math.round(cancellationRate) },
           { status: 'Pending', count: pendingBookings, percentage: totalBookings > 0 ? Math.round((pendingBookings / totalBookings) * 100) : 0 }
         ],
-        byCategory: Array.from(categoryStats.entries()).map(([category, stats]) => ({
+        byCategory: Array.from(categoryStats.entries()).map(([category, stats]: [string, any]) => ({
           category,
           count: stats.bookings,
           revenue: Math.round(stats.revenue)
@@ -304,21 +304,21 @@ export async function GET(request: NextRequest) {
       },
       vehicles: {
         total: vehicleStats.length,
-        available: vehicleStats.filter(v => v.status === 'ACTIVE').length,
-        rented: vehicleStats.filter(v => v._count.bookings > 0 && v.status === 'ACTIVE').length,
-        maintenance: vehicleStats.filter(v => v.status === 'MAINTENANCE').length,
-        utilization: vehicleStats.length > 0 ? Math.round((vehicleStats.filter(v => v._count.bookings > 0).length / vehicleStats.length) * 100) : 0,
+        available: vehicleStats.filter((v: any) => v.status === 'ACTIVE').length,
+        rented: vehicleStats.filter((v: any) => v._count.bookings > 0 && v.status === 'ACTIVE').length,
+        maintenance: vehicleStats.filter((v: any) => v.status === 'MAINTENANCE').length,
+        utilization: vehicleStats.length > 0 ? Math.round((vehicleStats.filter((v: any) => v._count.bookings > 0).length / vehicleStats.length) * 100) : 0,
         topPerformers: vehicleStats
-          .filter(v => v._count.bookings > 0)
-          .sort((a, b) => b._count.bookings - a._count.bookings)
+          .filter((v: any) => v._count.bookings > 0)
+          .sort((a: any, b: any) => b._count.bookings - a._count.bookings)
           .slice(0, 5)
-          .map(vehicle => ({
+          .map((vehicle: any) => ({
             name: vehicle.displayName || `${vehicle.make} ${vehicle.model}`,
             bookings: vehicle._count.bookings,
             revenue: Math.round(vehicle._count.bookings * averageBookingValue),
             utilization: Math.round((vehicle._count.bookings / Math.max(1, totalBookings)) * 100)
           })),
-        categoryPerformance: Array.from(categoryStats.entries()).map(([category, stats]) => ({
+        categoryPerformance: Array.from(categoryStats.entries()).map(([category, stats]: [string, any]) => ({
           category,
           bookings: stats.bookings,
           revenue: Math.round(stats.revenue),
@@ -326,7 +326,7 @@ export async function GET(request: NextRequest) {
         }))
       },
       recent: {
-        bookings: recentBookings.slice(0, 5).map(booking => ({
+        bookings: recentBookings.slice(0, 5).map((booking: any) => ({
           id: booking.id,
           bookingNumber: booking.bookingNumber,
           customer: booking.user?.name || 'Unknown',
@@ -335,7 +335,7 @@ export async function GET(request: NextRequest) {
           status: booking.status,
           createdAt: booking.createdAt
         })),
-        payments: recentPayments.slice(0, 5).map(payment => ({
+        payments: recentPayments.slice(0, 5).map((payment: any) => ({
           id: payment.id,
           bookingNumber: payment.booking?.bookingNumber || 'N/A',
           customer: payment.booking?.user?.name || 'Unknown',
