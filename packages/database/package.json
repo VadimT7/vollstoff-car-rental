@@ -13,6 +13,9 @@
     "migrate:reset": "prisma migrate reset",
     "push": "prisma db push",
     "seed": "tsx prisma/seed.ts",
+    "cleanup": "tsx scripts/cleanup-database.ts",
+    "cleanup:sql": "psql $DATABASE_URL -f scripts/cleanup-database.sql",
+    "verify-cleanup": "tsx scripts/verify-cleanup.ts",
     "studio": "prisma studio",
     "format": "prisma format",
     "typecheck": "tsc --noEmit"

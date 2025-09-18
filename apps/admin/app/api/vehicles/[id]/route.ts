@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { vehicleService } from '@valore/database'
+import { vehicleService, prisma } from '@valore/database'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
@@ -118,26 +118,35 @@ export async function PUT(
     if (primaryImage) {
       console.log('💾 Processing new primary image...')
       
-      // Create upload directory if it doesn't exist
-      let uploadDir = join(process.cwd(), 'apps/web/public/uploads')
+      // Create upload directories if they don't exist
+      let webUploadDir = join(process.cwd(), 'apps/web/public/uploads/vehicles')
+      let adminUploadDir = join(process.cwd(), 'public/uploads/vehicles')
       
       if (process.cwd().includes('apps/admin')) {
-        uploadDir = join(process.cwd(), '../web/public/uploads')
+        webUploadDir = join(process.cwd(), '../web/public/uploads/vehicles')
+        adminUploadDir = join(process.cwd(), 'public/uploads/vehicles')
       }
       
-      if (!existsSync(uploadDir)) {
-        await mkdir(uploadDir, { recursive: true })
+      // Ensure directories exist
+      if (!existsSync(webUploadDir)) {
+        await mkdir(webUploadDir, { recursive: true })
+      }
+      if (!existsSync(adminUploadDir)) {
+        await mkdir(adminUploadDir, { recursive: true })
       }
 
       const timestamp = Date.now()
       const filename = `${slug}-primary-${timestamp}.${primaryImage.name.split('.').pop()}`
-      const filepath = join(uploadDir, filename)
+      const webFilePath = join(webUploadDir, filename)
+      const adminFilePath = join(adminUploadDir, filename)
       
       try {
         const bytes = await primaryImage.arrayBuffer()
         const buffer = Buffer.from(bytes)
-        await writeFile(filepath, buffer)
-        primaryImageUrl = `/uploads/${filename}`
+        // Save to both locations
+        await writeFile(webFilePath, buffer)
+        await writeFile(adminFilePath, buffer)
+        primaryImageUrl = `/uploads/vehicles/${filename}`
         console.log('✅ New primary image saved:', primaryImageUrl)
       } catch (error) {
         console.error('❌ Failed to save primary image:', error)
@@ -188,6 +197,35 @@ export async function PUT(
       { id: vehicleId },
       updateData
     )
+
+    // If we have a new primary image, also update/create the CarImage record
+    if (primaryImageUrl && vehicle) {
+      try {
+        // First, delete existing primary image records
+        await prisma.carImage.deleteMany({
+          where: {
+            carId: vehicleId,
+            isGallery: false
+          }
+        })
+
+        // Create new primary image record
+        await prisma.carImage.create({
+          data: {
+            carId: vehicleId,
+            url: primaryImageUrl,
+            alt: vehicle.displayName,
+            caption: 'Primary image',
+            order: 0,
+            isGallery: false
+          }
+        })
+        console.log('✅ Updated CarImage record for primary image')
+      } catch (error) {
+        console.error('❌ Failed to update CarImage record:', error)
+        // Don't fail the whole operation for this
+      }
+    }
 
     // Update price rules
     if (vehicle) {

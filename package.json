@@ -38,6 +38,8 @@
     "db:migrate:deploy": "pnpm --filter @valore/database migrate:deploy",
     "db:push": "pnpm --filter @valore/database push",
     "db:seed": "pnpm --filter @valore/database seed",
+    "db:cleanup": "pnpm --filter @valore/database cleanup",
+    "db:verify-cleanup": "pnpm --filter @valore/database verify-cleanup",
     "db:studio": "pnpm --filter @valore/database studio",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",

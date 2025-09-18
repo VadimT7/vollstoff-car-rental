@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
         bookingsCount: vehicle._count.bookings,
         revenue: revenue,
         utilization: utilization,
-        primaryImageUrl: primaryImage?.url || '/placeholder-car.jpg'
+        primaryImageUrl: vehicle.primaryImageUrl || primaryImage?.url || '/placeholder-car.jpg'
       }
     })
 
@@ -166,6 +166,7 @@ export async function POST(request: NextRequest) {
        acceleration: vehicleData.acceleration || 0,
        fuelConsumption: vehicleData.fuelConsumption || 0,
        features: vehicleData.features || [],
+       primaryImageUrl: '/placeholder-car.jpg', // Default placeholder
        priceRules: {
          create: {
            basePricePerDay: String(vehicleData.pricePerDay || 0),
@@ -220,6 +221,9 @@ export async function POST(request: NextRequest) {
           await writeFile(adminFilePath, buffer)
           await writeFile(webFilePath, buffer)
           
+          // Set the primary image URL on the vehicle
+          vehicleCreateData.primaryImageUrl = imageUrl
+          
           vehicleCreateData.images.create.push({
             url: imageUrl,
             alt: vehicleData.displayName,
@@ -229,7 +233,7 @@ export async function POST(request: NextRequest) {
           })
         } catch (error) {
           console.error('Failed to save primary image:', error)
-          // Fallback to placeholder
+          // Keep default placeholder
           vehicleCreateData.images.create.push({
             url: '/placeholder-car.jpg',
             alt: vehicleData.displayName,

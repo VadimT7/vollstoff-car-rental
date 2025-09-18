@@ -129,9 +129,9 @@ export async function GET(request: NextRequest) {
       category: vehicle.category,
       bodyType: vehicle.bodyType,
       description: vehicle.description,
-              primaryImage: vehicle.primaryImageUrl || '/placeholder-car.jpg',
-        pricePerDay: Number((vehicle as any).priceRules?.[0]?.basePricePerDay) || 0,
-        featured: vehicle.featured,
+      primaryImage: vehicle.primaryImageUrl || vehicle.images?.[0]?.url || '/placeholder-car.jpg',
+      pricePerDay: Number((vehicle as any).priceRules?.[0]?.basePricePerDay) || 0,
+      featured: vehicle.featured,
       featuredOrder: vehicle.featuredOrder,
       specs: {
         transmission: vehicle.transmission,
