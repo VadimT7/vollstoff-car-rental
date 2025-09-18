@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Transform vehicles to include calculated fields
-    const transformedVehicles = vehicles.map(vehicle => {
+    const transformedVehicles = vehicles.map((vehicle: any) => {
       const activePriceRule = vehicle.priceRules[0]
       const primaryImage = vehicle.images[0]
       
