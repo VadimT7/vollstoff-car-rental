@@ -28,7 +28,7 @@ const navigation = [
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
   { name: 'Payments', href: '/payments', icon: CreditCard },
   { name: 'Featured Fleet', href: '/featured', icon: Package },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  // { name: 'Settings', href: '/settings', icon: Settings },
 ]
 
 export function Sidebar() {
