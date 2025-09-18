@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Transform the data to match the expected format
-    const transformedPayments = payments.map(payment => ({
+    const transformedPayments = payments.map((payment: any) => ({
       id: payment.id,
       bookingNumber: payment.booking?.bookingNumber || 'N/A',
       customerName: payment.booking?.user?.name || 'Unknown',
