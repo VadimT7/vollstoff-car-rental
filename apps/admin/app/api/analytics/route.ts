@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@valore/database'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     console.log('📊 Fetching analytics data...')
 
     // Get date range from query params
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const days = parseInt(searchParams.get('days') || '30')
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - days)

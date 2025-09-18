@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@valore/database'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     console.log('🚀 Admin bookings API called')
     
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const limit = parseInt(searchParams.get('limit') || '10')
     const status = searchParams.get('status')
     const page = parseInt(searchParams.get('page') || '1')

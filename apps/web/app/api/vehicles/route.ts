@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { vehicleService } from '@valore/database'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
@@ -124,8 +126,8 @@ export async function GET(request: NextRequest) {
         id: v.id,
         displayName: v.displayName,
         primaryImageUrl: v.primaryImageUrl,
-        hasImages: !!v.images,
-        imagesCount: v.images?.length || 0
+        hasImages: !!(v as any).images,
+        imagesCount: (v as any).images?.length || 0
       }))
     })
 

@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@valore/database'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const limit = parseInt(searchParams.get('limit') || '10')
     const page = parseInt(searchParams.get('page') || '1')
     const offset = (page - 1) * limit

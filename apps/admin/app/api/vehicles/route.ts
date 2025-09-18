@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@valore/database'
 import { saveImageToBothDirectories } from '../../../lib/image-utils'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     console.log('🚗 Fetching vehicles for admin dashboard...')
     
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : undefined
     const status = searchParams.get('status')
     const id = searchParams.get('id')
@@ -343,7 +345,7 @@ export async function DELETE(request: NextRequest) {
   try {
     console.log('🗑️ Deleting vehicle...')
     
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const id = searchParams.get('id')
     
     if (!id) {
