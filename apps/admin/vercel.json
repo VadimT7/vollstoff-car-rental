@@ -2,5 +2,5 @@
   "framework": "nextjs",
   "installCommand": "npm install -g pnpm@8.15.1 && pnpm install --frozen-lockfile",
   "buildCommand": "pnpm db:generate && pnpm db:push && cd apps/admin && NEXT_PRIVATE_LOCAL_WEBPACK=1 next build",
-  "outputDirectory": "apps/admin/.next"
+  "outputDirectory": ".next"
 }
