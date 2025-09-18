@@ -1,7 +1,6 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { SessionProvider } from 'next-auth/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { trpc } from '@/lib/trpc/client'
 import { httpBatchLink } from '@trpc/client'
@@ -44,9 +43,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+        {children}
       </QueryClientProvider>
     </trpc.Provider>
   )

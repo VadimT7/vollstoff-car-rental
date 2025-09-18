@@ -25,7 +25,6 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   experimental: {
-    transpilePackages: ['@valore/database', '@valore/lib', '@valore/ui'],
     typedRoutes: false
   },
   webpack: (config) => {

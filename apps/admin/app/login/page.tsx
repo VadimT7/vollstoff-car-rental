@@ -1,16 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Input } from '@valore/ui'
 import { SimpleButton } from '@/components/ui/simple-button'
 import { SimpleCard } from '@/components/ui/simple-card'
-import { Lock, Mail, AlertCircle } from 'lucide-react'
+import { Lock, User, AlertCircle } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -21,20 +20,21 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
       })
 
-      if (result?.error) {
-        setError(result.error === 'Unauthorized' 
-          ? 'You do not have admin access'
-          : 'Invalid email or password'
-        )
-      } else {
+      const data = await response.json()
+
+      if (data.success) {
         router.push('/')
         router.refresh()
+      } else {
+        setError('Invalid username or password')
       }
     } catch (error) {
       setError('Something went wrong. Please try again.')
@@ -49,9 +49,9 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-6">
             <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">V</span>
+              <span className="text-white font-bold text-xl">F</span>
             </div>
-            <span className="font-semibold text-2xl">Valore Admin</span>
+            <span className="font-semibold text-2xl">FlyRentals Admin</span>
           </div>
           <h1 className="text-3xl font-bold text-neutral-900 mb-2">
             Welcome back
@@ -71,17 +71,17 @@ export default function LoginPage() {
             )}
 
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
-                Email address
+              <label htmlFor="username" className="block text-sm font-medium text-neutral-700">
+                Username
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
                 <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="flyrentalsca@gmail.com"
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="admin"
                   className="pl-10"
                   required
                 />

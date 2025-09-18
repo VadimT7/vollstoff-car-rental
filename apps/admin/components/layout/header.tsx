@@ -1,7 +1,7 @@
 'use client'
 
 import { Bell, Search, LogOut, User as UserIcon } from 'lucide-react'
-// import { signOut } from 'next-auth/react' // Disabled for demo
+import { useRouter } from 'next/navigation'
 import { SimpleButton } from '@/components/ui/simple-button'
 import {
   DropdownMenu,
@@ -22,6 +22,18 @@ interface HeaderProps {
 }
 
 export function Header({ user }: HeaderProps) {
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/logout', { method: 'POST' })
+      router.push('/login')
+      router.refresh()
+    } catch (error) {
+      // Fallback: just redirect to login
+      router.push('/login')
+    }
+  }
   return (
     <header className="h-16 bg-white border-b border-neutral-200 px-6">
       <div className="h-full flex items-center justify-between">
@@ -99,10 +111,7 @@ export function Header({ user }: HeaderProps) {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-red-600"
-                onClick={() => {
-                  // For demo purposes, just reload the page
-                  window.location.href = '/login'
-                }}
+                onClick={handleLogout}
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign out
