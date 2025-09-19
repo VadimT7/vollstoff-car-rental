@@ -865,10 +865,6 @@ export default function AvailabilityPage() {
                               <label className="text-sm text-neutral-600">Phone</label>
                               <p className="font-medium text-neutral-900">{bookingDetails.customer?.phone || 'N/A'}</p>
                             </div>
-                            <div>
-                              <label className="text-sm text-neutral-600">License</label>
-                              <p className="font-medium text-neutral-900">{bookingDetails.customer?.licenseNumber || 'N/A'}</p>
-                            </div>
                         </div>
                       </div>
 
@@ -938,11 +934,62 @@ export default function AvailabilityPage() {
                         <div className="space-y-3">
                           <div>
                             <label className="text-sm text-neutral-600">Booking Status</label>
-                            <p className="font-medium text-neutral-900 capitalize">{bookingDetails.status || 'N/A'}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <div className={`w-2 h-2 rounded-full ${
+                                bookingDetails.status === 'CONFIRMED' ? 'bg-green-500' :
+                                bookingDetails.status === 'PENDING' ? 'bg-yellow-500' :
+                                bookingDetails.status === 'IN_PROGRESS' ? 'bg-blue-500' :
+                                bookingDetails.status === 'COMPLETED' ? 'bg-green-600' :
+                                bookingDetails.status === 'CANCELLED' ? 'bg-red-500' :
+                                'bg-gray-400'
+                              }`} />
+                              <span className={`font-medium ${
+                                bookingDetails.status === 'CONFIRMED' ? 'text-green-700' :
+                                bookingDetails.status === 'PENDING' ? 'text-yellow-700' :
+                                bookingDetails.status === 'IN_PROGRESS' ? 'text-blue-700' :
+                                bookingDetails.status === 'COMPLETED' ? 'text-green-700' :
+                                bookingDetails.status === 'CANCELLED' ? 'text-red-700' :
+                                'text-gray-700'
+                              }`}>
+                                {bookingDetails.status === 'CONFIRMED' ? 'Confirmed' :
+                                 bookingDetails.status === 'PENDING' ? 'Pending' :
+                                 bookingDetails.status === 'IN_PROGRESS' ? 'In Progress' :
+                                 bookingDetails.status === 'COMPLETED' ? 'Completed' :
+                                 bookingDetails.status === 'CANCELLED' ? 'Cancelled' :
+                                 bookingDetails.status || 'Unknown'}
+                              </span>
+                            </div>
                           </div>
                           <div>
                             <label className="text-sm text-neutral-600">Payment Status</label>
-                            <p className="font-medium text-neutral-900 capitalize">{bookingDetails.paymentStatus || 'N/A'}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <div className={`w-2 h-2 rounded-full ${
+                                bookingDetails.paymentStatus === 'PAID' ? 'bg-green-500' :
+                                bookingDetails.paymentStatus === 'PENDING' ? 'bg-yellow-500' :
+                                bookingDetails.paymentStatus === 'PROCESSING' ? 'bg-blue-500' :
+                                bookingDetails.paymentStatus === 'FAILED' ? 'bg-red-500' :
+                                bookingDetails.paymentStatus === 'REFUNDED' ? 'bg-purple-500' :
+                                bookingDetails.paymentStatus === 'PARTIALLY_REFUNDED' ? 'bg-orange-500' :
+                                'bg-gray-400'
+                              }`} />
+                              <span className={`font-medium ${
+                                bookingDetails.paymentStatus === 'PAID' ? 'text-green-700' :
+                                bookingDetails.paymentStatus === 'PENDING' ? 'text-yellow-700' :
+                                bookingDetails.paymentStatus === 'PROCESSING' ? 'text-blue-700' :
+                                bookingDetails.paymentStatus === 'FAILED' ? 'text-red-700' :
+                                bookingDetails.paymentStatus === 'REFUNDED' ? 'text-purple-700' :
+                                bookingDetails.paymentStatus === 'PARTIALLY_REFUNDED' ? 'text-orange-700' :
+                                'text-gray-700'
+                              }`}>
+                                {bookingDetails.paymentStatus === 'PAID' ? 'Paid' :
+                                 bookingDetails.paymentStatus === 'PENDING' ? 'Pending' :
+                                 bookingDetails.paymentStatus === 'PROCESSING' ? 'Processing' :
+                                 bookingDetails.paymentStatus === 'FAILED' ? 'Failed' :
+                                 bookingDetails.paymentStatus === 'REFUNDED' ? 'Refunded' :
+                                 bookingDetails.paymentStatus === 'PARTIALLY_REFUNDED' ? 'Partially Refunded' :
+                                 bookingDetails.paymentStatus || 'Unknown'}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1006,8 +1053,10 @@ export default function AvailabilityPage() {
                         window.open(mailtoLink, '_blank')
                       }}
                     >
-                      <Send className="h-4 w-4 mr-2" />
-                      Send Confirmation
+                      <div className="flex items-center gap-2">
+                        <Send className="h-4 w-4" />
+                        <span>Send Confirmation</span>
+                      </div>
                     </Button>
                   </div>
                 </div>
