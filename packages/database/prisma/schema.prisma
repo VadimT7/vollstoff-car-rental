@@ -87,7 +87,7 @@ model Car {
   model           String
   year            Int
   trim            String?
-  vin             String?          @unique
+  vin             String?
   licensePlate    String?
   displayName     String
   description     String

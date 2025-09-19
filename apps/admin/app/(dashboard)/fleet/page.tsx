@@ -384,7 +384,6 @@ export default function FleetPage() {
                   />
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700">Vehicle</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700">Details</th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700">Status</th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700">Price/Day</th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700">Performance</th>
@@ -437,16 +436,6 @@ export default function FleetPage() {
                           <p className="font-medium text-neutral-900">{vehicle.displayName}</p>
                           <p className="text-sm text-neutral-600">{vehicle.year} • {vehicle.category}</p>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="space-y-1">
-                        <p className="text-sm text-neutral-900">
-                          <span className="text-neutral-600">Plate:</span> {vehicle.licensePlate}
-                        </p>
-                        <p className="text-sm text-neutral-900">
-                          <span className="text-neutral-600">VIN:</span> {vehicle.vin}
-                        </p>
                       </div>
                     </td>
                     <td className="px-4 py-4">

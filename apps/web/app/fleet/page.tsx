@@ -392,14 +392,14 @@ export default function FleetPage() {
                 <div className="relative bg-black/60 backdrop-blur-md border border-amber-400/20 rounded-2xl overflow-hidden group-hover:border-amber-400/40 transition-all duration-300">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-400/70 group-hover:text-amber-300 transition-colors duration-300" />
                   <input
-                    type="text"
+                  type="text"
                     placeholder="Search luxury vehicles..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-12 pr-4 py-4 bg-transparent text-white placeholder-neutral-400 focus:outline-none focus:placeholder-neutral-500 text-sm tracking-wide"
-                  />
-                </div>
+                />
               </div>
+            </div>
             </motion.div>
 
             {/* Premium Filter Controls */}
@@ -413,50 +413,50 @@ export default function FleetPage() {
               {/* Category Filter */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-amber-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
                   className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-6 py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[140px]"
-                >
-                  {categories.map(cat => (
+              >
+                {categories.map(cat => (
                     <option key={cat.value} value={cat.value} className="bg-black text-white">
                       {cat.label}
                     </option>
-                  ))}
-                </select>
+                ))}
+              </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-amber-400/70 pointer-events-none" />
               </div>
 
               {/* Price Range Filter */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-amber-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                <select
-                  value={selectedPriceRange}
-                  onChange={(e) => setSelectedPriceRange(e.target.value)}
+              <select
+                value={selectedPriceRange}
+                onChange={(e) => setSelectedPriceRange(e.target.value)}
                   className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-6 py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[160px]"
-                >
-                  {priceRanges.map(range => (
+              >
+                {priceRanges.map(range => (
                     <option key={range.value} value={range.value} className="bg-black text-white">
                       {range.label}
                     </option>
-                  ))}
-                </select>
+                ))}
+              </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-amber-400/70 pointer-events-none" />
               </div>
 
               {/* Sort Filter */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-amber-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
                   className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-6 py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[140px]"
                 >
                   <option value="featured" className="bg-black text-white">Featured</option>
                   <option value="price-low" className="bg-black text-white">Price: Low to High</option>
                   <option value="price-high" className="bg-black text-white">Price: High to Low</option>
                   <option value="name" className="bg-black text-white">Name: A to Z</option>
-                </select>
+              </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-amber-400/70 pointer-events-none" />
               </div>
 
@@ -503,7 +503,7 @@ export default function FleetPage() {
                 Showing {filteredVehicles.length} of {vehicles.length} exceptional vehicles
               </span>
               <div className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse" />
-            </div>
+          </div>
           </motion.div>
         </div>
       </section>
@@ -578,8 +578,8 @@ export default function FleetPage() {
                           <div className="relative">
                             <div className="absolute inset-0 bg-amber-400/20 blur-xl rounded-full scale-150" />
                             <div className="relative bg-black/90 backdrop-blur-md text-amber-300 px-4 py-2 rounded-full text-sm font-light tracking-wider uppercase border border-amber-400/30">
-                              {vehicle.category}
-                            </div>
+                          {vehicle.category}
+                        </div>
                           </div>
                         </motion.div>
                         
@@ -597,7 +597,7 @@ export default function FleetPage() {
                             whileHover={{ color: "#fbbf24" }}
                             transition={{ duration: 0.3 }}
                           >
-                            {vehicle.displayName}
+                          {vehicle.displayName}
                           </motion.h3>
                           <p className="text-amber-300/80 text-sm font-light tracking-wider uppercase">
                             {vehicle.year} • {vehicle.bodyType}
@@ -627,7 +627,7 @@ export default function FleetPage() {
                             <div className="relative mb-3">
                               <div className="absolute inset-0 bg-amber-400/10 blur-lg rounded-full scale-150 opacity-0 group-hover/spec:opacity-100 transition-all duration-500" />
                               <Users className="h-5 w-5 text-amber-400/70 mx-auto relative group-hover/spec:text-amber-300 transition-colors duration-300" />
-                            </div>
+                          </div>
                             <p className="text-xs text-neutral-400 mb-1 uppercase tracking-wider">Seats</p>
                             <p className="text-sm font-light text-white">{vehicle.specs.seats}</p>
                           </motion.div>
@@ -639,7 +639,7 @@ export default function FleetPage() {
                             <div className="relative mb-3">
                               <div className="absolute inset-0 bg-amber-400/10 blur-lg rounded-full scale-150 opacity-0 group-hover/spec:opacity-100 transition-all duration-500" />
                               <Car className="h-5 w-5 text-amber-400/70 mx-auto relative group-hover/spec:text-amber-300 transition-colors duration-300" />
-                            </div>
+                          </div>
                             <p className="text-xs text-neutral-400 mb-1 uppercase tracking-wider">Doors</p>
                             <p className="text-sm font-light text-white">{vehicle.specs.doors}</p>
                           </motion.div>
@@ -651,7 +651,7 @@ export default function FleetPage() {
                             <p className="text-xs text-amber-300/60 mb-1 uppercase tracking-wider">From</p>
                             <div className="flex items-baseline gap-1">
                               <span className="text-3xl font-thin text-white tracking-tight">
-                                ${vehicle.pricePerDay}
+                              ${vehicle.pricePerDay}
                               </span>
                               <span className="text-sm text-neutral-400 font-light">/day</span>
                             </div>

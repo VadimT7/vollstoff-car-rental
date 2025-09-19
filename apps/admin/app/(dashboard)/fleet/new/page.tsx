@@ -29,8 +29,8 @@ interface FormData {
   model: string
   year: number
   trim: string
-  vin: string
-  licensePlate: string
+  vin: string | null
+  licensePlate: string | null
   category: string
   status: string
   description: string
@@ -82,8 +82,8 @@ const initialFormData: FormData = {
   model: '',
   year: new Date().getFullYear(),
   trim: '',
-  vin: '',
-  licensePlate: '',
+  vin: null,
+  licensePlate: null,
   category: 'LUXURY',
   status: 'ACTIVE',
   description: '',
@@ -214,8 +214,6 @@ export default function NewVehiclePage() {
         if (!form.year || form.year < 1900 || form.year > new Date().getFullYear() + 2) {
           newErrors.year = 'Valid year is required'
         }
-        if (!form.vin.trim()) newErrors.vin = 'VIN is required'
-        if (!form.licensePlate.trim()) newErrors.licensePlate = 'License plate is required'
         break
         
       case 1: // Specifications
@@ -477,41 +475,6 @@ export default function NewVehiclePage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            VIN <span className="text-red-500">*</span>
-          </label>
-          <Input
-            value={form.vin}
-            onChange={(e) => handleInputChange('vin', e.target.value)}
-            placeholder="WDD1234567890"
-            className={errors.vin ? 'border-red-500' : ''}
-          />
-          {errors.vin && (
-            <p className="text-red-500 text-sm mt-1 flex items-center">
-              <AlertCircle className="h-4 w-4 mr-1" />
-              {errors.vin}
-            </p>
-          )}
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            License Plate <span className="text-red-500">*</span>
-          </label>
-          <Input
-            value={form.licensePlate}
-            onChange={(e) => handleInputChange('licensePlate', e.target.value)}
-            placeholder="FLY-001"
-            className={errors.licensePlate ? 'border-red-500' : ''}
-          />
-          {errors.licensePlate && (
-            <p className="text-red-500 text-sm mt-1 flex items-center">
-              <AlertCircle className="h-4 w-4 mr-1" />
-              {errors.licensePlate}
-            </p>
-          )}
-        </div>
       </div>
 
       <div>
