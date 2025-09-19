@@ -22,7 +22,7 @@ import { staggerContainer, staggerItem } from '@valore/ui'
 
 const stats = [
   { icon: Car, value: '10+', label: 'Luxury Vehicles' },
-  { icon: Users, value: '1000+', label: 'Happy Clients' },
+  { icon: Users, value: '700+', label: 'Happy Clients' },
   { icon: Star, value: '5.0', label: 'Customer Rating' },
   { icon: Award, value: '3+', label: 'Years Experience' },
 ]
@@ -113,7 +113,16 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="heading-large text-white mb-4">About FlyRentals</h1>
+            <h1 className="heading-large mb-4">
+              <span 
+                className="bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500 bg-clip-text text-transparent"
+                style={{
+                  textShadow: '0 0 80px rgba(251, 191, 36, 0.3)'
+                }}
+              >
+                About FlyRentals
+              </span>
+            </h1>
             <p className="text-xl text-neutral-300 max-w-3xl mx-auto font-light">
               Montreal's premier luxury car rental service, delivering exceptional experiences 
               with the world's most prestigious vehicles since 2022.
