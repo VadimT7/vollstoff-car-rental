@@ -53,14 +53,18 @@ const nextConfig = {
     ]
   },
   async rewrites() {
-    return [
-      {
-        source: '/uploads/:path*',
-        destination: process.env.NODE_ENV === 'production' 
-          ? 'https://flyrentals.ca/uploads/:path*'
-          : 'http://localhost:3000/uploads/:path*',
-      },
-    ]
+    // Only add rewrites for production
+    if (process.env.NODE_ENV === 'production') {
+      return [
+        {
+          source: '/uploads/:path*',
+          destination: 'https://flyrentals.ca/uploads/:path*',
+        },
+      ]
+    }
+    
+    // In development, serve files directly from public directory
+    return []
   },
 }
 

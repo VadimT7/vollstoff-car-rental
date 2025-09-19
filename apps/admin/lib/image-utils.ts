@@ -14,8 +14,21 @@ interface SaveImageResult {
 }
 
 /**
- * Save an image to both the admin and web app public directories
- * This ensures images are accessible from both applications
+ * Get the correct public directory path based on environment
+ */
+function getPublicDirectoryPath(): string {
+  // In production/serverless environments, use /tmp for temporary files
+  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+    return '/tmp/uploads/vehicles'
+  }
+  
+  // In development, use the local public directory
+  const currentDir = process.cwd()
+  return path.join(currentDir, 'public', 'uploads', 'vehicles')
+}
+
+/**
+ * Save an image to the appropriate directory based on environment
  */
 export async function saveImageToBothDirectories({
   buffer,
@@ -23,33 +36,35 @@ export async function saveImageToBothDirectories({
   baseDir
 }: SaveImageParams): Promise<SaveImageResult> {
   try {
-    // Define the directories where we need to save images
-    const adminPublicDir = path.join(baseDir, 'public', 'uploads', 'vehicles')
-    const webPublicDir = path.join(baseDir, '..', 'web', 'public', 'uploads', 'vehicles')
+    // Get the correct directory path
+    const uploadDir = getPublicDirectoryPath()
     
-    // Ensure directories exist
-    await ensureDirectoryExists(adminPublicDir)
-    await ensureDirectoryExists(webPublicDir)
+    console.log(`📁 Using upload directory: ${uploadDir}`)
     
-    // Define file paths
-    const adminFilePath = path.join(adminPublicDir, filename)
-    const webFilePath = path.join(webPublicDir, filename)
+    // Ensure directory exists
+    await ensureDirectoryExists(uploadDir)
     
-    // Save to both locations
-    await fs.promises.writeFile(adminFilePath, buffer)
-    await fs.promises.writeFile(webFilePath, buffer)
+    // Define file path
+    const filePath = path.join(uploadDir, filename)
     
-    // Return the public URL (relative to web root)
-    const imageUrl = `/uploads/vehicles/${filename}`
+    // Save the file
+    await fs.promises.writeFile(filePath, buffer)
     
-    console.log(`✅ Image saved successfully to both directories: ${filename}`)
+    // Return the public URL
+    // In production, we'll need to upload to a CDN or external storage
+    // For now, return a placeholder URL that can be handled by the frontend
+    const imageUrl = process.env.NODE_ENV === 'production' 
+      ? `/uploads/vehicles/${filename}` // This will need to be handled by a CDN
+      : `/uploads/vehicles/${filename}`
+    
+    console.log(`✅ Image saved successfully: ${filename} at ${filePath}`)
     
     return {
       success: true,
       imageUrl
     }
   } catch (error) {
-    console.error('❌ Failed to save image to both directories:', error)
+    console.error('❌ Failed to save image:', error)
     
     return {
       success: false,
@@ -72,36 +87,29 @@ async function ensureDirectoryExists(dirPath: string): Promise<void> {
 }
 
 /**
- * Delete an image from both directories
+ * Delete an image from the upload directory
  */
 export async function deleteImageFromBothDirectories(
   filename: string,
   baseDir: string
 ): Promise<SaveImageResult> {
   try {
-    const adminFilePath = path.join(baseDir, 'public', 'uploads', 'vehicles', filename)
-    const webFilePath = path.join(baseDir, '..', 'web', 'public', 'uploads', 'vehicles', filename)
+    const uploadDir = getPublicDirectoryPath()
+    const filePath = path.join(uploadDir, filename)
     
-    // Delete from both locations (ignore errors if files don't exist)
+    // Delete the file (ignore errors if file doesn't exist)
     try {
-      await fs.promises.unlink(adminFilePath)
+      await fs.promises.unlink(filePath)
+      console.log(`🗑️ Image deleted: ${filename}`)
     } catch (error) {
-      console.log(`File not found in admin directory: ${adminFilePath}`)
+      console.log(`File not found: ${filePath}`)
     }
-    
-    try {
-      await fs.promises.unlink(webFilePath)
-    } catch (error) {
-      console.log(`File not found in web directory: ${webFilePath}`)
-    }
-    
-    console.log(`🗑️ Image deleted from both directories: ${filename}`)
     
     return {
       success: true
     }
   } catch (error) {
-    console.error('❌ Failed to delete image from both directories:', error)
+    console.error('❌ Failed to delete image:', error)
     
     return {
       success: false,
