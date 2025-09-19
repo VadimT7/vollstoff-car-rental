@@ -27,7 +27,11 @@ export function ClickableTimeInput({
 
   const handleContainerClick = () => {
     if (!disabled && inputRef.current) {
-      inputRef.current.showPicker?.() || inputRef.current.focus()
+      if (inputRef.current.showPicker) {
+        inputRef.current.showPicker()
+      } else {
+        inputRef.current.focus()
+      }
     }
   }
 
