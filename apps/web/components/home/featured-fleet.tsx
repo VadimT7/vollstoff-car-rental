@@ -100,90 +100,141 @@ export function FeaturedFleet() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {vehicles.map((vehicle) => (
-          <div key={vehicle.id}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        {vehicles.map((vehicle, index) => (
+          <motion.div
+            key={vehicle.id}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+          >
             <Link href={`/cars/${vehicle.slug}`}>
-              <Card className="overflow-hidden group cursor-pointer h-full bg-white text-black">
-                <div className="relative h-64 bg-gradient-to-br from-neutral-100 to-neutral-50">
-                  {vehicle.primaryImage ? (
-                    <Image
-                      src={vehicle.primaryImage}
-                      alt={vehicle.displayName}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      priority={false}
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none'
-                        const parent = e.currentTarget.parentElement
-                        if (parent) {
-                          const fallback = parent.querySelector('.car-placeholder')
-                          if (fallback) {
-                            (fallback as HTMLElement).style.display = 'flex'
+              <div className="group cursor-pointer h-full transform transition-all duration-700 hover:scale-[1.02] hover:-translate-y-2">
+                {/* Premium Card Container */}
+                <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-black shadow-2xl shadow-black/20 border border-slate-700/50 backdrop-blur-sm">
+                  {/* Luxury Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  
+                  {/* Image Section */}
+                  <div className="relative h-80 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
+                    {vehicle.primaryImage ? (
+                      <Image
+                        src={vehicle.primaryImage}
+                        alt={vehicle.displayName}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={false}
+                        className="object-cover group-hover:scale-110 transition-transform duration-700 brightness-90 group-hover:brightness-100"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                          const parent = e.currentTarget.parentElement
+                          if (parent) {
+                            const fallback = parent.querySelector('.car-placeholder')
+                            if (fallback) {
+                              (fallback as HTMLElement).style.display = 'flex'
+                            }
                           }
-                        }
-                      }}
-                    />
-                  ) : null}
-                  <div 
-                    className="car-placeholder absolute inset-0 flex items-center justify-center bg-gradient-to-br from-neutral-100 to-neutral-50" 
-                    style={{ display: vehicle.primaryImage ? 'none' : 'flex' }}
-                  >
-                    <Car className="h-16 w-16 text-neutral-400" />
-                  </div>
-                  <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
-                    {vehicle.category}
-                  </div>
-                  <div className="absolute top-4 right-4 bg-primary/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                    <Star className="h-3 w-3 fill-current" />
-                    <span>4.9</span>
-                  </div>
-                </div>
-                
-                <div className="p-6 bg-white">
-                  <h3 className="text-xl font-bold text-black mb-1">
-                    {vehicle.displayName}
-                  </h3>
-                  <p className="text-gray-600 mb-4">{vehicle.year} Model</p>
-                  
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center">
-                      <p className="text-xs text-gray-500 mb-1">Transmission</p>
-                      <p className="text-sm font-medium capitalize text-black">
-                        {vehicle.specs.transmission.toLowerCase()}
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-xs text-gray-500 mb-1">Seats</p>
-                      <p className="text-sm font-medium text-black">{vehicle.specs.seats}</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-xs text-gray-500 mb-1">Doors</p>
-                      <p className="text-sm font-medium text-black">{vehicle.specs.doors}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                    <div>
-                      <p className="text-sm text-gray-600">Starting from</p>
-                      <p className="text-2xl font-bold text-amber-600">
-                        ${vehicle.pricePerDay}
-                        <span className="text-sm text-gray-600 font-normal">/day</span>
-                      </p>
-                    </div>
-                    <Button 
-                      size="sm" 
-                      rightIcon={<ArrowRight className="h-4 w-4" />}
-                      className="group-hover:bg-primary-dark transition-colors"
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className="car-placeholder absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900" 
+                      style={{ display: vehicle.primaryImage ? 'none' : 'flex' }}
                     >
-                      View Details
-                    </Button>
+                      <Car className="h-20 w-20 text-slate-500" />
+                    </div>
+                    
+                    {/* Premium Overlay Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    
+                    {/* Category Badge */}
+                    <div className="absolute top-6 left-6">
+                      <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-black px-4 py-2 rounded-full text-sm font-bold tracking-wide shadow-lg shadow-amber-500/30">
+                        {vehicle.category}
+                      </div>
+                    </div>
+                    
+                    {/* Rating Badge */}
+                    <div className="absolute top-6 right-6">
+                      <div className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-lg">
+                        <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                        <span>4.9</span>
+                      </div>
+                    </div>
                   </div>
+                  
+                  {/* Content Section */}
+                  <div className="p-10 bg-gradient-to-br from-slate-900 to-black relative">
+                    {/* Subtle Inner Glow */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent rounded-b-3xl"></div>
+                    
+                    <div className="relative z-10">
+                      {/* Title Section */}
+                      <div className="mb-6">
+                         <h3 className="text-2xl font-bold mb-2 leading-tight relative overflow-hidden">
+                           <span className="bg-gradient-to-r from-amber-200 via-white to-amber-300 bg-clip-text text-transparent relative z-10">
+                             {vehicle.displayName}
+                           </span>
+                           {/* Shining overlay effect */}
+                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-full transition-all duration-1000 ease-out transform -skew-x-12 z-20 pointer-events-none"></div>
+                         </h3>
+                        <p className="text-slate-400 font-medium">{vehicle.year} Model</p>
+                      </div>
+                      
+                      {/* Specs Grid */}
+                      <div className="grid grid-cols-3 gap-8 mb-10">
+                        <div className="text-center group/spec">
+                          <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 group-hover/spec:border-amber-500/50 transition-colors duration-300">
+                             <p className="text-xs text-amber-400 mb-1 uppercase tracking-wider">Transmission</p>
+                            <p className="text-sm font-semibold capitalize text-white">
+                              {vehicle.specs.transmission.toLowerCase()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-center group/spec">
+                          <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 group-hover/spec:border-amber-500/50 transition-colors duration-300">
+                             <p className="text-xs text-amber-400 mb-1 uppercase tracking-wider">Seats</p>
+                            <p className="text-sm font-semibold text-white">{vehicle.specs.seats}</p>
+                          </div>
+                        </div>
+                        <div className="text-center group/spec">
+                          <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 group-hover/spec:border-amber-500/50 transition-colors duration-300">
+                             <p className="text-xs text-amber-400 mb-1 uppercase tracking-wider">Doors</p>
+                            <p className="text-sm font-semibold text-white">{vehicle.specs.doors}</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Price and CTA Section */}
+                      <div className="flex items-center justify-between pt-6 border-t border-slate-700/50">
+                        <div>
+                          <p className="text-sm text-slate-400 mb-1 uppercase tracking-wide">Starting from</p>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-amber-500 bg-clip-text text-transparent">
+                              ${vehicle.pricePerDay}
+                            </span>
+                            <span className="text-slate-400 font-medium">/day</span>
+                          </div>
+                        </div>
+                        <div className="transform group-hover:scale-105 transition-transform duration-300">
+                          <Button 
+                            size="sm" 
+                            rightIcon={<ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />}
+                            className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-amber-500/25 border-0 hover:shadow-amber-500/40 transition-all duration-300"
+                          >
+                            View Details
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Premium Border Glow */}
+                  <div className="absolute inset-0 rounded-3xl border border-gradient-to-r from-amber-500/20 via-transparent to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                 </div>
-              </Card>
+              </div>
             </Link>
-          </div>
+          </motion.div>
         ))}
       </div>
 

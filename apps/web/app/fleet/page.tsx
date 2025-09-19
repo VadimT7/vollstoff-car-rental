@@ -583,8 +583,6 @@ export default function FleetPage() {
                           </div>
                         </motion.div>
                         
-                        {/* Luxury Accent Lines */}
-                        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-transparent z-20" />
                       </div>
                       
                       {/* Premium Content Section */}
