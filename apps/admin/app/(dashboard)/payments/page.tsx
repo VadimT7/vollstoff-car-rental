@@ -338,11 +338,6 @@ export default function PaymentsPage() {
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
-                        {payment.status === 'SUCCEEDED' && (payment.type === 'RENTAL_FEE' || payment.type === 'EXTRA_CHARGE' || payment.type === 'DAMAGE_CHARGE') && (
-                          <Button size="sm" variant="ghost" className="text-red-600">
-                            Refund
-                          </Button>
-                        )}
                       </div>
                     </td>
                   </tr>
