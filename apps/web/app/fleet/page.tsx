@@ -217,21 +217,21 @@ export default function FleetPage() {
               }}
               className="relative mb-4"
             >
-              <h1 className="text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-extralight tracking-[-0.02em] leading-[0.85]">
-                <span 
-                  className="bg-gradient-to-r from-white/90 via-white to-amber-100/80 bg-clip-text text-transparent"
-                  style={{
-                    textShadow: '0 0 40px rgba(255, 255, 255, 0.1)'
-                  }}
-                >
-                  Our Luxury
-                </span>
-              </h1>
-              
-              {/* Subtle glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-amber-100/5 bg-clip-text text-transparent blur-sm text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-extralight tracking-[-0.02em] leading-[0.85] -z-10">
-                Our Luxury
-              </div>
+               <h1 className="text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-light tracking-wider leading-[0.85]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                 <span 
+                   className="bg-gradient-to-r from-white/90 via-white to-amber-100/80 bg-clip-text text-transparent"
+                   style={{
+                     textShadow: '0 0 40px rgba(255, 255, 255, 0.1)'
+                   }}
+                 >
+                   Our Luxury
+                 </span>
+               </h1>
+               
+               {/* Subtle glow effect */}
+               <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-amber-100/5 bg-clip-text text-transparent blur-sm text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-light tracking-wider leading-[0.85] -z-10" style={{ fontFamily: 'Playfair Display, serif' }}>
+                 Our Luxury
+               </div>
             </motion.div>
 
             {/* "Fleet" - Bold and Golden */}
@@ -246,30 +246,30 @@ export default function FleetPage() {
               }}
               className="relative"
             >
-              <h1 className="text-7xl md:text-9xl lg:text-[12rem] xl:text-[14rem] font-black tracking-[-0.05em] leading-[0.75]">
-                <motion.span 
-                  className="bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500 bg-clip-text text-transparent"
-                  animate={{
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-                  }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  style={{
-                    backgroundSize: '200% 200%',
-                    textShadow: '0 0 80px rgba(251, 191, 36, 0.3)'
-                  }}
-                >
-                  Fleet
-                </motion.span>
-              </h1>
-              
-              {/* Golden glow */}
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-200/20 via-amber-300/20 to-amber-500/20 bg-clip-text text-transparent blur-lg text-7xl md:text-9xl lg:text-[12rem] xl:text-[14rem] font-black tracking-[-0.05em] leading-[0.75] -z-10">
-                Fleet
-              </div>
+               <h1 className="text-7xl md:text-9xl lg:text-[12rem] xl:text-[14rem] font-normal tracking-wider leading-[0.75]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                 <motion.span 
+                   className="bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500 bg-clip-text text-transparent"
+                   animate={{
+                     backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                   }}
+                   transition={{
+                     duration: 6,
+                     repeat: Infinity,
+                     ease: "easeInOut"
+                   }}
+                   style={{
+                     backgroundSize: '200% 200%',
+                     textShadow: '0 0 80px rgba(251, 191, 36, 0.3)'
+                   }}
+                 >
+                   Fleet
+                 </motion.span>
+               </h1>
+               
+               {/* Golden glow */}
+               <div className="absolute inset-0 bg-gradient-to-r from-amber-200/20 via-amber-300/20 to-amber-500/20 bg-clip-text text-transparent blur-lg text-7xl md:text-9xl lg:text-[12rem] xl:text-[14rem] font-normal tracking-wider leading-[0.75] -z-10" style={{ fontFamily: 'Playfair Display, serif' }}>
+                 Fleet
+               </div>
             </motion.div>
           </div>
 
@@ -284,36 +284,42 @@ export default function FleetPage() {
             }}
             className="max-w-4xl mx-auto mb-16"
           >
-            <p className="text-2xl md:text-3xl lg:text-4xl font-thin text-neutral-300 leading-relaxed tracking-wide">
-              Discover our{' '}
-              <motion.span 
-                className="text-amber-300 font-light"
-                animate={{ 
-                  textShadow: [
-                    '0 0 20px rgba(251, 191, 36, 0.3)',
-                    '0 0 40px rgba(251, 191, 36, 0.5)',
-                    '0 0 20px rgba(251, 191, 36, 0.3)'
-                  ]
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              >
-                curated collection
-              </motion.span>
-              {' '}of the world's most{' '}
-              <motion.span 
-                className="text-amber-300 font-light"
-                animate={{ 
-                  textShadow: [
-                    '0 0 20px rgba(251, 191, 36, 0.3)',
-                    '0 0 40px rgba(251, 191, 36, 0.5)',
-                    '0 0 20px rgba(251, 191, 36, 0.3)'
-                  ]
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-              >
-                prestigious vehicles
-              </motion.span>
-            </p>
+             <p className="text-2xl md:text-3xl lg:text-4xl text-neutral-300 font-light leading-relaxed" style={{ fontFamily: 'Playfair Display, serif' }}>
+               Discover our{' '}
+               <motion.span 
+                 className="text-amber-300 font-normal"
+                 style={{ 
+                   fontFamily: 'Playfair Display, serif'
+                 }}
+                 animate={{ 
+                   textShadow: [
+                     '0 0 20px rgba(251, 191, 36, 0.3)',
+                     '0 0 40px rgba(251, 191, 36, 0.5)',
+                     '0 0 20px rgba(251, 191, 36, 0.3)'
+                   ]
+                 }}
+                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+               >
+                 curated collection
+               </motion.span>
+               {' '}of the world's most{' '}
+               <motion.span 
+                 className="text-amber-300 font-normal"
+                 style={{ 
+                   fontFamily: 'Playfair Display, serif'
+                 }}
+                 animate={{ 
+                   textShadow: [
+                     '0 0 20px rgba(251, 191, 36, 0.3)',
+                     '0 0 40px rgba(251, 191, 36, 0.5)',
+                     '0 0 20px rgba(251, 191, 36, 0.3)'
+                   ]
+                 }}
+                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+               >
+                 prestigious vehicles
+               </motion.span>
+             </p>
           </motion.div>
 
           {/* Luxury Accent Elements */}
@@ -555,7 +561,7 @@ export default function FleetPage() {
                       {/* Premium Image Container */}
                       <div className="relative h-72 overflow-hidden">
                         {/* Image Backdrop */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10" />
                         
                         <Image
                           src={vehicle.primaryImage}
