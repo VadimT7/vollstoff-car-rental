@@ -793,12 +793,6 @@ export default function AdvancedBookingsPage() {
                         <Printer className="h-4 w-4" />
                         Print Invoice
                       </Button>
-                      {selectedBooking.paymentStatus === 'PAID' && (
-                        <Button className="w-full justify-start gap-2" variant="outline">
-                          <RefreshCw className="h-4 w-4" />
-                          Process Refund
-                        </Button>
-                      )}
                     </div>
                   </Card>
                 </div>

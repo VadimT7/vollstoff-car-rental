@@ -483,14 +483,6 @@ export default function PaymentsPage() {
 
                 {/* Actions */}
                 <div className="flex justify-end gap-2 pt-4 border-t">
-                  {selectedPayment.status === 'SUCCEEDED' && (selectedPayment.type === 'RENTAL_FEE' || selectedPayment.type === 'EXTRA_CHARGE' || selectedPayment.type === 'DAMAGE_CHARGE') && (
-                    <Button
-                      variant="outline"
-                      className="text-red-600"
-                    >
-                      Process Refund
-                    </Button>
-                  )}
                   <Button
                     variant="outline"
                     onClick={() => window.print()}
