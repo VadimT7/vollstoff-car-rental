@@ -869,10 +869,6 @@ export default function AvailabilityPage() {
                               <label className="text-sm text-neutral-600">License</label>
                               <p className="font-medium text-neutral-900">{bookingDetails.customer?.licenseNumber || 'N/A'}</p>
                             </div>
-                            <div>
-                              <label className="text-sm text-neutral-600">Address</label>
-                              <p className="font-medium text-neutral-900">{bookingDetails.customer?.address || 'N/A'}</p>
-                            </div>
                         </div>
                       </div>
 

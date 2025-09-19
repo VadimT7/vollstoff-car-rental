@@ -206,6 +206,7 @@ model Booking {
   guestEmail      String?
   guestName       String?
   guestPhone      String?
+  guestLicense    String?
   carId           String
   startDate       DateTime
   endDate         DateTime
