@@ -66,7 +66,7 @@ export async function checkCarAvailability({
     where: {
       carId,
       status: {
-        in: ['CONFIRMED', 'IN_PROGRESS'],
+        in: ['CONFIRMED', 'IN_PROGRESS', 'PENDING'],
       },
       OR: [
         {
@@ -85,10 +85,17 @@ export async function checkCarAvailability({
         },
         {
           // Booking completely encompasses our range
-          AND: {
-            startDate: { lte: checkStartDate },
-            endDate: { gte: checkEndDate },
-          },
+          AND: [
+            { startDate: { lte: checkStartDate } },
+            { endDate: { gte: checkEndDate } },
+          ],
+        },
+        {
+          // Our range completely encompasses an existing booking
+          AND: [
+            { startDate: { gte: checkStartDate } },
+            { endDate: { lte: checkEndDate } },
+          ],
         },
       ],
     },

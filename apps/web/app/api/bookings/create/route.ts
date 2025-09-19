@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@valore/database'
+import { checkCarAvailability } from '@valore/lib'
 import { randomBytes } from 'crypto'
 
 // Test database connection
@@ -66,6 +67,28 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Check car availability before creating booking
+    console.log('🔍 Checking car availability for:', { carId, startDate, endDate })
+    const availability = await checkCarAvailability({
+      carId,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+    })
+
+    if (!availability.available) {
+      console.log('❌ Car not available:', availability.reason)
+      return NextResponse.json(
+        { 
+          error: 'Car is not available for the selected dates',
+          reason: availability.reason,
+          conflictingBookings: availability.conflictingBookings 
+        },
+        { status: 409 } // Conflict status code
+      )
+    }
+
+    console.log('✅ Car is available for booking')
 
     // Generate booking number
     const bookingNumber = `FLY-${Date.now()}`
