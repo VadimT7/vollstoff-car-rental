@@ -41,7 +41,7 @@ export function ExperienceSection() {
             variants={fadeInUp}
           >
             <p className="text-luxury text-primary mb-4">The Proper Difference</p>
-            <h2 className="heading-large mb-8">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-wider mb-8" style={{ lineHeight: '1.1' }}>
               Crafted for the
               <span className="block gradient-text">Extraordinary</span>
             </h2>

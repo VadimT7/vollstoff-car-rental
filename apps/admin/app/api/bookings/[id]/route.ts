@@ -33,6 +33,23 @@ export async function PATCH(
     if (body.taxTotal !== undefined) updateData.taxTotal = body.taxTotal
     if (body.totalAmount !== undefined) updateData.totalAmount = body.totalAmount
 
+    // Get current booking data before update to check for status changes
+    const currentBooking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: {
+        id: true,
+        carId: true,
+        startDate: true,
+        endDate: true,
+        status: true,
+        bookingNumber: true,
+      }
+    })
+
+    if (!currentBooking) {
+      return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+    }
+
     // Add timestamps for status changes
     if (body.status === 'CONFIRMED' && !updateData.confirmedAt) {
       updateData.confirmedAt = new Date()
@@ -81,6 +98,24 @@ export async function PATCH(
         }
       }
     })
+
+    // If booking was cancelled, free up the availability
+    if (body.status === 'CANCELLED' && currentBooking.status !== 'CANCELLED') {
+      console.log(`🗓️ Freeing up availability for cancelled booking ${bookingId}`)
+      
+      await prisma.availability.deleteMany({
+        where: {
+          carId: currentBooking.carId,
+          date: {
+            gte: currentBooking.startDate,
+            lte: currentBooking.endDate,
+          },
+          reason: 'BOOKED',
+        },
+      })
+      
+      console.log(`✅ Availability freed up for booking ${currentBooking.bookingNumber}`)
+    }
 
     console.log(`✅ Successfully updated booking ${bookingId}`)
 

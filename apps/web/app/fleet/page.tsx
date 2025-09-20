@@ -358,14 +358,14 @@ export default function FleetPage() {
 
       {/* Luxury Filters Section */}
       <section className="sticky top-0 z-40 bg-gradient-to-r from-black via-zinc-950 to-black backdrop-blur-xl border-b border-amber-400/20">
-        <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto px-6 py-4 md:py-8">
           
           {/* Premium Filter Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex items-center justify-center mb-8"
+            className="flex items-center justify-center mb-4 md:mb-8"
           >
             <div className="flex items-center gap-4">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-amber-400/60" />
@@ -376,7 +376,7 @@ export default function FleetPage() {
             </div>
           </motion.div>
 
-          <div className="flex flex-col xl:flex-row gap-8 items-center">
+          <div className="flex flex-col xl:flex-row gap-4 md:gap-8 items-center">
             
             {/* Luxury Search */}
             <motion.div 
@@ -396,7 +396,7 @@ export default function FleetPage() {
                     placeholder="Search luxury vehicles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-transparent text-white placeholder-neutral-400 focus:outline-none focus:placeholder-neutral-500 text-sm tracking-wide"
+                    className="w-full pl-12 pr-4 py-3 md:py-4 bg-transparent text-white placeholder-neutral-400 focus:outline-none focus:placeholder-neutral-500 text-sm tracking-wide"
                 />
               </div>
             </div>
@@ -404,7 +404,7 @@ export default function FleetPage() {
 
             {/* Premium Filter Controls */}
             <motion.div 
-              className="flex flex-wrap gap-4 items-center"
+              className="flex flex-wrap gap-2 md:gap-4 items-center"
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -416,7 +416,7 @@ export default function FleetPage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-6 py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[140px]"
+                  className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-4 md:px-6 py-2 md:py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[120px] md:min-w-[140px]"
               >
                 {categories.map(cat => (
                     <option key={cat.value} value={cat.value} className="bg-black text-white">
@@ -433,7 +433,7 @@ export default function FleetPage() {
               <select
                 value={selectedPriceRange}
                 onChange={(e) => setSelectedPriceRange(e.target.value)}
-                  className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-6 py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[160px]"
+                  className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-4 md:px-6 py-2 md:py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[140px] md:min-w-[160px]"
               >
                 {priceRanges.map(range => (
                     <option key={range.value} value={range.value} className="bg-black text-white">
@@ -450,8 +450,8 @@ export default function FleetPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                  className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-6 py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[140px]"
-                >
+                  className="relative bg-black/80 backdrop-blur-md border border-amber-400/30 text-white px-4 md:px-6 py-2 md:py-3 rounded-xl text-sm font-light tracking-wide cursor-pointer hover:border-amber-400/50 focus:border-amber-400/70 focus:outline-none transition-all duration-300 min-w-[120px] md:min-w-[140px]"
+              >
                   <option value="featured" className="bg-black text-white">Featured</option>
                   <option value="price-low" className="bg-black text-white">Price: Low to High</option>
                   <option value="price-high" className="bg-black text-white">Price: High to Low</option>
@@ -461,10 +461,10 @@ export default function FleetPage() {
               </div>
 
               {/* Luxury View Mode Toggle */}
-              <div className="flex bg-black/60 backdrop-blur-md border border-amber-400/30 rounded-xl p-1.5 gap-1">
+              <div className="flex bg-black/60 backdrop-blur-md border border-amber-400/30 rounded-xl p-1 md:p-1.5 gap-1">
                 <motion.button
                   onClick={() => setViewMode('grid')}
-                  className={`p-3 rounded-lg transition-all duration-300 ${
+                  className={`p-2 md:p-3 rounded-lg transition-all duration-300 ${
                     viewMode === 'grid' 
                       ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-lg shadow-amber-400/25' 
                       : 'text-amber-400/70 hover:text-amber-300 hover:bg-amber-400/10'
@@ -476,7 +476,7 @@ export default function FleetPage() {
                 </motion.button>
                 <motion.button
                   onClick={() => setViewMode('list')}
-                  className={`p-3 rounded-lg transition-all duration-300 ${
+                  className={`p-2 md:p-3 rounded-lg transition-all duration-300 ${
                     viewMode === 'list' 
                       ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-lg shadow-amber-400/25' 
                       : 'text-amber-400/70 hover:text-amber-300 hover:bg-amber-400/10'
@@ -492,7 +492,7 @@ export default function FleetPage() {
 
           {/* Elegant Results Count */}
           <motion.div 
-            className="mt-8 text-center"
+            className="mt-4 md:mt-8 text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}

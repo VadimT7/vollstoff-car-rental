@@ -128,12 +128,33 @@ export async function PATCH(request: NextRequest) {
 
     console.log(`📝 Updating booking ${bookingId} to status: ${status}`)
 
+    // First, get the current booking to check if we need to free up availability
+    const currentBooking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: {
+        id: true,
+        carId: true,
+        startDate: true,
+        endDate: true,
+        status: true,
+        bookingNumber: true,
+      }
+    })
+
+    if (!currentBooking) {
+      return NextResponse.json(
+        { error: 'Booking not found' },
+        { status: 404 }
+      )
+    }
+
     // Update the booking status in the database
     const updatedBooking = await prisma.booking.update({
       where: { id: bookingId },
       data: { 
         status: status as any,
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        cancelledAt: status === 'CANCELLED' ? new Date() : undefined
       },
       include: {
         car: {
@@ -167,6 +188,26 @@ export async function PATCH(request: NextRequest) {
         },
       },
     })
+
+    // If booking was cancelled, free up the availability
+    if (status === 'CANCELLED' && currentBooking.status !== 'CANCELLED') {
+      console.log(`🗓️ Freeing up availability for cancelled booking ${bookingId}`)
+      
+      await prisma.availability.deleteMany({
+        where: {
+          carId: currentBooking.carId,
+          date: {
+            gte: currentBooking.startDate,
+            lte: currentBooking.endDate,
+          },
+          reason: 'BOOKED',
+          // Optional: only delete availability that was created for this specific booking
+          // We can match by reason containing the booking number if needed
+        },
+      })
+      
+      console.log(`✅ Availability freed up for booking ${currentBooking.bookingNumber}`)
+    }
 
     console.log(`✅ Booking ${bookingId} updated successfully to ${status}`)
 
