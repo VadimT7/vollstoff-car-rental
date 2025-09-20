@@ -209,28 +209,33 @@ export async function POST(request: NextRequest) {
           const bytes = await vehicleData.primaryImage.arrayBuffer()
           const buffer = Buffer.from(bytes)
           
-          // Use bulletproof image saving utility
+          // Use Vercel Blob Storage utility
           const result = await saveImageToBothDirectories({
             buffer,
             filename: fileName,
             baseDir: process.cwd()
           })
           
-          if (result.success) {
+          if (result.success && result.imageUrl) {
             // Set the primary image URL on the vehicle
             vehicleCreateData.primaryImageUrl = result.imageUrl
             
             vehicleCreateData.images.create.push({
-              url: result.imageUrl!,
+              url: result.imageUrl,
               alt: vehicleData.displayName,
               caption: 'Primary image',
               order: 0,
               isGallery: false
             })
-            console.log('✅ Primary image saved successfully')
+            console.log('✅ Primary image uploaded successfully to Blob Storage')
           } else {
-            console.error('Failed to save primary image:', result.error)
-            // Keep default placeholder
+            console.error('⚠️ Failed to upload primary image:', result.error)
+            // If Blob Storage is not configured, inform the user
+            if (result.error?.includes('BLOB_READ_WRITE_TOKEN')) {
+              console.warn('⚠️ Vercel Blob Storage not configured. Using placeholder.')
+            }
+            // Use placeholder but don't fail the vehicle creation
+            vehicleCreateData.primaryImageUrl = '/placeholder-car.jpg'
             vehicleCreateData.images.create.push({
               url: '/placeholder-car.jpg',
               alt: vehicleData.displayName,
@@ -240,8 +245,9 @@ export async function POST(request: NextRequest) {
             })
           }
         } catch (error) {
-          console.error('Failed to process primary image:', error)
-          // Keep default placeholder
+          console.error('❌ Failed to process primary image:', error)
+          // Use placeholder but don't fail the vehicle creation
+          vehicleCreateData.primaryImageUrl = '/placeholder-car.jpg'
           vehicleCreateData.images.create.push({
             url: '/placeholder-car.jpg',
             alt: vehicleData.displayName,
@@ -264,28 +270,31 @@ export async function POST(request: NextRequest) {
             const bytes = await image.arrayBuffer()
             const buffer = Buffer.from(bytes)
             
-            // Use bulletproof image saving utility
+            // Use Vercel Blob Storage utility
             const result = await saveImageToBothDirectories({
               buffer,
               filename: fileName,
               baseDir: process.cwd()
             })
             
-            if (result.success) {
+            if (result.success && result.imageUrl) {
               vehicleCreateData.images.create.push({
-                url: result.imageUrl!,
+                url: result.imageUrl,
                 alt: vehicleData.displayName,
                 caption: `Gallery image ${index + 1}`,
                 order: index + 1,
                 isGallery: true
               })
-              console.log(`✅ Gallery image ${index + 1} saved successfully`)
+              console.log(`✅ Gallery image ${index + 1} uploaded successfully to Blob Storage`)
             } else {
-              console.error(`Failed to save gallery image ${index + 1}:`, result.error)
+              console.error(`⚠️ Failed to upload gallery image ${index + 1}:`, result.error)
+              if (result.error?.includes('BLOB_READ_WRITE_TOKEN')) {
+                console.warn('⚠️ Vercel Blob Storage not configured')
+              }
               // Skip this image if it fails
             }
           } catch (error) {
-            console.error(`Failed to process gallery image ${index + 1}:`, error)
+            console.error(`❌ Failed to process gallery image ${index + 1}:`, error)
             // Skip this image if it fails
           }
         }

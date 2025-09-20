@@ -1,10 +1,9 @@
-import fs from 'fs'
-import path from 'path'
+import { put, del } from '@vercel/blob'
 
 interface SaveImageParams {
   buffer: Buffer
   filename: string
-  baseDir: string
+  baseDir: string // Not used with blob storage, kept for compatibility
 }
 
 interface SaveImageResult {
@@ -14,57 +13,45 @@ interface SaveImageResult {
 }
 
 /**
- * Get the correct public directory path based on environment
- */
-function getPublicDirectoryPath(): string {
-  // In production/serverless environments, use /tmp for temporary files
-  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
-    return '/tmp/uploads/vehicles'
-  }
-  
-  // In development, use the local public directory
-  const currentDir = process.cwd()
-  return path.join(currentDir, 'public', 'uploads', 'vehicles')
-}
-
-/**
- * Save an image to the appropriate directory based on environment
+ * Save an image to Vercel Blob Storage
+ * This works in both development and production serverless environments
  */
 export async function saveImageToBothDirectories({
   buffer,
   filename,
-  baseDir
+  baseDir // Not used but kept for compatibility
 }: SaveImageParams): Promise<SaveImageResult> {
   try {
-    // Get the correct directory path
-    const uploadDir = getPublicDirectoryPath()
+    console.log(`📁 Uploading image to Vercel Blob Storage: ${filename}`)
     
-    console.log(`📁 Using upload directory: ${uploadDir}`)
+    // Create a unique path for the vehicle images
+    const path = `vehicles/${filename}`
     
-    // Ensure directory exists
-    await ensureDirectoryExists(uploadDir)
+    // Upload to Vercel Blob Storage
+    const blob = await put(path, buffer, {
+      access: 'public',
+      addRandomSuffix: false, // We already add timestamps to filenames
+      cacheControlMaxAge: 31536000, // 1 year cache
+    })
     
-    // Define file path
-    const filePath = path.join(uploadDir, filename)
-    
-    // Save the file
-    await fs.promises.writeFile(filePath, buffer)
-    
-    // Return the public URL
-    // In production, we'll need to upload to a CDN or external storage
-    // For now, return a placeholder URL that can be handled by the frontend
-    const imageUrl = process.env.NODE_ENV === 'production' 
-      ? `/uploads/vehicles/${filename}` // This will need to be handled by a CDN
-      : `/uploads/vehicles/${filename}`
-    
-    console.log(`✅ Image saved successfully: ${filename} at ${filePath}`)
+    console.log(`✅ Image uploaded successfully: ${blob.url}`)
     
     return {
       success: true,
-      imageUrl
+      imageUrl: blob.url
     }
   } catch (error) {
-    console.error('❌ Failed to save image:', error)
+    console.error('❌ Failed to upload image to Blob Storage:', error)
+    
+    // If Vercel Blob Storage is not configured, return a placeholder
+    if (error instanceof Error && error.message.includes('BLOB_READ_WRITE_TOKEN')) {
+      console.warn('⚠️ Vercel Blob Storage not configured. Using placeholder image.')
+      return {
+        success: false,
+        imageUrl: '/placeholder-car.jpg',
+        error: 'Vercel Blob Storage not configured. Please set BLOB_READ_WRITE_TOKEN environment variable.'
+      }
+    }
     
     return {
       success: false,
@@ -74,46 +61,47 @@ export async function saveImageToBothDirectories({
 }
 
 /**
- * Ensure a directory exists, creating it if necessary
- */
-async function ensureDirectoryExists(dirPath: string): Promise<void> {
-  try {
-    await fs.promises.access(dirPath)
-  } catch {
-    // Directory doesn't exist, create it
-    await fs.promises.mkdir(dirPath, { recursive: true })
-    console.log(`📁 Created directory: ${dirPath}`)
-  }
-}
-
-/**
- * Delete an image from the upload directory
+ * Delete an image from Vercel Blob Storage
  */
 export async function deleteImageFromBothDirectories(
-  filename: string,
-  baseDir: string
+  filenameOrUrl: string,
+  baseDir: string // Not used but kept for compatibility
 ): Promise<SaveImageResult> {
   try {
-    const uploadDir = getPublicDirectoryPath()
-    const filePath = path.join(uploadDir, filename)
+    // If it's a full URL from Blob Storage, use it directly
+    // Otherwise, construct the path
+    const url = filenameOrUrl.startsWith('http') 
+      ? filenameOrUrl 
+      : `vehicles/${filenameOrUrl}`
     
-    // Delete the file (ignore errors if file doesn't exist)
-    try {
-      await fs.promises.unlink(filePath)
-      console.log(`🗑️ Image deleted: ${filename}`)
-    } catch (error) {
-      console.log(`File not found: ${filePath}`)
-    }
+    // Delete from Vercel Blob Storage
+    await del(url)
+    console.log(`🗑️ Image deleted from Blob Storage: ${filenameOrUrl}`)
     
     return {
       success: true
     }
   } catch (error) {
-    console.error('❌ Failed to delete image:', error)
+    console.error('❌ Failed to delete image from Blob Storage:', error)
+    
+    // Don't fail if the image doesn't exist
+    if (error instanceof Error && error.message.includes('404')) {
+      console.log(`Image not found in Blob Storage: ${filenameOrUrl}`)
+      return {
+        success: true
+      }
+    }
     
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred'
     }
   }
+}
+
+/**
+ * Helper function to check if Blob Storage is configured
+ */
+export function isBlobStorageConfigured(): boolean {
+  return !!process.env.BLOB_READ_WRITE_TOKEN
 }

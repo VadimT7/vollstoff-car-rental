@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { vehicleService, prisma } from '@valore/database'
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
-import { existsSync } from 'fs'
 import { saveImageToBothDirectories, deleteImageFromBothDirectories } from '../../../../lib/image-utils'
 
 export async function PUT(
@@ -126,7 +123,7 @@ export async function PUT(
         const bytes = await primaryImage.arrayBuffer()
         const buffer = Buffer.from(bytes)
         
-        // Use bulletproof image saving utility
+        // Use Vercel Blob Storage utility
         const result = await saveImageToBothDirectories({
           buffer,
           filename,
@@ -134,15 +131,31 @@ export async function PUT(
         })
         
         if (!result.success) {
-          console.error('❌ Failed to save image to both directories:', result.error)
+          console.error('❌ Failed to upload image to Blob Storage:', result.error)
+          // Check if it's a configuration issue
+          if (result.error?.includes('BLOB_READ_WRITE_TOKEN')) {
+            console.warn('⚠️ Vercel Blob Storage not configured. Please set BLOB_READ_WRITE_TOKEN environment variable.')
+            return NextResponse.json({ 
+              error: 'Image storage not configured', 
+              details: 'Vercel Blob Storage is not configured. Please contact the administrator.' 
+            }, { status: 503 })
+          }
           return NextResponse.json({ 
             error: 'Failed to save image', 
             details: result.error 
           }, { status: 500 })
         }
         
-        primaryImageUrl = result.imageUrl!
-        console.log('✅ New primary image saved successfully:', primaryImageUrl)
+        if (!result.imageUrl) {
+          console.error('❌ No image URL returned from Blob Storage')
+          return NextResponse.json({ 
+            error: 'Failed to save image', 
+            details: 'No image URL was returned' 
+          }, { status: 500 })
+        }
+        
+        primaryImageUrl = result.imageUrl
+        console.log('✅ New primary image uploaded successfully to Blob Storage:', primaryImageUrl)
         
       } catch (error) {
         console.error('❌ Failed to process primary image:', error)
