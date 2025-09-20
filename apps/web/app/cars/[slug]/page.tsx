@@ -336,7 +336,7 @@ export default function CarDetailPage() {
                 <div className="space-y-3">
                   <h3 className="text-lg font-semibold text-slate-900">Gallery</h3>
                   <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                    {carData.images.map((image, index) => (
+                    {carData.images.map((image: string, index: number) => (
                       <button
                         key={index}
                         onClick={() => setSelectedImage(index)}
