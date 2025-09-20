@@ -19,7 +19,9 @@ import {
   Award,
   Car,
   Settings,
-  TrendingUp
+  TrendingUp,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -73,6 +75,35 @@ export default function CarDetailPage() {
   const [showDateWarning, setShowDateWarning] = useState(false)
   const [blockedDates, setBlockedDates] = useState<Record<string, { booked: boolean, reason?: string }>>({})
   const [availabilityLoading, setAvailabilityLoading] = useState(false)
+
+  // Navigation functions for image carousel
+  const nextImage = () => {
+    if (car?.images && car.images.length > 0) {
+      const totalImages = (car.images && car.images.length > 0) ? car.images.length : 1
+      setSelectedImage((prev) => (prev + 1) % totalImages)
+    }
+  }
+
+  const prevImage = () => {
+    if (car?.images && car.images.length > 0) {
+      const totalImages = (car.images && car.images.length > 0) ? car.images.length : 1
+      setSelectedImage((prev) => (prev - 1 + totalImages) % totalImages)
+    }
+  }
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        prevImage()
+      } else if (e.key === 'ArrowRight') {
+        nextImage()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [car?.images])
 
   // Validate if dates are selected
   const areDatesSelected = selectedDates.start && selectedDates.end
@@ -167,7 +198,8 @@ export default function CarDetailPage() {
     year: car.year,
     category: car.category,
     pricePerDay: car.pricePerDay,
-    images: [car.primaryImage, ...(car.images || [])],
+    // Use all images from the database (which includes primary + gallery)
+    images: car.images && car.images.length > 0 ? car.images : [car.primaryImage],
     specs: {
       power: car.specs?.horsePower ? `${car.specs.horsePower} HP` : 'N/A',
       acceleration: car.specs?.acceleration ? `${car.specs.acceleration}s` : 'N/A',
@@ -250,49 +282,88 @@ export default function CarDetailPage() {
               </div>
             </motion.div>
 
-            {/* Image Gallery */}
+            {/* Enhanced Image Gallery */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="mb-8"
             >
-              <div className="relative h-[500px] rounded-2xl overflow-hidden mb-4">
+              {/* Main Image with Navigation */}
+              <div className="relative h-[500px] rounded-2xl overflow-hidden mb-4 group">
                 <Image
                   src={carData.images[selectedImage]}
                   alt={carData.displayName}
                   fill
-                  className={`object-cover ${
+                  className={`object-cover transition-all duration-300 ${
                     carData.slug === 'mercedes-c43-amg' ? 'object-[center_73%]' : 
                     carData.slug === 'mercedes-cla-250-2018' ? 'object-[center_37%]' : 'object-center'
                   }`}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority
                 />
+                
+                {/* Navigation Arrows */}
+                {carData.images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100 hover:scale-110"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 rounded-full p-2 shadow-lg transition-all opacity-0 group-hover:opacity-100 hover:scale-110"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )}
+                
+                {/* Image Counter */}
+                {carData.images.length > 1 && (
+                  <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm">
+                    {selectedImage + 1} / {carData.images.length}
+                  </div>
+                )}
               </div>
 
-              {/* Thumbnail Gallery */}
-              <div className="grid grid-cols-4 gap-2">
-                {carData.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`relative h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === index ? 'border-primary' : 'border-transparent'
-                    }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${carData.displayName} - Image ${index + 1}`}
-                      fill
-                      className={`object-cover ${
-                        carData.slug === 'mercedes-c43-amg' ? 'object-[center_73%]' : 
-                        carData.slug === 'mercedes-cla-250-2018' ? 'object-[center_37%]' : 'object-center'
-                      }`}
-                      sizes="(max-width: 768px) 25vw, 20vw"
-                    />
-                  </button>
-                ))}
-              </div>
+              {/* Enhanced Thumbnail Gallery */}
+              {carData.images.length > 1 && (
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-slate-900">Gallery</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                    {carData.images.map((image, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImage(index)}
+                        className={`relative h-20 rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
+                          selectedImage === index 
+                            ? 'border-amber-500 ring-2 ring-amber-200' 
+                            : 'border-transparent hover:border-slate-300'
+                        }`}
+                      >
+                        <Image
+                          src={image}
+                          alt={`${carData.displayName} - Image ${index + 1}`}
+                          fill
+                          className={`object-cover ${
+                            carData.slug === 'mercedes-c43-amg' ? 'object-[center_73%]' : 
+                            carData.slug === 'mercedes-cla-250-2018' ? 'object-[center_37%]' : 'object-center'
+                          }`}
+                          sizes="(max-width: 768px) 25vw, 20vw"
+                        />
+                        {selectedImage === index && (
+                          <div className="absolute inset-0 bg-amber-500/20" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
 
             {/* Description */}

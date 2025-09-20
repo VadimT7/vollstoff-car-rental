@@ -48,7 +48,11 @@ export async function GET(request: NextRequest) {
         bodyType: vehicle.bodyType,
         description: vehicle.description,
         primaryImage: vehicle.primaryImageUrl || '/placeholder-car.jpg',
-        images: (vehicle as any).images?.map((img: any) => img.url) || [],
+        // Include all images (primary first, then gallery) for the carousel
+        images: [
+          vehicle.primaryImageUrl || '/placeholder-car.jpg',
+          ...((vehicle as any).images?.filter((img: any) => img.isGallery)?.map((img: any) => img.url) || [])
+        ].filter(Boolean), // Remove any null/undefined values
         pricePerDay: Number((vehicle as any).priceRules?.[0]?.basePricePerDay) || 0,
         features: vehicle.features as string[],
         specs: {

@@ -166,6 +166,61 @@ export async function PUT(
       }
     }
 
+    // Handle gallery image uploads
+    console.log('📸 Processing gallery images...')
+    const galleryImages: File[] = []
+    
+    // Extract gallery images from FormData
+    const galleryEntries = Array.from(formData.entries())
+    for (const [key, value] of galleryEntries) {
+      if (key.startsWith('galleryImage_') && value instanceof File) {
+        galleryImages.push(value)
+        console.log(`  Found gallery image: ${value.name} (${value.size} bytes)`)
+      }
+    }
+
+    // Process and upload gallery images
+    const newGalleryImages: any[] = []
+    if (galleryImages.length > 0) {
+      console.log(`📸 Processing ${galleryImages.length} gallery images...`)
+      
+      for (let index = 0; index < galleryImages.length; index++) {
+        const image = galleryImages[index]
+        try {
+          const timestamp = Date.now()
+          const filename = `${slug}-gallery-${index + 1}-${timestamp}.${image.name.split('.').pop()}`
+          
+          const bytes = await image.arrayBuffer()
+          const buffer = Buffer.from(bytes)
+          
+          // Use Vercel Blob Storage utility
+          const result = await saveImageToBothDirectories({
+            buffer,
+            filename,
+            baseDir: process.cwd()
+          })
+          
+          if (result.success && result.imageUrl) {
+            newGalleryImages.push({
+              url: result.imageUrl,
+              alt: displayName,
+              caption: `Gallery image ${index + 1}`,
+              order: index + 1,
+              isGallery: true
+            })
+            console.log(`✅ Gallery image ${index + 1} uploaded successfully to Blob Storage`)
+          } else {
+            console.error(`⚠️ Failed to upload gallery image ${index + 1}:`, result.error)
+            if (result.error?.includes('BLOB_READ_WRITE_TOKEN')) {
+              console.warn('⚠️ Vercel Blob Storage not configured')
+            }
+          }
+        } catch (error) {
+          console.error(`❌ Failed to process gallery image ${index + 1}:`, error)
+        }
+      }
+    }
+
     console.log('💾 Updating vehicle in database...')
 
     // Prepare update data
@@ -235,6 +290,36 @@ export async function PUT(
         console.log('✅ Updated CarImage record for primary image')
       } catch (error) {
         console.error('❌ Failed to update CarImage record:', error)
+        // Don't fail the whole operation for this
+      }
+    }
+
+    // Handle new gallery images if any were uploaded
+    if (newGalleryImages.length > 0 && vehicle) {
+      try {
+        console.log(`📸 Adding ${newGalleryImages.length} new gallery images to database...`)
+        
+        // Delete existing gallery images (we're replacing them)
+        await prisma.carImage.deleteMany({
+          where: {
+            carId: vehicleId,
+            isGallery: true
+          }
+        })
+        console.log('🗑️ Deleted existing gallery images')
+
+        // Create new gallery image records
+        for (const imageData of newGalleryImages) {
+          await prisma.carImage.create({
+            data: {
+              carId: vehicleId,
+              ...imageData
+            }
+          })
+        }
+        console.log('✅ Created new gallery image records')
+      } catch (error) {
+        console.error('❌ Failed to update gallery CarImage records:', error)
         // Don't fail the whole operation for this
       }
     }
