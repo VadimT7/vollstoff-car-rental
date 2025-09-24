@@ -25,10 +25,10 @@ import { AutoOpenInput } from '@/components/ui/auto-open-input'
 import { CalendarWithAvailability } from '@/components/ui/calendar-with-availability'
 import { ClickableTimeInput } from '@/components/ui/clickable-time-input'
 // Removed static data import - now using API
-import dynamic from 'next/dynamic'
+import dynamicImport from 'next/dynamic'
 
 // Dynamically import PaymentForm to avoid SSR issues with Stripe
-const PaymentForm = dynamic(() => import('@/components/booking/payment-form'), {
+const PaymentForm = dynamicImport(() => import('@/components/booking/payment-form'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center py-12">
