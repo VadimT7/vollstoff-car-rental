@@ -14,6 +14,9 @@ import {
 import { Button, Input } from '@valore/ui'
 import { staggerContainer, staggerItem } from '@valore/ui'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 const contactInfo = [
   {
     icon: Phone,

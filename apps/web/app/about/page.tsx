@@ -20,6 +20,9 @@ import Link from 'next/link'
 import { Button } from '@valore/ui'
 import { staggerContainer, staggerItem } from '@valore/ui'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 const stats = [
   { icon: Car, value: '10+', label: 'Luxury Vehicles' },
   { icon: Users, value: '700+', label: 'Happy Clients' },
