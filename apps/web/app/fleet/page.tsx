@@ -19,8 +19,6 @@ import Link from 'next/link'
 import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 
-// Force dynamic rendering
-export const dynamic = 'force-dynamic'
 
 interface Vehicle {
   id: string

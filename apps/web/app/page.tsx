@@ -9,8 +9,6 @@ import { CTASection } from '@/components/home/cta-section'
 import { InstantBooking } from '@/components/booking/instant-booking'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 
-// Force dynamic rendering
-export const dynamic = 'force-dynamic'
 
 export default function HomePage() {
   return (
