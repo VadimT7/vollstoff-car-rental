@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
   "installCommand": "cd ../.. && npm install -g pnpm@8.15.1 && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm --filter @valore/database generate && pnpm --filter @valore/admin build",
+  "buildCommand": "cd ../.. && pnpm --filter @valore/database generate",
   "outputDirectory": "apps/admin/.next"
 }
