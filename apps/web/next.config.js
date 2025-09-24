@@ -3,8 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   output: 'standalone',
-  trailingSlash: true,
+  trailingSlash: false,
   transpilePackages: ['@valore/ui', '@valore/database', '@valore/lib'],
+  // Completely disable static generation
+  staticPageGenerationTimeout: 0,
+  generateEtags: false,
   images: {
     remotePatterns: [
       {
@@ -36,8 +39,6 @@ const nextConfig = {
     typedRoutes: false,
   },
   // Completely disable static generation
-  output: 'standalone',
-  trailingSlash: false,
   skipTrailingSlashRedirect: true,
   webpack: (config, { isServer }) => {
     // Fix for lucide-react barrel optimization issues
