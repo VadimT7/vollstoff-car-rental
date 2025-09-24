@@ -22,8 +22,8 @@ export function VideoShowcase() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* First Video - CLA AMG */}
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* First Video - Audi S5 */}
           <motion.div
             initial={{ opacity: 0, x: -200 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -59,7 +59,43 @@ export function VideoShowcase() {
             </div>
           </motion.div>
 
-          {/* Second Video - Lamborghini */}
+          {/* Second Video - Lamborghini 1 */}
+          <motion.div
+            initial={{ opacity: 0, x: 0 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative group"
+          >
+            <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-900">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              >
+                <source src="/lamborghini-driving.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+              
+              {/* Overlay content */}
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <Instagram className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Lamborghini</p>
+                    <p className="text-xs text-neutral-300">Pure Performance and Style</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Third Video - Lamborghini 2 */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
