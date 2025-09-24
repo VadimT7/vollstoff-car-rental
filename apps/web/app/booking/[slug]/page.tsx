@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ArrowLeft, 
@@ -43,6 +44,9 @@ const steps = [
   { id: 4, title: 'Add-ons', icon: Settings },
   { id: 5, title: 'Review & Pay', icon: PaymentIcon },
 ]
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 
 export default function BookingPage() {
   const params = useParams()

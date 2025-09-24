@@ -35,6 +35,10 @@ const nextConfig = {
   experimental: {
     typedRoutes: false,
   },
+  // Completely disable static generation
+  output: 'standalone',
+  trailingSlash: false,
+  skipTrailingSlashRedirect: true,
   webpack: (config, { isServer }) => {
     // Fix for lucide-react barrel optimization issues
     config.resolve.alias = {

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { motion } from 'framer-motion'
 import { 
   Star, 
@@ -32,6 +33,9 @@ import { staggerContainer, staggerItem } from '@valore/ui'
 import { AutoOpenInput } from '@/components/ui/auto-open-input'
 import { CalendarWithAvailability } from '@/components/ui/calendar-with-availability'
 import { ClickableTimeInput } from '@/components/ui/clickable-time-input'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 
 // Default services and requirements for all cars
 const defaultServices = [
