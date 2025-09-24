@@ -9,6 +9,9 @@ import { Toaster } from '@/components/ui/toaster'
 import { generateMetadata as generateSiteMetadata } from '@/lib/seo'
 import { Header, Footer } from '@/components/layout'
 
+// Force dynamic rendering for all pages
+export const dynamic = 'force-dynamic'
+
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',

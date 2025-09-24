@@ -28,12 +28,12 @@ const nextConfig = {
     unoptimized: false,
     domains: ['localhost'],
   },
-  experimental: {
-    typedRoutes: false,
-  },
   generateBuildId: async () => {
     return 'build-' + Date.now()
   },
+  // Disable static optimization completely
+  distDir: '.next',
+  generateEtags: false,
   webpack: (config, { isServer }) => {
     // Fix for lucide-react barrel optimization issues
     config.resolve.alias = {
