@@ -4,6 +4,12 @@ const nextConfig = {
   swcMinify: true,
   output: 'standalone',
   transpilePackages: ['@valore/ui', '@valore/database', '@valore/lib'],
+  // Completely disable static generation
+  staticPageGenerationTimeout: 0,
+  generateEtags: false,
+  experimental: {
+    typedRoutes: false,
+  },
   images: {
     remotePatterns: [
       {

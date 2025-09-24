@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { 
   Plus, 
   Search, 
@@ -23,8 +24,13 @@ import {
 import { Button, Card, Input } from '@valore/ui'
 import { formatCurrency } from '@valore/ui'
 import Image from 'next/image'
+
 import { useRouter } from 'next/navigation'
+
 import { ConfirmationModal } from '../../../components/ui/confirmation-modal'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 
 interface Vehicle {
   id: string

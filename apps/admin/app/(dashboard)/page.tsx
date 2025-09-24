@@ -9,12 +9,16 @@ import {
   CheckCircle,
   Clock
 } from 'lucide-react'
+
 import { DashboardStats } from '@/components/dashboard/stats'
 import { RevenueChart } from '@/components/dashboard/revenue-chart'
 import { BookingsTable } from '@/components/dashboard/bookings-table'
 import { FleetUtilization } from '@/components/dashboard/fleet-utilization'
 import { LoadingCard } from '@/components/ui/loading-card'
 import { RealTimeMetrics } from '@/components/dashboard/real-time-metrics'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 
 async function TodaysActivities() {
   // Fetch real dashboard data including activities
