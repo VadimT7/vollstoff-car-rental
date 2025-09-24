@@ -34,6 +34,13 @@ const nextConfig = {
   // Disable static optimization completely
   distDir: '.next',
   generateEtags: false,
+  // Force all pages to be dynamic
+  experimental: {
+    typedRoutes: false,
+  },
+  // Completely disable static generation
+  staticPageGenerationTimeout: 0,
+  skipTrailingSlashRedirect: true,
   webpack: (config, { isServer }) => {
     // Fix for lucide-react barrel optimization issues
     config.resolve.alias = {
