@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'standalone',
   trailingSlash: false,
   transpilePackages: ['@valore/ui', '@valore/database', '@valore/lib'],
   // Completely disable static generation
