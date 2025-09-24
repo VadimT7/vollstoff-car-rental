@@ -29,7 +29,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   ...generateSiteMetadata({
-    title: 'FlyRentals - Ultra-Luxury Exotic Car Rentals',
+    title: 'VollStoff Rentals - Ultra-Luxury Exotic Car Rentals',
     description: 'Experience the pinnacle of automotive luxury. Rent Lamborghini, Ferrari, BMW M8, Mercedes-AMG G63 and more. Premium service, worldwide delivery.',
   }),
   icons: {

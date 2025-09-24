@@ -28,11 +28,11 @@ export interface SendEmailParams {
 export async function sendEmail({
   to,
   template,
-  replyTo = process.env.EMAIL_REPLY_TO || 'flyrentalsca@gmail.com',
+  replyTo = process.env.EMAIL_REPLY_TO || 'vollstoffrentals@gmail.com',
   attachments = [],
 }: SendEmailParams): Promise<string> {
   const { data, error } = await resend.emails.send({
-    from: process.env.EMAIL_FROM || 'flyrentalsca@gmail.com',
+    from: process.env.EMAIL_FROM || 'vollstoffrentals@gmail.com',
     to: Array.isArray(to) ? to : [to],
     subject: template.subject,
     html: template.html,
@@ -158,7 +158,7 @@ function generateBookingConfirmationTemplate(booking: any): EmailTemplate {
   const pickupTime = format(booking.startDate, 'h:mm a')
   const returnTime = format(booking.endDate, 'h:mm a')
   
-  const subject = `Booking Confirmation - ${booking.car.displayName} | FlyRentals`
+  const subject = `Booking Confirmation - ${booking.car.displayName} | VollStoff Rentals`
   
   const html = `
     <!DOCTYPE html>
@@ -251,7 +251,7 @@ function generateBookingConfirmationTemplate(booking: any): EmailTemplate {
     <body>
       <div class="container">
         <div class="header">
-          <h1>FlyRentals</h1>
+          <h1>VollStoff Rentals</h1>
           <p style="margin: 10px 0 0 0; font-size: 16px; font-weight: 300;">
             Your Luxury Experience Awaits
           </p>
@@ -263,7 +263,7 @@ function generateBookingConfirmationTemplate(booking: any): EmailTemplate {
           </h2>
           <p>Dear ${booking.user?.name || booking.guestName || 'Valued Customer'},</p>
           <p>
-            Thank you for choosing FlyRentals. Your booking for the 
+            Thank you for choosing VollStoff Rentals. Your booking for the 
             <strong>${booking.car.displayName}</strong> has been confirmed.
           </p>
           
@@ -294,7 +294,7 @@ function generateBookingConfirmationTemplate(booking: any): EmailTemplate {
               <span class="detail-value">${
                 booking.pickupType === 'DELIVERY' 
                   ? 'Delivery to your location' 
-                  : 'FlyRentals Showroom'
+                  : 'VollStoff Rentals Showroom'
               }</span>
             </div>
             <div class="detail-row">
@@ -333,13 +333,13 @@ function generateBookingConfirmationTemplate(booking: any): EmailTemplate {
           <p>
             If you have any questions or need to make changes to your booking, 
             please don't hesitate to contact us at 
-            <a href="mailto:flyrentalsca@gmail.com">flyrentalsca@gmail.com</a> 
+            <a href="mailto:vollstoffrentals@gmail.com">vollstoffrentals@gmail.com</a> 
             or call us at +1 (438) 680-3936.
           </p>
         </div>
         
         <div class="footer">
-          <p>© ${new Date().getFullYear()} FlyRentals. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} VollStoff Rentals. All rights reserved.</p>
           <p>
             This email was sent to ${booking.user?.email || booking.guestEmail}. 
             If you no longer wish to receive these emails, you can 
@@ -352,11 +352,11 @@ function generateBookingConfirmationTemplate(booking: any): EmailTemplate {
   `
   
   const text = `
-FlyRentals - Booking Confirmation
+VollStoff Rentals - Booking Confirmation
 
 Dear ${booking.user?.name || booking.guestName || 'Valued Customer'},
 
-Thank you for choosing FlyRentals. Your booking for the ${booking.car.displayName} has been confirmed.
+Thank you for choosing VollStoff Rentals. Your booking for the ${booking.car.displayName} has been confirmed.
 
 BOOKING DETAILS
 ---------------
@@ -364,7 +364,7 @@ Booking Number: ${booking.bookingNumber}
 Vehicle: ${booking.car.displayName}
 Pickup Date: ${pickupDate} at ${pickupTime}
 Return Date: ${returnDate} at ${returnTime}
-Pickup Location: ${booking.pickupType === 'DELIVERY' ? 'Delivery to your location' : 'FlyRentals Showroom'}
+Pickup Location: ${booking.pickupType === 'DELIVERY' ? 'Delivery to your location' : 'VollStoff Rentals Showroom'}
 Total Amount: $${booking.totalAmount.toFixed(2)}
 
 WHAT'S NEXT?
@@ -373,9 +373,9 @@ WHAT'S NEXT?
 2. Please bring your valid driver's license and the credit card used for booking
 3. Our concierge team is available 24/7 for any special requests
 
-If you have any questions or need to make changes to your booking, please contact us at flyrentalsca@gmail.com or call +1 (438) 680-3936.
+If you have any questions or need to make changes to your booking, please contact us at vollstoffrentals@gmail.com or call +1 (438) 680-3936.
 
-© ${new Date().getFullYear()} FlyRentals. All rights reserved.
+© ${new Date().getFullYear()} VollStoff Rentals. All rights reserved.
   `.trim()
   
   return { subject, html, text }
@@ -388,7 +388,7 @@ function generatePickupReminderTemplate(booking: any): EmailTemplate {
   const pickupDate = format(booking.startDate, 'EEEE, MMMM d, yyyy')
   const pickupTime = format(booking.startDate, 'h:mm a')
   
-  const subject = `Pickup Reminder - ${booking.car.displayName} Tomorrow | FlyRentals`
+  const subject = `Pickup Reminder - ${booking.car.displayName} Tomorrow | VollStoff Rentals`
   
   const html = `
     <!DOCTYPE html>
@@ -408,7 +408,7 @@ function generatePickupReminderTemplate(booking: any): EmailTemplate {
           <p><strong>Location:</strong> ${
             booking.pickupType === 'DELIVERY' 
               ? booking.deliveryAddress 
-              : 'FlyRentals Showroom, 123 Luxury Avenue, Monaco'
+              : 'VollStoff Rentals Showroom, 123 Luxury Avenue, Monaco'
           }</p>
         </div>
         
@@ -421,7 +421,7 @@ function generatePickupReminderTemplate(booking: any): EmailTemplate {
         
         <p>Our team looks forward to providing you with an exceptional experience.</p>
         
-        <p>Best regards,<br>The FlyRentals Team</p>
+        <p>Best regards,<br>The VollStoff Rentals Team</p>
       </div>
     </body>
     </html>

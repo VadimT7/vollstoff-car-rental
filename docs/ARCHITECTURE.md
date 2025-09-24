@@ -1,4 +1,4 @@
-# FlyRentals - System Architecture
+# VollStoff Rentals - System Architecture
 
 ## System Overview
 

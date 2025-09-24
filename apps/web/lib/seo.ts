@@ -23,8 +23,8 @@ interface GenerateMetadataParams {
 }
 
 const siteConfig = {
-  name: 'FlyRentals',
-  title: 'FlyRentals - Ultra-Luxury Exotic Car Rentals',
+  name: 'VollStoff Rentals',
+  title: 'VollStoff Rentals - Ultra-Luxury Exotic Car Rentals',
   description: 'Experience the pinnacle of automotive luxury. Rent Lamborghini, Ferrari, BMW M8, Mercedes-AMG G63 and more. Premium service, worldwide delivery.',
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://valorerent.com',
   keywords: [
@@ -139,7 +139,7 @@ export function generateJsonLd(type: 'Organization' | 'Car' | 'RentalCarReservat
         ...baseData,
         name: siteConfig.name,
         url: siteConfig.url,
-        logo: `${siteConfig.url}/FlyRentalsLogo.png`,
+        logo: `${siteConfig.url}/logo.png`,
         description: siteConfig.description,
         address: {
           '@type': 'PostalAddress',

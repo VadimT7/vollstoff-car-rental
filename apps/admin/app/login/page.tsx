@@ -51,7 +51,7 @@ export default function LoginPage() {
             <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">F</span>
             </div>
-            <span className="font-semibold text-2xl">FlyRentals Admin</span>
+            <span className="font-semibold text-2xl">VollStoff Rentals Admin</span>
           </div>
           <h1 className="text-3xl font-bold text-neutral-900 mb-2">
             Welcome back

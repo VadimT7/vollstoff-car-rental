@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
-import Image from 'next/image'
 import { Button, Card } from '@valore/ui'
 import { cn } from '@valore/ui'
 
@@ -12,38 +11,26 @@ const testimonials = [
   {
     id: '1',
     authorName: 'Alexander Chen',
-    authorTitle: 'CEO, Tech Innovations',
-    content: 'Exceptional service from start to finish. The Mercedes CLA AMG was immaculate, and the delivery to my hotel was seamless. FlyRentals sets the standard for luxury car rentals.',
+    content: 'Exceptional service from start to finish. The Audi S5 was immaculate, and the delivery to my hotel was seamless. VollStoff Rentals sets the standard for luxury car rentals.',
     rating: 5,
-    carModel: 'Lamborghini Huracán EVO',
-    authorImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
   },
   {
     id: '2',
     authorName: 'Isabella Martinez',
-    authorTitle: 'Fashion Designer',
-    content: 'The Mercedes C43 AMG was perfect for my photoshoot in Monaco. The team at FlyRentals understood exactly what I needed and went above and beyond to accommodate my schedule.',
+    content: 'The Audi S3 was perfect for my photoshoot in Monaco. The team at VollStoff Rentals understood exactly what I needed and went above and beyond to accommodate my schedule.',
     rating: 5,
-    carModel: 'BMW M8 Competition',
-    authorImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
   },
   {
     id: '3',
     authorName: 'James Wellington',
-    authorTitle: 'Private Investor',
-    content: "I've rented luxury cars worldwide, but FlyRentals' attention to detail is unmatched. The Porsche Cayenne was pristine, and their concierge service made everything effortless.",
+    content: "I've rented luxury cars worldwide, but VollStoff Rentals' attention to detail is unmatched. The Audi S5 was pristine, and their concierge service made everything effortless.",
     rating: 5,
-    carModel: 'Mercedes-AMG G63',
-    authorImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
   },
   {
     id: '4',
     authorName: 'Sophia Laurent',
-    authorTitle: 'Art Gallery Director',
-    content: "Driving the CLA AMG along the St-Laurent river was a dream come true. FlyRentals' team curated the perfect route and even arranged a private lunch at a vineyard.",
+    content: "Driving the Audi S3 along the St-Laurent river was a dream come true. VollStoff Rentals' team curated the perfect route and even arranged a private lunch at a vineyard.",
     rating: 5,
-    carModel: 'Ferrari F8 Tributo',
-    authorImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop',
   },
 ]
 
@@ -72,7 +59,7 @@ export function TestimonialsSection() {
         <p className="text-luxury text-primary mb-4">Client Experiences</p>
         <h2 className="heading-large mb-4">Voices of Excellence</h2>
         <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
-          Discover why discerning individuals choose FlyRentals for their luxury automotive experiences
+          Discover why discerning individuals choose VollStoff Rentals for their luxury automotive experiences
         </p>
       </motion.div>
 
@@ -87,17 +74,7 @@ export function TestimonialsSection() {
                 transition={{ duration: 0.5 }}
                 className="mb-6"
               >
-                <div className="relative w-32 h-32 mx-auto md:mx-0 mb-4">
-                  <Image
-                    src={current.authorImage}
-                    alt={current.authorName}
-                    fill
-                    className="object-cover rounded-full"
-                  />
-                </div>
                 <h3 className="text-xl font-medium mb-1">{current.authorName}</h3>
-                <p className="text-neutral-600 text-sm">{current.authorTitle}</p>
-                <p className="text-sm text-primary mt-2">{current.carModel}</p>
               </motion.div>
               
               {/* Rating */}

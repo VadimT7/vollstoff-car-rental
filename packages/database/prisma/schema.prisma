@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
@@ -206,7 +206,6 @@ model Booking {
   guestEmail      String?
   guestName       String?
   guestPhone      String?
-  guestLicense    String?
   carId           String
   startDate       DateTime
   endDate         DateTime
@@ -235,6 +234,7 @@ model Booking {
   completedAt     DateTime?
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
+  guestLicense    String?
   car             Car            @relation(fields: [carId], references: [id])
   user            User           @relation(fields: [userId], references: [id])
   addOns          BookingAddOn[]

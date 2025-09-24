@@ -2,6 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  output: 'standalone',
+  trailingSlash: true,
   transpilePackages: ['@valore/ui', '@valore/database', '@valore/lib'],
   images: {
     remotePatterns: [
@@ -28,6 +30,9 @@ const nextConfig = {
   },
   experimental: {
     typedRoutes: false,
+  },
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
   },
   webpack: (config, { isServer }) => {
     // Fix for lucide-react barrel optimization issues

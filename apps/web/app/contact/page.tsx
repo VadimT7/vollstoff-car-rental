@@ -25,8 +25,8 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    details: 'flyrentalsca@gmail.com',
-    href: 'mailto:flyrentalsca@gmail.com',
+    details: 'vollstoffrentals@gmail.com',
+    href: 'mailto:vollstoffrentals@gmail.com',
     description: 'Quick Response Guaranteed'
   },
   {

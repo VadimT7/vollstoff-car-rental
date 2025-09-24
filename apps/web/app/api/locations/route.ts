@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const locations = [
       {
         id: 'showroom',
-        name: 'FlyRentals Showroom (Montreal)',
+        name: 'VollStoff Rentals Showroom (Montreal)',
         address: '1555 Rue Richelieu, Montreal, QC H3J 1G8',
         type: 'SHOWROOM',
         isDefault: true

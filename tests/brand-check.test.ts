@@ -47,11 +47,11 @@ test.describe('Brand Name Verification', () => {
   test('should display correct new company name', async ({ page }) => {
     await page.goto('/');
     
-    // Check that FlyRentals appears
-    await expect(page.locator('text=FlyRentals').first()).toBeVisible();
+    // Check that VollStoff Rentals appears
+    await expect(page.locator('text=VollStoff Rentals').first()).toBeVisible();
     
-    // Check page title contains FlyRentals
+    // Check page title contains VollStoff Rentals
     const title = await page.title();
-    expect(title).toContain('FlyRentals');
+    expect(title).toContain('VollStoff Rentals');
   });
 });

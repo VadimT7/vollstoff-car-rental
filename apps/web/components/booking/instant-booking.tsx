@@ -127,7 +127,7 @@ export function InstantBooking() {
                   : 'border-neutral-200 hover:border-neutral-300'
               )}
             >
-              <p className="font-medium mb-1">FlyRentals Showroom</p>
+              <p className="font-medium mb-1">VollStoff Rentals Showroom</p>
               <p className="text-sm text-neutral-600">1555 Rue Richelieu, Montreal, QC H3J 1G8</p>
             </button>
             <button

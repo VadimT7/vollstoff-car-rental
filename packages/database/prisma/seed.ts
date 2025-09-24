@@ -3,118 +3,16 @@ import { faker } from '@faker-js/faker'
 
 const prisma = new PrismaClient()
 
-// Luxury car data based on FlyRentals fleet
+// Luxury car data based on VollStoff Rentals fleet
 const LUXURY_CARS = [
   {
-    make: 'Mercedes-Benz',
-    model: 'CLA',
-    year: 2024,
-    trim: 'AMG',
-    displayName: 'Mercedes-Benz CLA AMG',
-    category: CarCategory.LUXURY,
+    make: 'Audi',
+    model: 'S5',
+    year: 2020,
+    trim: 'Sportback',
+    displayName: 'Audi S5 Sportback',
+    category: CarCategory.SPORT,
     bodyType: BodyType.SEDAN,
-    transmission: TransmissionType.AUTOMATIC,
-    fuelType: FuelType.PETROL,
-    drivetrain: DrivetrainType.AWD,
-    seats: 5,
-    doors: 4,
-    engineSize: 2.0,
-    engineType: 'Turbo I4',
-    horsePower: 382,
-    torque: 354,
-    topSpeed: 270,
-    acceleration: 4.0,
-    fuelConsumption: 8.5,
-    features: [
-      'AMG Performance 4MATIC+',
-      'MBUX Infotainment',
-      'AMG Ride Control Suspension',
-      'AMG Performance Exhaust',
-      'Burmester Surround Sound',
-      'Ambient Lighting',
-      'Wireless Charging',
-      'Head-Up Display'
-    ],
-    basePricePerDay: 549,
-    depositAmount: 4500,
-    primaryImageUrl: '/Mercedes-CLA-AMG-2024.jpg'
-  },
-  {
-    make: 'Mercedes-Benz',
-    model: 'C43',
-    year: 2023,
-    trim: 'AMG',
-    displayName: 'Mercedes-Benz C43 AMG',
-    category: CarCategory.LUXURY,
-    bodyType: BodyType.SEDAN,
-    transmission: TransmissionType.AUTOMATIC,
-    fuelType: FuelType.HYBRID,
-    drivetrain: DrivetrainType.AWD,
-    seats: 5,
-    doors: 4,
-    engineSize: 2.0,
-    engineType: 'Turbo I4 + Electric',
-    horsePower: 402,
-    torque: 500,
-    topSpeed: 250,
-    acceleration: 4.6,
-    fuelConsumption: 7.8,
-    features: [
-      'AMG Performance 4MATIC+',
-      'EQ Boost Hybrid System',
-      'AMG Speedshift TCT',
-      'Digital Cockpit',
-      'Burmester Sound System',
-      'Adaptive Damping',
-      'Wireless Charging',
-      'MBUX Navigation'
-    ],
-    basePricePerDay: 499,
-    depositAmount: 4000,
-    primaryImageUrl: '/C43Silver-1.jpg'
-  },
-  {
-    make: 'Mercedes-Benz',
-    model: 'CLA',
-    year: 2018,
-    trim: '250',
-    displayName: 'Mercedes-Benz CLA 250',
-    category: CarCategory.LUXURY,
-    bodyType: BodyType.SEDAN,
-    transmission: TransmissionType.AUTOMATIC,
-    fuelType: FuelType.PETROL,
-    drivetrain: DrivetrainType.FWD,
-    seats: 5,
-    doors: 4,
-    engineSize: 2.0,
-    engineType: 'Turbo I4',
-    horsePower: 208,
-    torque: 258,
-    topSpeed: 210,
-    acceleration: 6.9,
-    fuelConsumption: 7.5,
-    features: [
-      '7G-DCT Transmission',
-      'COMAND Navigation',
-      'Panoramic Sunroof',
-      'LED Headlights',
-      'Apple CarPlay',
-      'Android Auto',
-      'Blind Spot Assist',
-      'Parking Sensors'
-    ],
-    basePricePerDay: 299,
-    depositAmount: 2500,
-    primaryImageUrl: '/2018-CLA250.jpg'
-  },
-  {
-    make: 'Porsche',
-    model: 'Cayenne',
-    year: 2024,
-    trim: 'Base',
-    displayName: 'Porsche Cayenne',
-    category: CarCategory.SUV,
-    bodyType: BodyType.SUV,
     transmission: TransmissionType.AUTOMATIC,
     fuelType: FuelType.PETROL,
     drivetrain: DrivetrainType.AWD,
@@ -122,24 +20,58 @@ const LUXURY_CARS = [
     doors: 4,
     engineSize: 3.0,
     engineType: 'Turbo V6',
-    horsePower: 335,
-    torque: 332,
-    topSpeed: 245,
-    acceleration: 5.9,
-    fuelConsumption: 9.2,
+    horsePower: 349,
+    torque: 369,
+    topSpeed: 250,
+    acceleration: 4.7,
+    fuelConsumption: 8.3,
     features: [
-      'Porsche Active Suspension Management',
-      'Porsche Traction Management',
-      'Sport Chrono Package',
-      'Porsche Communication Management',
-      'BOSE Surround Sound',
-      'LED Matrix Headlights',
+      'quattro All-Wheel Drive',
+      'Virtual Cockpit',
+      'MMI Navigation Plus',
+      'Bang & Olufsen Sound System',
+      'Audi Drive Select',
+      'Sport Differential',
       'Adaptive Cruise Control',
-      'Panoramic Roof'
+      'Audi Pre Sense'
     ],
-    basePricePerDay: 699,
-    depositAmount: 6000,
-    primaryImageUrl: '/PorscheCayenneWhite-1.jpg'
+    basePricePerDay: 220,
+    depositAmount: 2200,
+    primaryImageUrl: '/AudiS5-1.jpg'
+  },
+  {
+    make: 'Audi',
+    model: 'S3',
+    year: 2019,
+    trim: 'Sedan',
+    displayName: 'Audi S3 Sedan',
+    category: CarCategory.SPORT,
+    bodyType: BodyType.SEDAN,
+    transmission: TransmissionType.AUTOMATIC,
+    fuelType: FuelType.PETROL,
+    drivetrain: DrivetrainType.AWD,
+    seats: 5,
+    doors: 4,
+    engineSize: 2.0,
+    engineType: 'Turbo I4',
+    horsePower: 288,
+    torque: 280,
+    topSpeed: 250,
+    acceleration: 4.8,
+    fuelConsumption: 7.4,
+    features: [
+      'quattro All-Wheel Drive',
+      'Virtual Cockpit',
+      'MMI Navigation',
+      'Audi Sound System',
+      'Audi Drive Select',
+      'Sport Suspension',
+      'LED Headlights',
+      'Audi Pre Sense'
+    ],
+    basePricePerDay: 200,
+    depositAmount: 2000,
+    primaryImageUrl: '/AudiS3-1.jpg'
   }
 ]
 
@@ -152,6 +84,7 @@ const ADD_ONS = [
     category: AddOnCategory.INSURANCE,
     priceType: PriceType.PER_DAY,
     price: 150,
+    currency: 'CAD',
     icon: 'shield'
   },
   {
@@ -161,6 +94,7 @@ const ADD_ONS = [
     category: AddOnCategory.SERVICE,
     priceType: PriceType.PER_DAY,
     price: 100,
+    currency: 'CAD',
     icon: 'road'
   },
   {
@@ -170,6 +104,7 @@ const ADD_ONS = [
     category: AddOnCategory.EQUIPMENT,
     priceType: PriceType.PER_BOOKING,
     price: 50,
+    currency: 'CAD',
     icon: 'baby',
     maxQuantity: 2
   },
@@ -180,6 +115,7 @@ const ADD_ONS = [
     category: AddOnCategory.SERVICE,
     priceType: PriceType.PER_DAY,
     price: 500,
+    currency: 'CAD',
     icon: 'user-tie',
     requiresApproval: true
   },
@@ -190,6 +126,7 @@ const ADD_ONS = [
     category: AddOnCategory.EXPERIENCE,
     priceType: PriceType.PER_BOOKING,
     price: 800,
+    currency: 'CAD',
     icon: 'camera',
     requiresApproval: true
   },
@@ -200,6 +137,7 @@ const ADD_ONS = [
     category: AddOnCategory.EXPERIENCE,
     priceType: PriceType.PER_BOOKING,
     price: 350,
+    currency: 'CAD',
     icon: 'champagne'
   }
 ]
@@ -241,45 +179,45 @@ const TESTIMONIALS = [
   {
     authorName: 'Alexander Chen',
     authorTitle: 'CEO, Tech Innovations',
-    content: 'Exceptional service from start to finish. The Mercedes CLA AMG was immaculate, and the delivery to my hotel was seamless. FlyRentals sets the standard for luxury car rentals.',
+    content: 'Exceptional service from start to finish. The Audi S5 Sportback was immaculate, and the delivery to my hotel was seamless. VollStoff Rentals sets the standard for luxury car rentals.',
     rating: 5,
-    carModel: 'Mercedes-Benz CLA AMG',
+    carModel: 'Audi S5 Sportback',
     isPublished: true,
     publishedAt: new Date()
   },
   {
     authorName: 'Isabella Martinez',
     authorTitle: 'Fashion Designer',
-    content: 'The Mercedes C43 AMG was perfect for my photoshoot in Monaco. The team at FlyRentals understood exactly what I needed and went above and beyond to accommodate my schedule.',
+    content: 'The Audi S3 Sedan was perfect for my photoshoot in Toronto. The team at VollStoff Rentals understood exactly what I needed and went above and beyond to accommodate my schedule.',
     rating: 5,
-    carModel: 'Mercedes-Benz C43 AMG',
+    carModel: 'Audi S3 Sedan',
     isPublished: true,
     publishedAt: new Date()
   },
   {
     authorName: 'James Wellington',
     authorTitle: 'Private Investor',
-    content: 'I\'ve rented luxury cars worldwide, but FlyRentals\' attention to detail is unmatched. The Porsche Cayenne was pristine, and their concierge service made everything effortless.',
+    content: 'I\'ve rented luxury cars worldwide, but VollStoff Rentals\' attention to detail is unmatched. The Audi S5 was pristine, and their concierge service made everything effortless.',
     rating: 5,
-    carModel: 'Porsche Cayenne',
+    carModel: 'Audi S5 Sportback',
     isPublished: true,
     publishedAt: new Date()
   },
   {
     authorName: 'Sophia Laurent',
     authorTitle: 'Art Gallery Director',
-    content: 'Driving the Porsche Cayenne along the French Riviera was a dream come true. FlyRentals\' team curated the perfect route and even arranged a private lunch at a vineyard.',
+    content: 'Driving the Audi S3 through the city was a dream come true. VollStoff Rentals\' team curated the perfect route and even arranged a private lunch at a vineyard.',
     rating: 5,
-    carModel: 'Porsche Cayenne',
+    carModel: 'Audi S3 Sedan',
     isPublished: true,
     publishedAt: new Date()
   },
   {
     authorName: 'Michael Thompson',
     authorTitle: 'Film Producer',
-    content: 'For my anniversary, I surprised my wife with a Tesla Model X. The car was stunning, and the premium experience made it unforgettable. Truly five-star service.',
+    content: 'For my anniversary, I surprised my wife with an Audi S5. The car was stunning, and the premium experience made it unforgettable. Truly five-star service.',
     rating: 5,
-    carModel: 'Tesla Model X Plaid',
+    carModel: 'Audi S5 Sportback',
     isPublished: true,
     publishedAt: new Date()
   }
@@ -373,6 +311,7 @@ async function main() {
         priceRules: {
           create: {
             basePricePerDay,
+            currency: 'CAD',
             depositAmount,
             weekendMultiplier: 1.15,
             weeklyDiscount: 0.10,
@@ -479,10 +418,11 @@ async function main() {
       endDate,
       pickupType: 'SHOWROOM',
       returnType: 'SHOWROOM',
-      basePriceTotal: 7500, // 3 days * 2500
-      feesTotal: 150,
-      taxTotal: 765,
-      totalAmount: 8415,
+      basePriceTotal: 660, // 3 days * 220 CAD
+      feesTotal: 15,
+      taxTotal: 67.5,
+      totalAmount: 742.5,
+      currency: 'CAD',
       status: 'CONFIRMED',
       paymentStatus: 'PAID',
       includedKm: 600, // 3 days * 200km
@@ -506,6 +446,7 @@ async function main() {
       bookingId: booking.id,
       stripePaymentIntentId: `pi_${faker.string.alphanumeric(24)}`,
       amount: booking.totalAmount,
+      currency: 'CAD',
       type: 'RENTAL_FEE',
       method: 'CARD',
       status: 'SUCCEEDED',
@@ -517,7 +458,7 @@ async function main() {
   console.log(`
     Created:
     - 2 users (flyrentalsca@gmail.com, customer@example.com)
-    - ${cars.length} luxury cars with images and pricing
+    - ${cars.length} Audi cars with images and pricing (S5: 220 CAD/day, S3: 200 CAD/day)
     - ${ADD_ONS.length} add-ons
     - ${COUPONS.length} coupons
     - ${TESTIMONIALS.length} testimonials

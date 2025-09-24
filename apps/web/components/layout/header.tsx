@@ -30,7 +30,7 @@ const navigation = [
 
 const contactInfo = [
   { icon: Phone, text: '+1 (438) 680-3936', href: 'tel:+14386803936' },
-  { icon: Mail, text: 'flyrentalsca@gmail.com', href: 'mailto:flyrentalsca@gmail.com' },
+  { icon: Mail, text: 'vollstoffrentals@gmail.com', href: 'mailto:vollstoffrentals@gmail.com' },
   { icon: MapPin, text: 'Montreal, Quebec', href: '/contact' },
 ]
 
@@ -128,8 +128,8 @@ export function Header() {
             <div className="absolute left-1/2 transform -translate-x-1/2">
               <Link href="/" className="flex items-center group">
                 <Image
-                  src="/FlyRentalsLogo.png"
-                  alt="FlyRentals Luxury Rental"
+                  src="/logo.png"
+                  alt="VollStoff Rentals Luxury Rental"
                   width={180}
                   height={60}
                   className="h-16 w-auto object-contain"

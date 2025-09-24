@@ -1,4 +1,4 @@
-# FlyRentals Admin Dashboard Deployment Guide
+# VollStoff Rentals Admin Dashboard Deployment Guide
 
 This guide will help you deploy the admin dashboard to Vercel with the subdomain `admin.flyrentals.ca`.
 
@@ -15,7 +15,7 @@ This guide will help you deploy the admin dashboard to Vercel with the subdomain
    - Click "New Project"
 
 2. **Import Repository**
-   - Select your FlyRentals repository
+   - Select your VollStoff Rentals repository
    - Choose "Import" (don't deploy yet)
 
 3. **Configure Project Settings**

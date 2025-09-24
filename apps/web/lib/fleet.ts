@@ -23,105 +23,57 @@ export interface FleetCar {
 
 export const FLEET_DATA: FleetCar[] = [
   {
-    id: 'mercedes-cla-amg-2024',
-    brand: 'Mercedes-Benz',
-    model: 'CLA AMG',
-    year: 2024,
-    category: 'luxury',
+    id: 'audi-s5-sportback',
+    brand: 'Audi',
+    model: 'S5 Sportback',
+    year: 2020,
+    category: 'sport',
     transmission: 'automatic',
     seats: 5,
-    pricePerDay: 385,
+    pricePerDay: 220,
     featured: true,
     specs: {
-      engine: '2.0L Turbo I4',
-      power: '382 HP',
-      acceleration: '0-60 mph in 4.0s',
-      topSpeed: '168 mph'
+      engine: '3.0L Turbo V6',
+      power: '349 HP',
+      acceleration: '0-60 mph in 4.7s',
+      topSpeed: '155 mph'
     },
     images: {
-      primary: '/Mercedes-CLA-AMG-2024.jpg',
+      primary: '/AudiS5-1.jpg',
       gallery: [
-        '/Mercedes-CLA-AMG-2024.jpg',
-        '/Mercedes-CLA-AMG-2024-2.jpg'
+        '/AudiS5-1.jpg',
+        '/AudiS5-2.jpg',
+        '/AudiS5-3.jpg',
+        '/AudiS5-4.jpg',
+        '/AudiS5-5.jpg',
+        '/AudiS5-6.jpg',
+        '/AudiS5-7.jpg'
       ]
     },
     video: '/AudiS5-Video.mp4'
   },
   {
-    id: 'mercedes-c43-amg',
-    brand: 'Mercedes-Benz',
-    model: 'C43 AMG',
-    year: 2023,
-    category: 'luxury',
+    id: 'audi-s3-sedan',
+    brand: 'Audi',
+    model: 'S3 Sedan',
+    year: 2019,
+    category: 'sport',
     transmission: 'automatic',
     seats: 5,
-    pricePerDay: 425,
+    pricePerDay: 200,
     featured: true,
     specs: {
-      engine: '2.0L Turbo I4 + Electric',
-      power: '402 HP',
-      acceleration: '0-60 mph in 4.6s',
+      engine: '2.0L Turbo I4',
+      power: '288 HP',
+      acceleration: '0-60 mph in 4.8s',
       topSpeed: '155 mph'
     },
     images: {
-      primary: '/C43Silver-1.jpg',
+      primary: '/AudiS3-1.jpg',
       gallery: [
-        '/C43Silver-1.jpg',
-        '/C43Silver-2.jpg',
-        '/C43Silver-Interior-1.jpg'
-      ]
-    }
-  },
-  {
-    id: 'mercedes-cla-250-2018',
-    brand: 'Mercedes-Benz',
-    model: 'CLA 250',
-    year: 2018,
-    category: 'luxury',
-    transmission: 'automatic',
-    seats: 5,
-    pricePerDay: 225,
-    featured: false,
-    specs: {
-      engine: '2.0L Turbo I4',
-      power: '208 HP',
-      acceleration: '0-60 mph in 6.9s',
-      topSpeed: '130 mph'
-    },
-    images: {
-      primary: '/2018-CLA250.jpg',
-      gallery: [
-        '/2018-CLA250.jpg'
-      ]
-    }
-  },
-  {
-    id: 'porsche-cayenne-white',
-    brand: 'Porsche',
-    model: 'Cayenne',
-    year: 2024,
-    category: 'suv',
-    transmission: 'automatic',
-    seats: 5,
-    pricePerDay: 525,
-    featured: true,
-    specs: {
-      engine: '3.0L Turbo V6',
-      power: '335 HP',
-      acceleration: '0-60 mph in 5.9s',
-      topSpeed: '152 mph'
-    },
-    images: {
-      primary: '/PorscheCayenneWhite-1.jpg',
-      gallery: [
-        '/PorscheCayenneWhite-1.jpg',
-        '/PorscheCayenneWhite-2.jpg',
-        '/PorscheCayenneWhite-3.jpg',
-        '/PorscheCayenneWhite-4.jpg',
-        '/PorscheCayenneWhite-5.jpg',
-        '/PorscheCayenneWhite-6.jpg',
-        '/PorscheCayenneWhite-7.jpg',
-        '/PorscheCayenneWhite-8.jpg'
+        '/AudiS3-1.jpg',
+        '/AudiS3-2.jpg',
+        '/AudiS3-3.jpg'
       ]
     },
     video: '/AudiS3-Video.mp4'

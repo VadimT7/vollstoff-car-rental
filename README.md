@@ -1,4 +1,4 @@
-# FlyRentals - Ultra-Luxury Exotic Car Rental Platform
+# VollStoff Rentals - Ultra-Luxury Exotic Car Rental Platform
 
 > "If Louis Vuitton & Gucci ran a supercar fleet."
 
@@ -198,7 +198,7 @@ For detailed deployment instructions, see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.m
 ### Default Credentials
 
 #### Admin User
-- Email: `flyrentalsca@gmail.com`
+- Email: `vollstoffrentals@gmail.com`
 - Password: `admin123`
 
 #### Test Customer
@@ -518,7 +518,7 @@ pnpm test:e2e:debug
 - **Documentation**: Check `/docs` folder
 - **Issues**: GitHub Issues for bug reports
 - **Discussions**: GitHub Discussions for questions
-- **Email**: flyrentalsca@gmail.com
+- **Email**: vollstoffrentals@gmail.com
 
 ### Common Issues
 
@@ -536,7 +536,7 @@ pnpm test:e2e:debug
 
 ## 📄 License
 
-Copyright © 2025 FlyRentals. All rights reserved.
+Copyright © 2025 VollStoff Rentals. All rights reserved.
 
 This is proprietary software. Unauthorized copying, modification, or distribution is strictly prohibited.
 

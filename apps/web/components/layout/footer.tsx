@@ -51,7 +51,7 @@ const socialLinks = [
 
 const contactInfo = [
   { icon: Phone, text: '+1 (438) 680-3936', href: 'tel:+14386803936' },
-  { icon: Mail, text: 'flyrentalsca@gmail.com', href: 'mailto:flyrentalsca@gmail.com' },
+  { icon: Mail, text: 'vollstoffrentals@gmail.com', href: 'mailto:vollstoffrentals@gmail.com' },
   { icon: MapPin, text: 'Montreal, Quebec', href: '/contact' },
 ]
 
@@ -69,7 +69,7 @@ export function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="font-display text-xl font-bold tracking-wider text-white">
-                  FLY
+                  VOLLSTOFF
                 </span>
                 <span className="text-xs tracking-luxury text-slate-400">
                   RENTALS
@@ -175,7 +175,7 @@ export function Footer() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-6 text-sm">
-                              <span>&copy; 2025 FlyRentals. All rights reserved.</span>
+                              <span>&copy; 2025 VollStoff Rentals. All rights reserved.</span>
               <div className="flex items-center gap-4">
                 <Link href="/terms" className="hover:text-primary transition-colors">
                   Terms

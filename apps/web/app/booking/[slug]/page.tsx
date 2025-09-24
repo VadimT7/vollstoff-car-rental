@@ -246,8 +246,8 @@ export default function BookingPage() {
           endDate: bookingData.endDate,
           pickupType: bookingData.pickupLocation === 'showroom' ? 'SHOWROOM' : 'DELIVERY',
           returnType: bookingData.returnLocation === 'showroom' ? 'SHOWROOM' : 'DELIVERY',
-          pickupLocation: bookingData.pickupLocation === 'showroom' ? 'FlyRentals Showroom' : 'Delivery',
-          returnLocation: bookingData.returnLocation === 'showroom' ? 'FlyRentals Showroom' : 'Delivery',
+          pickupLocation: bookingData.pickupLocation === 'showroom' ? 'VollStoff Rentals Showroom' : 'Delivery',
+          returnLocation: bookingData.returnLocation === 'showroom' ? 'VollStoff Rentals Showroom' : 'Delivery',
           guestEmail: bookingData.driverEmail,
           guestName: bookingData.driverName,
           guestPhone: bookingData.driverPhone,
@@ -412,7 +412,7 @@ export default function BookingPage() {
                   onChange={(e) => setBookingData(prev => ({ ...prev, pickupLocation: e.target.value }))}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="showroom">FlyRentals Showroom (Montreal)</option>
+                  <option value="showroom">VollStoff Rentals Showroom (Montreal)</option>
                   <option value="airport">Montreal Airport (YUL)</option>
                   <option value="hotel">Hotel Delivery (Montreal Area)</option>
                 </select>
@@ -425,7 +425,7 @@ export default function BookingPage() {
                   onChange={(e) => setBookingData(prev => ({ ...prev, returnLocation: e.target.value }))}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="showroom">FlyRentals Showroom (Montreal)</option>
+                  <option value="showroom">VollStoff Rentals Showroom (Montreal)</option>
                   <option value="airport">Montreal Airport (YUL)</option>
                   <option value="hotel">Hotel Pickup (Montreal Area)</option>
                 </select>
