@@ -45,7 +45,7 @@ export const FLEET_DATA: FleetCar[] = [
         '/Mercedes-CLA-AMG-2024-2.jpg'
       ]
     },
-    video: '/Mercedes-CLA-AMG-2024.mp4'
+    video: '/AudiS5-Video.mp4'
   },
   {
     id: 'mercedes-c43-amg',
@@ -124,6 +124,6 @@ export const FLEET_DATA: FleetCar[] = [
         '/PorscheCayenneWhite-8.jpg'
       ]
     },
-    video: '/PorscheCayenneWhite.mp4'
+    video: '/AudiS3-Video.mp4'
   }
 ];
