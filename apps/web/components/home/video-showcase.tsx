@@ -22,49 +22,13 @@ export function VideoShowcase() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
-          {/* First Video - Lamborghini Huracán */}
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* First Video - Luxury Experience */}
           <motion.div
-            initial={{ opacity: 0, x: -200 }}
+            initial={{ opacity: 0, x: -100 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative group"
-          >
-            <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-900">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-              >
-                <source src="/lamborghini-driving.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              
-              {/* Overlay content */}
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                    <Instagram className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Lamborghini Huracán</p>
-                    <p className="text-xs text-neutral-300">Italian Excellence and Raw Power</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Second Video - Lamborghini Urus */}
-          <motion.div
-            initial={{ opacity: 0, x: 0 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
             className="relative group"
           >
             <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-900">
@@ -87,20 +51,20 @@ export function VideoShowcase() {
                     <Instagram className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Lamborghini Urus</p>
-                    <p className="text-xs text-neutral-300">The World's First Super SUV</p>
+                    <p className="text-sm font-medium">Elite Motion Rentals</p>
+                    <p className="text-xs text-neutral-300">Experience Unmatched Luxury</p>
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Third Video - Mercedes-AMG SL63 */}
+          {/* Second Video - Luxury Collection */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 100 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             className="relative group"
           >
             <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-900">
@@ -111,7 +75,7 @@ export function VideoShowcase() {
                 playsInline
                 className="w-full h-full object-cover"
               >
-                <source src="/lamborghini-driving.mp4" type="video/mp4" />
+                <source src="/luxury_cars_driving_together.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -123,8 +87,8 @@ export function VideoShowcase() {
                     <Instagram className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Mercedes-AMG SL63</p>
-                    <p className="text-xs text-neutral-300">German Engineering Perfection</p>
+                    <p className="text-sm font-medium">Our Premium Fleet</p>
+                    <p className="text-xs text-neutral-300">Luxury in Motion</p>
                   </div>
                 </div>
               </div>

@@ -53,7 +53,7 @@ export function HeroSection() {
           className="h-full w-full object-cover"
           style={{ objectPosition: 'center 30%' }}
         >
-          <source src="/Volstoff-Rentals-Ad.mp4" type="video/mp4" />
+          <source src="/lamborghini-driving.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         
