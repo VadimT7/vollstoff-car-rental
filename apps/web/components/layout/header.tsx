@@ -30,7 +30,7 @@ const navigation = [
 
 const contactInfo = [
   { icon: Phone, text: '+1 (438) 680-3936', href: 'tel:+14386803936' },
-  { icon: Mail, text: 'vollstoffrentals@gmail.com', href: 'mailto:vollstoffrentals@gmail.com' },
+  { icon: Mail, text: 'elitemotionrentals@gmail.com', href: 'mailto:elitemotionrentals@gmail.com' },
   { icon: MapPin, text: 'Montreal, Quebec', href: '/contact' },
 ]
 
@@ -129,7 +129,7 @@ export function Header() {
               <Link href="/" className="flex items-center group">
                 <Image
                   src="/logo.png"
-                  alt="VollStoff Rentals Luxury Rental"
+                  alt="Elite Motion Rentals Luxury Rental"
                   width={180}
                   height={60}
                   className="h-16 w-auto object-contain"

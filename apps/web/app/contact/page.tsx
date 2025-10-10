@@ -28,8 +28,8 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    details: 'vollstoffrentals@gmail.com',
-    href: 'mailto:vollstoffrentals@gmail.com',
+    details: 'elitemotionrentals@gmail.com',
+    href: 'mailto:elitemotionrentals@gmail.com',
     description: 'Quick Response Guaranteed'
   },
   {

@@ -78,7 +78,7 @@ const milestones = [
   {
     year: '2022',
     title: 'Company Founded',
-    description: 'Started with a single Mercedes CLA in Montreal, establishing VollStoff Rentals as the premier luxury car rental service.',
+    description: 'Started with a single Mercedes CLA in Montreal, establishing Elite Motion Rentals as the premier luxury car rental service.',
   },
   {
     year: '2023',
@@ -123,7 +123,7 @@ export default function AboutPage() {
                   textShadow: '0 0 80px rgba(251, 191, 36, 0.3)'
                 }}
               >
-                About VollStoff Rentals
+                About Elite Motion Rentals
               </span>
             </h1>
             <p className="text-xl text-neutral-300 max-w-3xl mx-auto font-light">
@@ -170,7 +170,7 @@ export default function AboutPage() {
               <h2 className="heading-medium text-slate-900 mb-6">Our Story</h2>
               <div className="space-y-4 text-slate-600 leading-relaxed">
                 <p>
-                  Founded in 2022 in the heart of Montreal, VollStoff Rentals began with a simple vision: 
+                  Founded in 2022 in the heart of Montreal, Elite Motion Rentals began with a simple vision: 
                   to make luxury automotive experiences accessible to discerning clients who appreciate 
                   the finest things in life.
                 </p>
@@ -267,7 +267,7 @@ export default function AboutPage() {
           >
             <h2 className="heading-medium text-slate-900 mb-4">Meet Our Team</h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              The passionate professionals behind VollStoff Rentals' success.
+              The passionate professionals behind Elite Motion Rentals' success.
             </p>
           </motion.div>
 
@@ -365,7 +365,7 @@ export default function AboutPage() {
           >
             <h2 className="heading-medium text-white mb-4 drop-shadow-lg">Ready to Experience Luxury?</h2>
             <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto drop-shadow-md">
-              Join thousands of satisfied clients who have experienced the VollStoff Rentals difference. 
+              Join thousands of satisfied clients who have experienced the Elite Motion Rentals difference. 
               Book your luxury vehicle today and discover why we're Montreal's premier choice.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

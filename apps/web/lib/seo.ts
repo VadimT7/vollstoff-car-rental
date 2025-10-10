@@ -23,8 +23,8 @@ interface GenerateMetadataParams {
 }
 
 const siteConfig = {
-  name: 'VollStoff Rentals',
-  title: 'VollStoff Rentals - Ultra-Luxury Exotic Car Rentals',
+  name: 'Elite Motion Rentals',
+  title: 'Elite Motion Rentals - Ultra-Luxury Exotic Car Rentals',
   description: 'Experience the pinnacle of automotive luxury. Rent Lamborghini, Ferrari, BMW M8, Mercedes-AMG G63 and more. Premium service, worldwide delivery.',
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://valorerent.com',
   keywords: [

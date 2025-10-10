@@ -78,7 +78,7 @@ export default function SettingsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <Label htmlFor="companyName">Company Name</Label>
-                <Input id="companyName" defaultValue="VollStoff Rentals" />
+                <Input id="companyName" defaultValue="Elite Motion Rentals" />
               </div>
               <div>
                 <Label htmlFor="website">Website URL</Label>

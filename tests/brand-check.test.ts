@@ -47,11 +47,11 @@ test.describe('Brand Name Verification', () => {
   test('should display correct new company name', async ({ page }) => {
     await page.goto('/');
     
-    // Check that VollStoff Rentals appears
-    await expect(page.locator('text=VollStoff Rentals').first()).toBeVisible();
+    // Check that Elite Motion Rentals appears
+    await expect(page.locator('text=Elite Motion Rentals').first()).toBeVisible();
     
-    // Check page title contains VollStoff Rentals
+    // Check page title contains Elite Motion Rentals
     const title = await page.title();
-    expect(title).toContain('VollStoff Rentals');
+    expect(title).toContain('Elite Motion Rentals');
   });
 });

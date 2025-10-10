@@ -23,48 +23,12 @@ export function VideoShowcase() {
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
-          {/* First Video - Audi S5 */}
+          {/* First Video - Lamborghini Huracán */}
           <motion.div
             initial={{ opacity: 0, x: -200 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative group"
-          >
-            <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-900">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-              >
-                <source src="/AudiS5-Video.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              
-              {/* Overlay content */}
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                    <Instagram className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Audi S5</p>
-                    <p className="text-xs text-neutral-300">A Showcase of Excellence and Luxury</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Second Video - Lamborghini 1 */}
-          <motion.div
-            initial={{ opacity: 0, x: 0 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
             className="relative group"
           >
             <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-900">
@@ -87,20 +51,20 @@ export function VideoShowcase() {
                     <Instagram className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Lamborghini</p>
-                    <p className="text-xs text-neutral-300">Pure Performance and Style</p>
+                    <p className="text-sm font-medium">Lamborghini Huracán</p>
+                    <p className="text-xs text-neutral-300">Italian Excellence and Raw Power</p>
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Third Video - Lamborghini 2 */}
+          {/* Second Video - Lamborghini Urus */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 0 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             className="relative group"
           >
             <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-900">
@@ -123,8 +87,44 @@ export function VideoShowcase() {
                     <Instagram className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Luxury and Pure Wealth</p>
-                    <p className="text-xs text-neutral-300">Get behind the wheel you deserve to drive</p>
+                    <p className="text-sm font-medium">Lamborghini Urus</p>
+                    <p className="text-xs text-neutral-300">The World's First Super SUV</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Third Video - Mercedes-AMG SL63 */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="relative group"
+          >
+            <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-900">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              >
+                <source src="/lamborghini-driving.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+              
+              {/* Overlay content */}
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <Instagram className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Mercedes-AMG SL63</p>
+                    <p className="text-xs text-neutral-300">German Engineering Perfection</p>
                   </div>
                 </div>
               </div>
@@ -140,7 +140,7 @@ export function VideoShowcase() {
           className="text-center mt-16"
         >
           <a 
-            href="https://www.instagram.com/vollstoff.rentals/" 
+            href="https://www.instagram.com/elitemotion_rent_a_car/" 
             target="_blank" 
             rel="noopener noreferrer"
           >

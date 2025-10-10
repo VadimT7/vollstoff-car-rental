@@ -15,10 +15,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'VollStoff Rentals Admin',
-    template: '%s | VollStoff Rentals Admin',
+    default: 'Elite Motion Rentals Admin',
+    template: '%s | Elite Motion Rentals Admin',
   },
-  description: 'Admin panel for VollStoff Rentals',
+  description: 'Admin panel for Elite Motion Rentals',
   robots: {
     index: false,
     follow: false,

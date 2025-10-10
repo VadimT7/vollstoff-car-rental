@@ -1,4 +1,4 @@
-# VollStoff Rentals - Ultra-Luxury Exotic Car Rental Platform
+# Elite Motion Rentals - Ultra-Luxury Exotic Car Rental Platform
 
 > "If Louis Vuitton & Gucci ran a supercar fleet."
 
@@ -198,7 +198,7 @@ For detailed deployment instructions, see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.m
 ### Default Credentials
 
 #### Admin User
-- Email: `vollstoffrentals@gmail.com`
+- Email: `elitemotionrentals@gmail.com`
 - Password: `admin123`
 
 #### Test Customer
@@ -518,7 +518,7 @@ pnpm test:e2e:debug
 - **Documentation**: Check `/docs` folder
 - **Issues**: GitHub Issues for bug reports
 - **Discussions**: GitHub Discussions for questions
-- **Email**: vollstoffrentals@gmail.com
+- **Email**: elitemotionrentals@gmail.com
 
 ### Common Issues
 
@@ -536,7 +536,7 @@ pnpm test:e2e:debug
 
 ## 📄 License
 
-Copyright © 2025 VollStoff Rentals. All rights reserved.
+Copyright © 2025 Elite Motion Rentals. All rights reserved.
 
 This is proprietary software. Unauthorized copying, modification, or distribution is strictly prohibited.
 

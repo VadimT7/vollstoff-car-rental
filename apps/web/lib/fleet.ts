@@ -23,59 +23,97 @@ export interface FleetCar {
 
 export const FLEET_DATA: FleetCar[] = [
   {
-    id: 'audi-s5-sportback',
-    brand: 'Audi',
-    model: 'S5 Sportback',
-    year: 2020,
+    id: 'lamborghini-huracan-yellow',
+    brand: 'Lamborghini',
+    model: 'Huracán',
+    year: 2023,
     category: 'sport',
     transmission: 'automatic',
-    seats: 5,
-    pricePerDay: 220,
+    seats: 2,
+    pricePerDay: 999,
     featured: true,
     specs: {
-      engine: '3.0L Turbo V6',
-      power: '349 HP',
-      acceleration: '0-60 mph in 4.7s',
-      topSpeed: '155 mph'
+      engine: '5.2L V10',
+      power: '631 HP',
+      acceleration: '0-60 mph in 2.9s',
+      topSpeed: '202 mph'
     },
     images: {
-      primary: '/AudiS5-1.jpg',
+      primary: '/Lamborghini-Huracan-Yellow.jpg',
       gallery: [
-        '/AudiS5-1.jpg',
-        '/AudiS5-2.jpg',
-        '/AudiS5-3.jpg',
-        '/AudiS5-4.jpg',
-        '/AudiS5-5.jpg',
-        '/AudiS5-6.jpg',
-        '/AudiS5-7.jpg'
+        '/Lamborghini-Huracan-Yellow.jpg'
       ]
     },
-    video: '/AudiS5-Video.mp4'
+    video: '/lamborghini-driving.mp4'
   },
   {
-    id: 'audi-s3-sedan',
-    brand: 'Audi',
-    model: 'S3 Sedan',
-    year: 2019,
-    category: 'sport',
+    id: 'lamborghini-urus-green',
+    brand: 'Lamborghini',
+    model: 'Urus',
+    year: 2023,
+    category: 'suv',
     transmission: 'automatic',
     seats: 5,
-    pricePerDay: 200,
+    pricePerDay: 1199,
     featured: true,
     specs: {
-      engine: '2.0L Turbo I4',
-      power: '288 HP',
-      acceleration: '0-60 mph in 4.8s',
-      topSpeed: '155 mph'
+      engine: '4.0L Twin-Turbo V8',
+      power: '641 HP',
+      acceleration: '0-60 mph in 3.6s',
+      topSpeed: '190 mph'
     },
     images: {
-      primary: '/AudiS3-1.jpg',
+      primary: '/Lamborghini-Urus-Green.png',
       gallery: [
-        '/AudiS3-1.jpg',
-        '/AudiS3-2.jpg',
-        '/AudiS3-3.jpg'
+        '/Lamborghini-Urus-Green.png'
       ]
     },
-    video: '/AudiS3-Video.mp4'
+    video: '/lamborghini-driving2.mp4'
+  },
+  {
+    id: 'mercedes-amg-sl63',
+    brand: 'Mercedes-Benz',
+    model: 'AMG SL63',
+    year: 2023,
+    category: 'luxury',
+    transmission: 'automatic',
+    seats: 2,
+    pricePerDay: 899,
+    featured: true,
+    specs: {
+      engine: '4.0L Twin-Turbo V8',
+      power: '577 HP',
+      acceleration: '0-60 mph in 3.5s',
+      topSpeed: '196 mph'
+    },
+    images: {
+      primary: '/Mercedes-AMG-SL63.png',
+      gallery: [
+        '/Mercedes-AMG-SL63.png'
+      ]
+    }
+  },
+  {
+    id: 'porsche-911-gt3-rs',
+    brand: 'Porsche',
+    model: '911 GT3 RS',
+    year: 2023,
+    category: 'sport',
+    transmission: 'automatic',
+    seats: 2,
+    pricePerDay: 949,
+    featured: true,
+    specs: {
+      engine: '4.0L Flat-6',
+      power: '518 HP',
+      acceleration: '0-60 mph in 3.2s',
+      topSpeed: '184 mph'
+    },
+    images: {
+      primary: '/Porsche-GT3RS-Grey-Black.jpg',
+      gallery: [
+        '/Porsche-GT3RS-Grey-Black.jpg'
+      ]
+    }
   }
 ];

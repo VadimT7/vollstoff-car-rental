@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     const returnTime = '10:00 AM'
 
     // Create the email content
-    const emailSubject = `🎉 Booking Confirmation - ${bookingNumber} | VollStoff Rentals`
+    const emailSubject = `🎉 Booking Confirmation - ${bookingNumber} | Elite Motion Rentals`
     
     const emailBody = `
 <!DOCTYPE html>
@@ -177,7 +177,7 @@ export async function POST(request: NextRequest) {
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">🚗 VollStoff Rentals</div>
+            <div class="logo">🚗 Elite Motion Rentals</div>
             <div class="tagline">Luxury Car Rental Experience</div>
         </div>
 
@@ -242,8 +242,8 @@ export async function POST(request: NextRequest) {
         <p>We're thrilled to be part of your luxury car experience. Get ready to turn heads and create unforgettable memories! 🌟</p>
 
         <div class="footer">
-            <p>Thank you for choosing VollStoff Rentals!</p>
-            <p>© 2025 VollStoff Rentals. All rights reserved.</p>
+            <p>Thank you for choosing Elite Motion Rentals!</p>
+            <p>© 2025 Elite Motion Rentals. All rights reserved.</p>
         </div>
     </div>
 </body>

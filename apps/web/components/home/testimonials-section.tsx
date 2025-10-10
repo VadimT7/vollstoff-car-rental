@@ -11,25 +11,25 @@ const testimonials = [
   {
     id: '1',
     authorName: 'Alexander Chen',
-    content: 'Exceptional service from start to finish. The Audi S5 was immaculate, and the delivery to my hotel was seamless. VollStoff Rentals sets the standard for luxury car rentals.',
+    content: 'Exceptional service from start to finish. The Lamborghini Huracán was immaculate, and the delivery to my hotel was seamless. Elite Motion Rentals sets the standard for luxury car rentals.',
     rating: 5,
   },
   {
     id: '2',
     authorName: 'Isabella Martinez',
-    content: 'The Audi S3 was perfect for my photoshoot in Monaco. The team at VollStoff Rentals understood exactly what I needed and went above and beyond to accommodate my schedule.',
+    content: 'The Lamborghini Urus was perfect for my photoshoot in Montreal. The team at Elite Motion Rentals understood exactly what I needed and went above and beyond to accommodate my schedule.',
     rating: 5,
   },
   {
     id: '3',
     authorName: 'James Wellington',
-    content: "I've rented luxury cars worldwide, but VollStoff Rentals' attention to detail is unmatched. The Audi S5 was pristine, and their concierge service made everything effortless.",
+    content: "I've rented luxury cars worldwide, but Elite Motion Rentals' attention to detail is unmatched. The Mercedes-AMG SL63 was pristine, and their concierge service made everything effortless.",
     rating: 5,
   },
   {
     id: '4',
     authorName: 'Sophia Laurent',
-    content: "Driving the Audi S3 along the St-Laurent river was a dream come true. VollStoff Rentals' team curated the perfect route and even arranged a private lunch at a vineyard.",
+    content: "Driving the Lamborghini Huracán along the St-Laurent river was a dream come true. Elite Motion Rentals' team curated the perfect route and even arranged a private lunch at a vineyard.",
     rating: 5,
   },
 ]
@@ -59,7 +59,7 @@ export function TestimonialsSection() {
         <p className="text-luxury text-primary mb-4">Client Experiences</p>
         <h2 className="heading-large mb-4">Voices of Excellence</h2>
         <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
-          Discover why discerning individuals choose VollStoff Rentals for their luxury automotive experiences
+          Discover why discerning individuals choose Elite Motion Rentals for their luxury automotive experiences
         </p>
       </motion.div>
 

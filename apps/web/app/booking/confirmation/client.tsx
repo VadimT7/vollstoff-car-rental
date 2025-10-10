@@ -57,13 +57,13 @@ export default function BookingConfirmationClient() {
   const getLocationDisplay = (location: string) => {
     switch (location) {
       case 'showroom':
-        return 'VollStoff Rentals Showroom (Montreal)'
+        return 'Elite Motion Rentals Showroom (Montreal)'
       case 'airport':
         return 'Montreal Airport (YUL)'
       case 'hotel':
         return 'Hotel Delivery (Montreal Area)'
       default:
-        return 'VollStoff Rentals Showroom (Montreal)'
+        return 'Elite Motion Rentals Showroom (Montreal)'
     }
   }
 
@@ -82,10 +82,10 @@ export default function BookingConfirmationClient() {
 
   // Generate email content for booking confirmation
   const generateEmailContent = () => {
-    const subject = `VollStoff Rentals Booking Confirmation - ${carName} ${carYear}`
+    const subject = `Elite Motion Rentals Booking Confirmation - ${carName} ${carYear}`
     const body = `Dear ${driverName},
 
-Your luxury vehicle rental has been successfully booked with VollStoff Rentals.
+Your luxury vehicle rental has been successfully booked with Elite Motion Rentals.
 
 BOOKING DETAILS:
 Booking ID: ${bookingId}
@@ -113,10 +113,10 @@ Need help? Contact our concierge team:
 Phone: +1 (234) 567-890
 Email: flyrentalsca@gmail.com
 
-Thank you for choosing VollStoff Rentals!
+Thank you for choosing Elite Motion Rentals!
 
 Best regards,
-The VollStoff Rentals Team`
+The Elite Motion Rentals Team`
 
     return { subject, body }
   }
@@ -132,10 +132,10 @@ The VollStoff Rentals Team`
   const handleDownloadPDF = () => {
     const pdf = new jsPDF()
     
-    // Add VollStoff Rentals header
+    // Add Elite Motion Rentals header
     pdf.setFontSize(24)
     pdf.setTextColor(245, 158, 11) // Amber color
-    pdf.text('VollStoff Rentals', 105, 20, { align: 'center' })
+    pdf.text('Elite Motion Rentals', 105, 20, { align: 'center' })
     
     pdf.setFontSize(16)
     pdf.setTextColor(0, 0, 0)
@@ -180,7 +180,7 @@ The VollStoff Rentals Team`
     pdf.setFontSize(11)
     pdf.setTextColor(60, 60, 60)
     const locationText = pickupLocation === 'showroom' 
-      ? 'VollStoff Rentals Showroom (Montreal)\n123 Luxury Street, Montreal, QC H3A 1A1'
+      ? 'Elite Motion Rentals Showroom (Montreal)\n123 Luxury Street, Montreal, QC H3A 1A1'
       : pickupLocation === 'airport'
       ? 'Montreal Airport (YUL)\n975 Roméo-Vachon Blvd N, Dorval, QC H4Y 1H1'
       : 'Hotel Delivery (Montreal Area)'
@@ -232,11 +232,11 @@ The VollStoff Rentals Team`
     // Footer
     pdf.setFontSize(10)
     pdf.setTextColor(150, 150, 150)
-    pdf.text('Thank you for choosing VollStoff Rentals!', 105, 280, { align: 'center' })
+    pdf.text('Thank you for choosing Elite Motion Rentals!', 105, 280, { align: 'center' })
     pdf.text('Contact: +1 (438) 680-3936 | flyrentalsca@gmail.com', 105, 287, { align: 'center' })
     
     // Save the PDF
-    pdf.save(`VollStoff Rentals_Booking_${bookingId}.pdf`)
+    pdf.save(`Elite Motion Rentals_Booking_${bookingId}.pdf`)
   }
 
   return (

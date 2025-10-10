@@ -1,4 +1,4 @@
-# VollStoff Rentals - System Architecture
+# Elite Motion Rentals - System Architecture
 
 ## System Overview
 

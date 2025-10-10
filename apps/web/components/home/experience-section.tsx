@@ -91,7 +91,7 @@ export function ExperienceSection() {
                 playsInline
                 className="w-full h-full object-cover"
               >
-                <source src="/AudiS3-Video.mp4" type="video/mp4" />
+                <source src="/lamborghini-driving.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
