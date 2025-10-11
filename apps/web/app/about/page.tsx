@@ -53,37 +53,16 @@ const values = [
   },
 ]
 
-const team = [
-  {
-    name: 'Alexandre Dubois',
-    role: 'Founder & CEO',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-    bio: 'Former racing driver with 15+ years in luxury automotive industry.',
-  },
-  {
-    name: 'Sophie Tremblay',
-    role: 'Operations Director',
-    image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
-    bio: 'Expert in premium customer service and fleet management.',
-  },
-  {
-    name: 'Marc Lavoie',
-    role: 'Head of Fleet',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
-    bio: 'Certified mechanic specializing in exotic and luxury vehicles.',
-  },
-]
-
 const milestones = [
   {
     year: '2022',
     title: 'Company Founded',
-    description: 'Started with a single Mercedes CLA in Montreal, establishing Elite Motion Rentals as the premier luxury car rental service.',
+    description: 'Started with a single Mercedes CLA in Dubai, establishing Elite Motion Rentals as the premier luxury car rental service.',
   },
   {
     year: '2023',
     title: 'Fleet Expansion & Showroom',
-    description: 'Grew to 5 luxury vehicles and opened our first state-of-the-art showroom in downtown Montreal.',
+    description: 'Grew to 5 luxury vehicles and opened our first state-of-the-art showroom in downtown Dubai.',
   },
   {
     year: '2024',
@@ -93,12 +72,12 @@ const milestones = [
   {
     year: '2024',
     title: 'Industry Recognition',
-    description: 'Awarded "Best Luxury Car Rental" in Quebec and "Excellence in Customer Service" by the Canadian Tourism Board.',
+    description: 'Awarded "Best Luxury Car Rental" in UAE and "Excellence in Customer Service" by the Emirates Tourism Board.',
   },
   {
     year: '2025',
     title: 'Digital Innovation & Expansion',
-    description: 'Launched mobile app, introduced AI-powered vehicle recommendations, and expanded to serve all major Canadian cities.',
+    description: 'Launched mobile app, introduced AI-powered vehicle recommendations, and expanded to serve all major Emirates cities.',
   },
 ]
 
@@ -127,7 +106,7 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="text-xl text-neutral-300 max-w-3xl mx-auto font-light">
-              Montreal's premier luxury car rental service, delivering exceptional experiences 
+              Dubai's premier luxury car rental service, delivering exceptional experiences 
               with the world's most prestigious vehicles since 2022.
             </p>
           </motion.div>
@@ -170,17 +149,17 @@ export default function AboutPage() {
               <h2 className="heading-medium text-slate-900 mb-6">Our Story</h2>
               <div className="space-y-4 text-slate-600 leading-relaxed">
                 <p>
-                  Founded in 2022 in the heart of Montreal, Elite Motion Rentals began with a simple vision: 
+                  Founded in 2022 in the heart of Dubai, Elite Motion Rentals began with a simple vision: 
                   to make luxury automotive experiences accessible to discerning clients who appreciate 
                   the finest things in life.
                 </p>
                 <p>
-                  What started with a single Lamborghini has grown into Quebec's most prestigious 
+                  What started with a single Lamborghini has grown into UAE's most prestigious 
                   luxury car rental service, featuring an exclusive collection of supercars, luxury 
                   sedans, and exotic vehicles from the world's most renowned manufacturers.
                 </p>
                 <p>
-                  Based in Montreal, we serve clients across Quebec and beyond, providing not just 
+                  Based in Dubai, we serve clients across UAE and beyond, providing not just 
                   vehicle rentals, but complete luxury experiences that exceed expectations and create 
                   lasting memories.
                 </p>
@@ -197,7 +176,7 @@ export default function AboutPage() {
               <div className="relative h-96 rounded-2xl overflow-hidden">
                 <Image
                   src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop"
-                  alt="Luxury cars in Montreal"
+                  alt="Luxury cars in Dubai"
                   fill
                   className="object-cover"
                 />
@@ -207,7 +186,7 @@ export default function AboutPage() {
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-primary" />
                   <div>
-                    <p className="font-semibold text-slate-900">Montreal, Quebec</p>
+                    <p className="font-semibold text-slate-900">Dubai, UAE</p>
                     <p className="text-sm text-slate-600">Our Home Base</p>
                   </div>
                 </div>
@@ -248,52 +227,6 @@ export default function AboutPage() {
                   </div>
                   <h3 className="text-xl font-semibold text-slate-900 mb-4">{value.title}</h3>
                   <p className="text-slate-600 leading-relaxed">{value.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="heading-medium text-slate-900 mb-4">Meet Our Team</h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              The passionate professionals behind Elite Motion Rentals' success.
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            {team.map((member, index) => (
-              <motion.div key={index} variants={staggerItem}>
-                <div className="bg-white rounded-2xl shadow-luxury-lg overflow-hidden">
-                  <div className="relative h-64">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-slate-900 mb-1">{member.name}</h3>
-                    <p className="text-primary font-medium mb-3">{member.role}</p>
-                    <p className="text-slate-600 text-sm leading-relaxed">{member.bio}</p>
-                  </div>
                 </div>
               </motion.div>
             ))}
@@ -366,7 +299,7 @@ export default function AboutPage() {
             <h2 className="heading-medium text-white mb-4 drop-shadow-lg">Ready to Experience Luxury?</h2>
             <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto drop-shadow-md">
               Join thousands of satisfied clients who have experienced the Elite Motion Rentals difference. 
-              Book your luxury vehicle today and discover why we're Montreal's premier choice.
+              Book your luxury vehicle today and discover why we're Dubai's premier choice.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/fleet">
