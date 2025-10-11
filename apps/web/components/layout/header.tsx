@@ -31,7 +31,7 @@ const navigation = [
 const contactInfo = [
   { icon: Phone, text: '+1 (438) 680-3936', href: 'tel:+14386803936' },
   { icon: Mail, text: 'elitemotionrentals@gmail.com', href: 'mailto:elitemotionrentals@gmail.com' },
-  { icon: MapPin, text: 'Montreal, Quebec', href: '/contact' },
+  { icon: MapPin, text: 'Dubai, UAE', href: '/contact' },
 ]
 
 export function Header() {

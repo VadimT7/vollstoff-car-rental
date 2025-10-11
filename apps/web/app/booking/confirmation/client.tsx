@@ -57,26 +57,26 @@ export default function BookingConfirmationClient() {
   const getLocationDisplay = (location: string) => {
     switch (location) {
       case 'showroom':
-        return 'Elite Motion Rentals Showroom (Montreal)'
+        return 'Elite Motion Rentals Showroom (Dubai)'
       case 'airport':
-        return 'Montreal Airport (YUL)'
+        return 'Dubai International Airport (DXB)'
       case 'hotel':
-        return 'Hotel Delivery (Montreal Area)'
+        return 'Hotel Delivery (Dubai Area)'
       default:
-        return 'Elite Motion Rentals Showroom (Montreal)'
+        return 'Elite Motion Rentals Showroom (Dubai)'
     }
   }
 
   const getLocationAddress = (location: string) => {
     switch (location) {
       case 'showroom':
-        return '1555 Rue Richelieu, Montreal, QC H3J 1G8'
+        return 'Sheikh Zayed Road, Dubai, UAE'
       case 'airport':
-        return '975 Roméo-Vachon Blvd N, Dorval, QC H4Y 1H1'
+        return 'Dubai International Airport, Dubai, UAE'
       case 'hotel':
-        return 'Your Hotel Address (Montreal Area)'
+        return 'Your Hotel Address (Dubai Area)'
       default:
-        return '1555 Rue Richelieu, Montreal, QC H3J 1G8'
+        return 'Sheikh Zayed Road, Dubai, UAE'
     }
   }
 
@@ -180,10 +180,10 @@ The Elite Motion Rentals Team`
     pdf.setFontSize(11)
     pdf.setTextColor(60, 60, 60)
     const locationText = pickupLocation === 'showroom' 
-      ? 'Elite Motion Rentals Showroom (Montreal)\n123 Luxury Street, Montreal, QC H3A 1A1'
+      ? 'Elite Motion Rentals Showroom (Dubai)\nSheikh Zayed Road, Dubai, UAE'
       : pickupLocation === 'airport'
-      ? 'Montreal Airport (YUL)\n975 Roméo-Vachon Blvd N, Dorval, QC H4Y 1H1'
-      : 'Hotel Delivery (Montreal Area)'
+      ? 'Dubai International Airport (DXB)\nDubai International Airport, Dubai, UAE'
+      : 'Hotel Delivery (Dubai Area)'
     
     const locationLines = locationText.split('\n')
     locationLines.forEach((line, index) => {

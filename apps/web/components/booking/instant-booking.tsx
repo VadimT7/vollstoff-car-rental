@@ -128,7 +128,7 @@ export function InstantBooking() {
               )}
             >
               <p className="font-medium mb-1">Elite Motion Rentals Showroom</p>
-              <p className="text-sm text-neutral-600">1555 Rue Richelieu, Montreal, QC H3J 1G8</p>
+              <p className="text-sm text-neutral-600">Sheikh Zayed Road, Dubai, UAE</p>
             </button>
             <button
               onClick={() => setLocation('delivery')}

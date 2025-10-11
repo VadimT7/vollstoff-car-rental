@@ -8,22 +8,22 @@ export async function GET(request: NextRequest) {
     const locations = [
       {
         id: 'showroom',
-        name: 'Elite Motion Rentals Showroom (Montreal)',
-        address: '1555 Rue Richelieu, Montreal, QC H3J 1G8',
+        name: 'Elite Motion Rentals Showroom (Dubai)',
+        address: 'Sheikh Zayed Road, Dubai, UAE',
         type: 'SHOWROOM',
         isDefault: true
       },
       {
         id: 'airport',
-        name: 'Montreal Airport (YUL)',
-        address: '975 Roméo-Vachon Blvd N, Dorval, QC H4Y 1H1',
+        name: 'Dubai International Airport (DXB)',
+        address: 'Dubai International Airport, Dubai, UAE',
         type: 'AIRPORT',
         isDefault: false
       },
       {
         id: 'hotel',
         name: 'Hotel Delivery',
-        address: 'Your Hotel Address (Montreal Area)',
+        address: 'Your Hotel Address (Dubai Area)',
         type: 'HOTEL',
         isDefault: false
       }

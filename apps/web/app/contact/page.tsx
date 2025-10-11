@@ -35,7 +35,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Location',
-    details: 'Montreal, Quebec',
+    details: 'Dubai, UAE',
     href: '/contact',
     description: 'Our Premium Showroom'
   },

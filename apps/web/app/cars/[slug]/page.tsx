@@ -220,7 +220,7 @@ export default function CarDetailPage() {
     rating: 4.9,
     reviewCount: 127,
     featured: car.featured,
-    location: 'Montreal',
+    location: 'Dubai',
     available: true,
     // Use actual description from database, fallback to default if not available
     description: car.description || `Experience the ${car.make} ${car.model}, a premium vehicle that combines luxury, performance, and cutting-edge technology. This ${car.year} model offers an exceptional driving experience with its powerful engine and sophisticated features.`,
