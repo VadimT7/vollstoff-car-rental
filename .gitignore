@@ -26,7 +26,6 @@ lerna-debug.log*
 .pnpm-debug.log*
 
 # local env files
-.env
 .env*.local
 
 # vercel
@@ -43,7 +42,6 @@ next-env.d.ts
 docker-compose.override.yml
 
 # IDEs
-.vscode/
 .idea/
 
 # OS
@@ -110,3 +108,4 @@ coverage
 
 # Prisma
 prisma/migrations/dev/
+config.bat
