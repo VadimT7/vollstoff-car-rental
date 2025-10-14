@@ -31,7 +31,7 @@ const navigation = [
 const contactInfo = [
   { icon: Phone, text: '+1 (438) 680-3936', href: 'tel:+14386803936' },
   { icon: Mail, text: 'info@toptierrental.com', href: 'mailto:info@toptierrental.com' },
-  { icon: MapPin, text: 'Dubai, UAE', href: '/contact' },
+  { icon: MapPin, text: 'Los Angeles, CA', href: '/contact' },
 ]
 
 export function Header() {

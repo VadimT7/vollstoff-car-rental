@@ -57,12 +57,12 @@ const milestones = [
   {
     year: '2022',
     title: 'Company Founded',
-    description: 'Started with a single Mercedes CLA in Dubai, establishing Elite Motion Rentals as the premier luxury car rental service.',
+    description: 'Started with a single Mercedes CLA in Los Angeles, establishing Elite Motion Rentals as the premier luxury car rental service.',
   },
   {
     year: '2023',
     title: 'Fleet Expansion & Showroom',
-    description: 'Grew to 5 luxury vehicles and opened our first state-of-the-art showroom in downtown Dubai.',
+    description: 'Grew to 5 luxury vehicles and opened our first state-of-the-art showroom in downtown Los Angeles.',
   },
   {
     year: '2024',
@@ -72,7 +72,7 @@ const milestones = [
   {
     year: '2024',
     title: 'Industry Recognition',
-    description: 'Awarded "Best Luxury Car Rental" in UAE and "Excellence in Customer Service" by the Emirates Tourism Board.',
+    description: 'Awarded "Best Luxury Car Rental" in CA and "Excellence in Customer Service" by the Emirates Tourism Board.',
   },
   {
     year: '2025',
@@ -106,7 +106,7 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="text-xl text-neutral-300 max-w-3xl mx-auto font-light">
-              Dubai's premier luxury car rental service, delivering exceptional experiences 
+              Los Angeles's premier luxury car rental service, delivering exceptional experiences 
               with the world's most prestigious vehicles since 2022.
             </p>
           </motion.div>
@@ -149,17 +149,17 @@ export default function AboutPage() {
               <h2 className="heading-medium text-slate-900 mb-6">Our Story</h2>
               <div className="space-y-4 text-slate-600 leading-relaxed">
                 <p>
-                  Founded in 2022 in the heart of Dubai, Top Tier Rental began with a simple vision: 
+                  Founded in 2022 in the heart of Los Angeles, Top Tier Rental began with a simple vision: 
                   to make luxury automotive experiences accessible to discerning clients who appreciate 
                   the finest things in life.
                 </p>
                 <p>
-                  What started with a single Lamborghini has grown into UAE's most prestigious 
+                  What started with a single Lamborghini has grown into CA's most prestigious 
                   luxury car rental service, featuring an exclusive collection of supercars, luxury 
                   sedans, and exotic vehicles from the world's most renowned manufacturers.
                 </p>
                 <p>
-                  Based in Dubai, we serve clients across UAE and beyond, providing not just 
+                  Based in Los Angeles, we serve clients across CA and beyond, providing not just 
                   vehicle rentals, but complete luxury experiences that exceed expectations and create 
                   lasting memories.
                 </p>
@@ -176,7 +176,7 @@ export default function AboutPage() {
               <div className="relative h-96 rounded-2xl overflow-hidden">
                 <Image
                   src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop"
-                  alt="Luxury cars in Dubai"
+                  alt="Luxury cars in Los Angeles"
                   fill
                   className="object-cover"
                 />
@@ -186,7 +186,7 @@ export default function AboutPage() {
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-primary" />
                   <div>
-                    <p className="font-semibold text-slate-900">Dubai, UAE</p>
+                    <p className="font-semibold text-slate-900">Los Angeles, CA</p>
                     <p className="text-sm text-slate-600">Our Home Base</p>
                   </div>
                 </div>
@@ -299,7 +299,7 @@ export default function AboutPage() {
             <h2 className="heading-medium text-white mb-4 drop-shadow-lg">Ready to Experience Luxury?</h2>
             <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto drop-shadow-md">
               Join thousands of satisfied clients who have experienced the Elite Motion Rentals difference. 
-              Book your luxury vehicle today and discover why we're Dubai's premier choice.
+              Book your luxury vehicle today and discover why we're Los Angeles's premier choice.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/fleet">

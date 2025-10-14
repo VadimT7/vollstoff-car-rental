@@ -152,7 +152,7 @@ export default function BookingPage() {
     },
     rating: 4.9,
     featured: car.featured,
-    location: 'Dubai',
+    location: 'Los Angeles',
     available: true,
   }
 
@@ -416,9 +416,9 @@ export default function BookingPage() {
                   onChange={(e) => setBookingData(prev => ({ ...prev, pickupLocation: e.target.value }))}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="showroom">Elite Motion Rentals Showroom (Dubai)</option>
-                  <option value="airport">Dubai International Airport (DXB)</option>
-                  <option value="hotel">Hotel Delivery (Dubai Area)</option>
+                  <option value="showroom">Top Tier Rental Showroom (Los Angeles)</option>
+                  <option value="airport">Los Angeles International Airport (LAX)</option>
+                  <option value="hotel">Hotel Delivery (Los Angeles Area)</option>
                 </select>
               </div>
               <div>
@@ -429,9 +429,9 @@ export default function BookingPage() {
                   onChange={(e) => setBookingData(prev => ({ ...prev, returnLocation: e.target.value }))}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="showroom">Elite Motion Rentals Showroom (Dubai)</option>
-                  <option value="airport">Dubai International Airport (DXB)</option>
-                  <option value="hotel">Hotel Pickup (Dubai Area)</option>
+                  <option value="showroom">Top Tier Rental Showroom (Los Angeles)</option>
+                  <option value="airport">Los Angeles International Airport (LAX)</option>
+                  <option value="hotel">Hotel Pickup (Los Angeles Area)</option>
                 </select>
               </div>
             </div>
@@ -442,7 +442,7 @@ export default function BookingPage() {
                 <div>
                   <h3 className="font-semibold text-blue-900 mb-1">Location Information</h3>
                   <p className="text-blue-700 text-sm">
-                    Our original pick-up location is located at Sheikh Zayed Road, Dubai, UAE. Airport and hotel delivery services are available 
+                    Our original pick-up location is located at Wilshire Boulevard, Los Angeles, CA. Airport and hotel delivery services are available 
                     for an additional fee. Please contact us for specific arrangements.
                   </p>
                 </div>

@@ -8,22 +8,22 @@ export async function GET(request: NextRequest) {
     const locations = [
       {
         id: 'showroom',
-        name: 'Elite Motion Rentals Showroom (Dubai)',
-        address: 'Sheikh Zayed Road, Dubai, UAE',
+        name: 'Top Tier Rental Showroom (Los Angeles)',
+        address: 'Wilshire Boulevard, Los Angeles, CA',
         type: 'SHOWROOM',
         isDefault: true
       },
       {
         id: 'airport',
-        name: 'Dubai International Airport (DXB)',
-        address: 'Dubai International Airport, Dubai, UAE',
+        name: 'Los Angeles International Airport (LAX)',
+        address: 'Los Angeles International Airport, Los Angeles, CA',
         type: 'AIRPORT',
         isDefault: false
       },
       {
         id: 'hotel',
         name: 'Hotel Delivery',
-        address: 'Your Hotel Address (Dubai Area)',
+        address: 'Your Hotel Address (Los Angeles Area)',
         type: 'HOTEL',
         isDefault: false
       }

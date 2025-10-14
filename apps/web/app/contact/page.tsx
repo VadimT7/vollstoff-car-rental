@@ -35,7 +35,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Location',
-    details: 'Dubai, UAE',
+    details: 'Los Angeles, CA',
     href: '/contact',
     description: 'Our Premium Showroom'
   },

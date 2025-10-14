@@ -127,8 +127,8 @@ export function InstantBooking() {
                   : 'border-neutral-200 hover:border-neutral-300'
               )}
             >
-              <p className="font-medium mb-1">Elite Motion Rentals Showroom</p>
-              <p className="text-sm text-neutral-600">Sheikh Zayed Road, Dubai, UAE</p>
+              <p className="font-medium mb-1">Top Tier Rental Showroom</p>
+              <p className="text-sm text-neutral-600">Wilshire Boulevard, Los Angeles, CA</p>
             </button>
             <button
               onClick={() => setLocation('delivery')}

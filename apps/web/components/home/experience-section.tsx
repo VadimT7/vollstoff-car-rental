@@ -19,7 +19,7 @@ const experiences = [
   {
     icon: MapPin,
     title: 'Worldwide Delivery',
-    description: 'We deliver to your location anywhere in Dubai within 24 hours',
+    description: 'We deliver to your location anywhere in Los Angeles within 24 hours',
   },
   {
     icon: Sparkles,

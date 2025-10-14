@@ -57,35 +57,35 @@ export default function BookingConfirmationClient() {
   const getLocationDisplay = (location: string) => {
     switch (location) {
       case 'showroom':
-        return 'Elite Motion Rentals Showroom (Dubai)'
+        return 'Top Tier Rental Showroom (Los Angeles)'
       case 'airport':
-        return 'Dubai International Airport (DXB)'
+        return 'Los Angeles International Airport (LAX)'
       case 'hotel':
-        return 'Hotel Delivery (Dubai Area)'
+        return 'Hotel Delivery (Los Angeles Area)'
       default:
-        return 'Elite Motion Rentals Showroom (Dubai)'
+        return 'Top Tier Rental Showroom (Los Angeles)'
     }
   }
 
   const getLocationAddress = (location: string) => {
     switch (location) {
       case 'showroom':
-        return 'Sheikh Zayed Road, Dubai, UAE'
+        return 'Wilshire Boulevard, Los Angeles, CA'
       case 'airport':
-        return 'Dubai International Airport, Dubai, UAE'
+        return 'Los Angeles International Airport, Los Angeles, CA'
       case 'hotel':
-        return 'Your Hotel Address (Dubai Area)'
+        return 'Your Hotel Address (Los Angeles Area)'
       default:
-        return 'Sheikh Zayed Road, Dubai, UAE'
+        return 'Wilshire Boulevard, Los Angeles, CA'
     }
   }
 
   // Generate email content for booking confirmation
   const generateEmailContent = () => {
-    const subject = `Elite Motion Rentals Booking Confirmation - ${carName} ${carYear}`
+    const subject = `Top Tier Rental Booking Confirmation - ${carName} ${carYear}`
     const body = `Dear ${driverName},
 
-Your luxury vehicle rental has been successfully booked with Elite Motion Rentals.
+Your luxury vehicle rental has been successfully booked with Top Tier Rental.
 
 BOOKING DETAILS:
 Booking ID: ${bookingId}
@@ -111,12 +111,12 @@ Please present yourself at the selected car pick-up location at the booked time 
 
 Need help? Contact our concierge team:
 Phone: +1 (234) 567-890
-Email: flyrentalsca@gmail.com
+Email: info@toptierrental.com
 
-Thank you for choosing Elite Motion Rentals!
+Thank you for choosing Top Tier Rental!
 
 Best regards,
-The Elite Motion Rentals Team`
+The Top Tier Rental Team`
 
     return { subject, body }
   }
@@ -132,10 +132,10 @@ The Elite Motion Rentals Team`
   const handleDownloadPDF = () => {
     const pdf = new jsPDF()
     
-    // Add Elite Motion Rentals header
+    // Add Top Tier Rental header
     pdf.setFontSize(24)
     pdf.setTextColor(245, 158, 11) // Amber color
-    pdf.text('Elite Motion Rentals', 105, 20, { align: 'center' })
+    pdf.text('Top Tier Rental', 105, 20, { align: 'center' })
     
     pdf.setFontSize(16)
     pdf.setTextColor(0, 0, 0)
@@ -180,10 +180,10 @@ The Elite Motion Rentals Team`
     pdf.setFontSize(11)
     pdf.setTextColor(60, 60, 60)
     const locationText = pickupLocation === 'showroom' 
-      ? 'Elite Motion Rentals Showroom (Dubai)\nSheikh Zayed Road, Dubai, UAE'
+      ? 'Top Tier Rental Showroom (Los Angeles)\nWilshire Boulevard, Los Angeles, CA'
       : pickupLocation === 'airport'
-      ? 'Dubai International Airport (DXB)\nDubai International Airport, Dubai, UAE'
-      : 'Hotel Delivery (Dubai Area)'
+      ? 'Los Angeles International Airport (LAX)\nLos Angeles International Airport, Los Angeles, CA'
+      : 'Hotel Delivery (Los Angeles Area)'
     
     const locationLines = locationText.split('\n')
     locationLines.forEach((line, index) => {
@@ -232,11 +232,11 @@ The Elite Motion Rentals Team`
     // Footer
     pdf.setFontSize(10)
     pdf.setTextColor(150, 150, 150)
-    pdf.text('Thank you for choosing Elite Motion Rentals!', 105, 280, { align: 'center' })
-    pdf.text('Contact: +1 (438) 680-3936 | flyrentalsca@gmail.com', 105, 287, { align: 'center' })
+    pdf.text('Thank you for choosing Top Tier Rental!', 105, 280, { align: 'center' })
+    pdf.text('Contact: +1 (438) 680-3936 | info@toptierrental.com', 105, 287, { align: 'center' })
     
     // Save the PDF
-    pdf.save(`Elite Motion Rentals_Booking_${bookingId}.pdf`)
+    pdf.save(`Top Tier Rental_Booking_${bookingId}.pdf`)
   }
 
   return (
@@ -399,9 +399,9 @@ The Elite Motion Rentals Team`
                   +1 (438) 680-3936
                 </Button>
               </Link>
-              <Link href="mailto:flyrentalsca@gmail.com">
+              <Link href="mailto:info@toptierrental.com">
                 <Button variant="outline" size="lg" className="text-base">
-                  flyrentalsca@gmail.com
+                  info@toptierrental.com
                 </Button>
               </Link>
             </div>

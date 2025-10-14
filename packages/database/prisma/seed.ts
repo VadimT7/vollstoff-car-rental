@@ -324,7 +324,7 @@ const TESTIMONIALS = [
   {
     authorName: 'Isabella Martinez',
     authorTitle: 'Fashion Designer',
-    content: 'The Lamborghini Urus was perfect for my photoshoot in Dubai. The team at Top Tier Rental understood exactly what I needed and went above and beyond to accommodate my schedule.',
+    content: 'The Lamborghini Urus was perfect for my photoshoot in Los Angeles. The team at Top Tier Rental understood exactly what I needed and went above and beyond to accommodate my schedule.',
     rating: 5,
     carModel: 'Lamborghini Urus',
     isPublished: true,

@@ -51,8 +51,8 @@ const socialLinks = [
 
 const contactInfo = [
   { icon: Phone, text: '+1 (438) 680-3936', href: 'tel:+14386803936' },
-  { icon: Mail, text: 'elitemotionrentals@gmail.com', href: 'mailto:elitemotionrentals@gmail.com' },
-  { icon: MapPin, text: 'Dubai, UAE', href: '/contact' },
+  { icon: Mail, text: 'info@toptierrental.com', href: 'mailto:info@toptierrental.com' },
+  { icon: MapPin, text: 'Los Angeles, CA', href: '/contact' },
 ]
 
 export function Footer() {
