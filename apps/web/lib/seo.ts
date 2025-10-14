@@ -23,9 +23,9 @@ interface GenerateMetadataParams {
 }
 
 const siteConfig = {
-  name: 'Elite Motion Rentals',
-  title: 'Elite Motion Rentals - Ultra-Luxury Exotic Car Rentals',
-  description: 'Experience the pinnacle of automotive luxury. Rent Lamborghini, Ferrari, BMW M8, Mercedes-AMG G63 and more. Premium service, worldwide delivery.',
+  name: 'Top Tier Rental',
+  title: 'Top Tier Rental - Ultra-Luxury Exotic Car Rentals',
+  description: 'Experience the pinnacle of automotive luxury. Rent Ferrari, Bentley, Rolls-Royce, Mercedes-Benz and more. Premium service, worldwide delivery.',
   url: process.env.NEXT_PUBLIC_APP_URL || 'https://valorerent.com',
   keywords: [
     'luxury car rental',

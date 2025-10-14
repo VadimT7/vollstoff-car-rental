@@ -1,4 +1,4 @@
-# Elite Motion Rentals - Ultra-Luxury Exotic Car Rental Platform
+# Top Tier Rental - Ultra-Luxury Exotic Car Rental Platform
 
 > "If Louis Vuitton & Gucci ran a supercar fleet."
 
@@ -6,7 +6,7 @@
 
 Valore Rental is a complete, production-ready luxury car rental platform featuring:
 
-- 🏎️ Ultra-luxury fleet management (Lamborghini, Ferrari, BMW M8, Mercedes-AMG G63, etc.)
+- 🏎️ Ultra-luxury fleet management (Ferrari SF90, Bentley, Rolls-Royce, Mercedes-Benz S-Class, etc.)
 - 💳 Complete Stripe integration (payments, deposits, holds, refunds)
 - 📅 Advanced booking system with real-time availability
 - 🎨 Luxury design system with custom animations & 3D car showcases

@@ -69,10 +69,10 @@ export function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="font-display text-xl font-bold tracking-wider text-white">
-                  ELITE MOTION
+                  TOP TIER
                 </span>
                 <span className="text-xs tracking-luxury text-slate-400">
-                  RENTALS
+                  RENTAL
                 </span>
               </div>
             </Link>

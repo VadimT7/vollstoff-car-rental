@@ -32,8 +32,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   ...generateSiteMetadata({
-    title: 'Elite Motion Rentals - Ultra-Luxury Exotic Car Rentals',
-    description: 'Experience the pinnacle of automotive luxury. Rent Lamborghini, Ferrari, BMW M8, Mercedes-AMG G63 and more. Premium service, worldwide delivery.',
+    title: 'Top Tier Rental - Ultra-Luxury Exotic Car Rentals',
+    description: 'Experience the pinnacle of automotive luxury. Rent Ferrari, Bentley, Rolls-Royce, Mercedes-Benz and more. Premium service, worldwide delivery.',
   }),
   icons: {
     icon: '/favicon.svg',

@@ -30,7 +30,7 @@ const navigation = [
 
 const contactInfo = [
   { icon: Phone, text: '+1 (438) 680-3936', href: 'tel:+14386803936' },
-  { icon: Mail, text: 'elitemotionrentals@gmail.com', href: 'mailto:elitemotionrentals@gmail.com' },
+  { icon: Mail, text: 'info@toptierrental.com', href: 'mailto:info@toptierrental.com' },
   { icon: MapPin, text: 'Dubai, UAE', href: '/contact' },
 ]
 
@@ -129,7 +129,7 @@ export function Header() {
               <Link href="/" className="flex items-center group">
                 <Image
                   src="/logo.png"
-                  alt="Elite Motion Rentals Luxury Rental"
+                  alt="Top Tier Rental Luxury Rental"
                   width={180}
                   height={60}
                   className="h-16 w-auto object-contain"

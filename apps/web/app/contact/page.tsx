@@ -28,8 +28,8 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    details: 'elitemotionrentals@gmail.com',
-    href: 'mailto:elitemotionrentals@gmail.com',
+    details: 'info@toptierrental.com',
+    href: 'mailto:info@toptierrental.com',
     description: 'Quick Response Guaranteed'
   },
   {

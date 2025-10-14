@@ -47,11 +47,11 @@ test.describe('Brand Name Verification', () => {
   test('should display correct new company name', async ({ page }) => {
     await page.goto('/');
     
-    // Check that Elite Motion Rentals appears
-    await expect(page.locator('text=Elite Motion Rentals').first()).toBeVisible();
+    // Check that Top Tier Rental appears
+    await expect(page.locator('text=Top Tier Rental').first()).toBeVisible();
     
-    // Check page title contains Elite Motion Rentals
+    // Check page title contains Top Tier Rental
     const title = await page.title();
-    expect(title).toContain('Elite Motion Rentals');
+    expect(title).toContain('Top Tier Rental');
   });
 });

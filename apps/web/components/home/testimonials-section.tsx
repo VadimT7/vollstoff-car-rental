@@ -11,25 +11,25 @@ const testimonials = [
   {
     id: '1',
     authorName: 'Alexander Chen',
-    content: 'Exceptional service from start to finish. The Lamborghini Huracán was immaculate, and the delivery to my hotel was seamless. Elite Motion Rentals sets the standard for luxury car rentals.',
+    content: 'Exceptional service from start to finish. The Ferrari SF90 was immaculate, and the delivery to my hotel was seamless. Top Tier Rental sets the standard for luxury car rentals.',
     rating: 5,
   },
   {
     id: '2',
     authorName: 'Isabella Martinez',
-    content: 'The Lamborghini Urus was perfect for my photoshoot in Dubai. The team at Elite Motion Rentals understood exactly what I needed and went above and beyond to accommodate my schedule.',
+    content: 'The Lamborghini Urus was perfect for my photoshoot in Dubai. The team at Top Tier Rental understood exactly what I needed and went above and beyond to accommodate my schedule.',
     rating: 5,
   },
   {
     id: '3',
     authorName: 'James Wellington',
-    content: "I've rented luxury cars worldwide, but Elite Motion Rentals' attention to detail is unmatched. The Mercedes-AMG SL63 was pristine, and their concierge service made everything effortless.",
+    content: "I've rented luxury cars worldwide, but Top Tier Rental's attention to detail is unmatched. The Mercedes-Benz S580 was pristine, and their concierge service made everything effortless.",
     rating: 5,
   },
   {
     id: '4',
     authorName: 'Sophia Laurent',
-    content: "Driving the Lamborghini Huracán along the St-Laurent river was a dream come true. Elite Motion Rentals' team curated the perfect route and even arranged a private lunch at a vineyard.",
+    content: "Driving the Bentley Continental GT along the coast was a dream come true. Top Tier Rental's team curated the perfect route and even arranged a private lunch at a vineyard.",
     rating: 5,
   },
 ]
@@ -59,7 +59,7 @@ export function TestimonialsSection() {
         <p className="text-luxury text-primary mb-4">Client Experiences</p>
         <h2 className="heading-large mb-4">Voices of Excellence</h2>
         <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
-          Discover why discerning individuals choose Elite Motion Rentals for their luxury automotive experiences
+          Discover why discerning individuals choose Top Tier Rental for their luxury automotive experiences
         </p>
       </motion.div>
 

@@ -39,7 +39,7 @@ export function VideoShowcase() {
                 playsInline
                 className="w-full h-full object-cover"
               >
-                <source src="/lamborghini-driving2.mp4" type="video/mp4" />
+                <source src="/Corvette-Video.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -51,7 +51,7 @@ export function VideoShowcase() {
                     <Instagram className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Elite Motion Rentals</p>
+                    <p className="text-sm font-medium">Top Tier Rental</p>
                     <p className="text-xs text-neutral-300">Experience Unmatched Luxury</p>
                   </div>
                 </div>
@@ -75,7 +75,7 @@ export function VideoShowcase() {
                 playsInline
                 className="w-full h-full object-cover"
               >
-                <source src="/luxury_cars_driving_together.mp4" type="video/mp4" />
+                <source src="/Lamborghini-Urus-Video.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -104,7 +104,7 @@ export function VideoShowcase() {
           className="text-center mt-16"
         >
           <a 
-            href="https://www.instagram.com/elitemotion_rent_a_car/" 
+            href="https://www.instagram.com/toptierrental/" 
             target="_blank" 
             rel="noopener noreferrer"
           >

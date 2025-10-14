@@ -41,12 +41,12 @@ export function Sidebar() {
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/logo.png"
-            alt="Elite Motion Rentals Logo"
+            alt="Top Tier Rental Logo"
             width={32}
             height={32}
             className="w-8 h-8"
           />
-          <span className="font-semibold text-lg text-primary">Elite Motion Rentals Admin</span>
+          <span className="font-semibold text-lg text-primary">Top Tier Rental Admin</span>
         </Link>
       </div>
 
@@ -75,7 +75,7 @@ export function Sidebar() {
       {/* Footer */}
         <div className="p-4 border-t border-neutral-200">
           <div className="text-xs text-neutral-500">
-            <p>© 2024 Elite Motion Rentals</p>
+            <p>© 2024 Top Tier Rental</p>
             <p className="mt-1">Admin Panel v1.0</p>
           </div>
         </div>

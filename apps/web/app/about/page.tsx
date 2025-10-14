@@ -149,7 +149,7 @@ export default function AboutPage() {
               <h2 className="heading-medium text-slate-900 mb-6">Our Story</h2>
               <div className="space-y-4 text-slate-600 leading-relaxed">
                 <p>
-                  Founded in 2022 in the heart of Dubai, Elite Motion Rentals began with a simple vision: 
+                  Founded in 2022 in the heart of Dubai, Top Tier Rental began with a simple vision: 
                   to make luxury automotive experiences accessible to discerning clients who appreciate 
                   the finest things in life.
                 </p>
