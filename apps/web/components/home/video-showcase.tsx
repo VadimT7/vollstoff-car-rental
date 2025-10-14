@@ -104,7 +104,7 @@ export function VideoShowcase() {
           className="text-center mt-16"
         >
           <a 
-            href="https://www.instagram.com/toptierrental/" 
+            href="https://www.instagram.com/toptier.rental/" 
             target="_blank" 
             rel="noopener noreferrer"
           >
